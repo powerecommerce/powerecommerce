@@ -25,13 +25,13 @@
 namespace PowerEcommerce\System {
 
     /**
-     * Class Container
+     * Class SByte
      *
-     * A type representing a array value.
+     * Signed 8-bit integers with values between -128 and 127.
      *
      * @package PowerEcommerce\System
      */
-    class Container extends Object
+    class SByte extends Object
     {
         /**
          * @param \PowerEcommerce\System\Object $object

@@ -25,13 +25,13 @@
 namespace PowerEcommerce\System {
 
     /**
-     * Class Container
+     * Class Blank
      *
-     * A type representing a array value.
+     * A null reference.
      *
      * @package PowerEcommerce\System
      */
-    class Container extends Object
+    class Blank extends Object
     {
         /**
          * @param \PowerEcommerce\System\Object $object

@@ -26,9 +26,66 @@ namespace PowerEcommerce\System {
 
     /**
      * Class Decimal
+     *
+     * A simple type representing values ranging from 1.0 x 10 ^ -28 to approximately 7.9 x 10 ^ 28 with 28-29 significant digits.
+     *
      * @package PowerEcommerce\System
      */
     class Decimal extends Object
     {
+        /**
+         * @param \PowerEcommerce\System\Object $object
+         * @return bool
+         */
+        function compare(Object $object)
+        {
+        }
+
+        /**
+         * @param \PowerEcommerce\System\Object $object
+         * @return \PowerEcommerce\System\Object
+         */
+        function concat(Object $object)
+        {
+        }
+
+        /**
+         * @param \PowerEcommerce\System\Object $object
+         * @return bool
+         */
+        function contains(Object $object)
+        {
+        }
+
+        /**
+         * @param int $type \PowerEcommerce\System\TypeCode
+         * @return mixed
+         */
+        function format($type)
+        {
+        }
+
+        /**
+         * @return int TypeCode
+         */
+        function getTypeCode()
+        {
+        }
+
+        /**
+         * @param \PowerEcommerce\System\Object[] $object
+         * @return \PowerEcommerce\System\Object
+         */
+        function join(array $object)
+        {
+        }
+
+        /**
+         * @param \PowerEcommerce\System\Object $object
+         * @return bool
+         */
+        function same(Object $object)
+        {
+        }
     }
 }

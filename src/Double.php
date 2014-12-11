@@ -26,9 +26,66 @@ namespace PowerEcommerce\System {
 
     /**
      * Class Double
+     *
+     * A floating point type representing values ranging from approximately 5.0 x 10 ^ -324 to 1.7 x 10 ^ 308 with a precision of 15-16 digits.
+     *
      * @package PowerEcommerce\System
      */
     class Double extends Object
     {
+        /**
+         * @param \PowerEcommerce\System\Object $object
+         * @return bool
+         */
+        function compare(Object $object)
+        {
+        }
+
+        /**
+         * @param \PowerEcommerce\System\Object $object
+         * @return \PowerEcommerce\System\Object
+         */
+        function concat(Object $object)
+        {
+        }
+
+        /**
+         * @param \PowerEcommerce\System\Object $object
+         * @return bool
+         */
+        function contains(Object $object)
+        {
+        }
+
+        /**
+         * @param int $type \PowerEcommerce\System\TypeCode
+         * @return mixed
+         */
+        function format($type)
+        {
+        }
+
+        /**
+         * @return int TypeCode
+         */
+        function getTypeCode()
+        {
+        }
+
+        /**
+         * @param \PowerEcommerce\System\Object[] $object
+         * @return \PowerEcommerce\System\Object
+         */
+        function join(array $object)
+        {
+        }
+
+        /**
+         * @param \PowerEcommerce\System\Object $object
+         * @return bool
+         */
+        function same(Object $object)
+        {
+        }
     }
 }

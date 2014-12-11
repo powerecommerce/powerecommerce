@@ -25,13 +25,13 @@
 namespace PowerEcommerce\System {
 
     /**
-     * Class Container
+     * Class UInt64
      *
-     * A type representing a array value.
+     * Unsigned 64-bit integers with values between 0 and 18446744073709551615.
      *
      * @package PowerEcommerce\System
      */
-    class Container extends Object
+    class UInt64 extends Object
     {
         /**
          * @param \PowerEcommerce\System\Object $object

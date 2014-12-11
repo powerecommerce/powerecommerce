@@ -25,13 +25,13 @@
 namespace PowerEcommerce\System {
 
     /**
-     * Class Container
+     * Class Single
      *
-     * A type representing a array value.
+     * A floating point type representing values ranging from approximately 1.5 x 10 ^ -45 to 3.4 x 10 ^ 38 with a precision of 7 digits.
      *
      * @package PowerEcommerce\System
      */
-    class Container extends Object
+    class Single extends Object
     {
         /**
          * @param \PowerEcommerce\System\Object $object

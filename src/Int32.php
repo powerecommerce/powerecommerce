@@ -25,13 +25,13 @@
 namespace PowerEcommerce\System {
 
     /**
-     * Class Container
+     * Class Int32
      *
-     * A type representing a array value.
+     * Signed 32-bit integers with values between -2147483648 and 2147483647.
      *
      * @package PowerEcommerce\System
      */
-    class Container extends Object
+    class Int32 extends Object
     {
         /**
          * @param \PowerEcommerce\System\Object $object
