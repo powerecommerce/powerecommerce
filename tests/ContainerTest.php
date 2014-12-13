@@ -25,44 +25,15 @@
 namespace PowerEcommerce\System {
 
     /**
-     * Class TypeCode
+     * Class ContainerTest
      * @package PowerEcommerce\System
      */
-    abstract class TypeCode
+    class ContainerTest extends \PHPUnit_Framework_TestCase
     {
-        /**
-         * A null reference.
-         */
-        const BLANK = 1;
-
-        /**
-         * A type representing a Dependency Injection Container.
-         */
-        const CONTAINER = 2;
-
-        /**
-         * A type representing a date and time value.
-         */
-        const DATETIME = 4;
-
-        /**
-         * A type representing a number value.
-         */
-        const NUMBER = 8;
-
-        /**
-         * A general type.
-         */
-        const OBJECT = 16;
-
-        /**
-         * Unicode character strings.
-         */
-        const STRING = 32;
-
-        /**
-         * Represents a time zone.
-         */
-        const TIMEZONE = 64;
+        function testGetTypeCode()
+        {
+            $this->assertSame((new Container())->getTypeCode(), TypeCode::CONTAINER);
+            $this->assertNotSame((new Container())->getTypeCode(), TypeCode::BLANK);
+        }
     }
 }

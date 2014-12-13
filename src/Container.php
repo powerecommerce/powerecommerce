@@ -27,11 +27,11 @@ namespace PowerEcommerce\System {
     /**
      * Class Container
      *
-     * A type representing a array value.
+     * A type representing a Dependency Injection Container.
      *
      * @package PowerEcommerce\System
      */
-    class Container extends Object
+    class Container extends \Pimple\Container
     {
         /**
          * @return int TypeCode
