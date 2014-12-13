@@ -25,67 +25,111 @@
 namespace PowerEcommerce\System {
 
     /**
-     * Class Int16
-     *
-     * Signed 16-bit integers with values between -32768 and 32767.
-     *
+     * Class Argument
      * @package PowerEcommerce\System
      */
-    class Int16 extends Object
+    class Argument
     {
         /**
-         * @param \PowerEcommerce\System\Object $object
+         * @var mixed
+         */
+        private $_value;
+
+        /**
+         * @param mixed $value
+         */
+        function __construct($value)
+        {
+            $this->_value = $value;
+        }
+
+        /**
          * @return bool
          */
-        function compare(Object $object)
+        function isNull()
         {
+            return (null === $this->_value);
         }
 
         /**
-         * @param \PowerEcommerce\System\Object $object
-         * @return \PowerEcommerce\System\Object
-         */
-        function concat(Object $object)
-        {
-        }
-
-        /**
-         * @param \PowerEcommerce\System\Object $object
          * @return bool
          */
-        function contains(Object $object)
+        function isString()
         {
+            return is_string($this->_value);
         }
 
         /**
-         * @param int $type \PowerEcommerce\System\TypeCode
-         * @return mixed
-         */
-        function format($type)
-        {
-        }
-
-        /**
-         * @return int TypeCode
-         */
-        function getTypeCode()
-        {
-        }
-
-        /**
-         * @param \PowerEcommerce\System\Object[] $object
-         * @return \PowerEcommerce\System\Object
-         */
-        function join(array $object)
-        {
-        }
-
-        /**
-         * @param \PowerEcommerce\System\Object $object
          * @return bool
          */
-        function same(Object $object)
+        function isNumber()
         {
+            return is_numeric($this->_value);
+        }
+
+        /**
+         * @return bool
+         */
+        function ofBlank()
+        {
+            return $this->_value instanceof Blank;
+        }
+
+        /**
+         * @return bool
+         */
+        function ofContainer()
+        {
+            return $this->_value instanceof Container;
+        }
+
+        /**
+         * @return bool
+         */
+        function ofDateTime()
+        {
+            return $this->_value instanceof DateTime;
+        }
+
+        /**
+         * @return bool
+         */
+        function ofNumber()
+        {
+            return $this->_value instanceof Number;
+        }
+
+        /**
+         * @return bool
+         */
+        function ofObject()
+        {
+            return $this->_value instanceof Object;
+        }
+
+        /**
+         * @return bool
+         */
+        function ofString()
+        {
+            return $this->_value instanceof String;
+        }
+
+        /**
+         * @return bool
+         */
+        function ofTimeZone()
+        {
+            return $this->_value instanceof TimeZone;
+        }
+
+        /**
+         * @param string $message
+         * @return \InvalidArgumentException
+         */
+        function invalid($message = null)
+        {
+            throw new \InvalidArgumentException($message);
         }
     }
 }

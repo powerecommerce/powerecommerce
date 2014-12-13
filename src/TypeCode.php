@@ -33,96 +33,36 @@ namespace PowerEcommerce\System {
         /**
          * A null reference.
          */
-        const BLANK = 123;
-
-        /**
-         * True or false.
-         */
-        const BOOLEAN = 623;
-
-        /**
-         * Unsigned 8-bit integers with values between 0 and 255.
-         */
-        const BYTE = 673;
-
-        /**
-         * Unsigned 16-bit integers with values between 0 and 65535.
-         */
-        const CHAR = 693;
+        const BLANK = 1;
 
         /**
          * A type representing a array value.
          */
-        const CONTAINER = 683;
+        const CONTAINER = 2;
 
         /**
          * A type representing a date and time value.
          */
-        const DATE_TIME = 283;
+        const DATETIME = 4;
 
         /**
-         * A simple type representing values ranging from 1.0 x 10 ^ -28 to approximately 7.9 x 10 ^ 28 with 28-29 significant digits.
+         * A type representing a number value.
          */
-        const DECIMAL = 483;
-
-        /**
-         * A floating point type representing values ranging from approximately 5.0 x 10 ^ -324 to 1.7 x 10 ^ 308 with a precision of 15-16 digits.
-         */
-        const DOUBLE = 583;
-
-        /**
-         * Signed 16-bit integers with values between -32768 and 32767.
-         */
-        const INT16 = 783;
-
-        /**
-         * Signed 32-bit integers with values between -2147483648 and 2147483647.
-         */
-        const INT32 = 793;
-
-        /**
-         * Signed 64-bit integers with values between -9223372036854775808 and 9223372036854775807.
-         */
-        const INT64 = 796;
+        const NUMBER = 8;
 
         /**
          * A general type.
          */
-        const OBJECT = 999;
-
-        /**
-         * Signed 8-bit integers with values between -128 and 127.
-         */
-        const SBYTE = 456;
-
-        /**
-         * A floating point type representing values ranging from approximately 1.5 x 10 ^ -45 to 3.4 x 10 ^ 38 with a precision of 7 digits.
-         */
-        const SINGLE = 556;
+        const OBJECT = 16;
 
         /**
          * Unicode character strings.
          */
-        const STRING = 312;
+        const STRING = 32;
 
         /**
          * Represents a time zone.
          */
-        const TIME_ZONE = 212;
-
-        /**
-         * Unsigned 16-bit integers with values between 0 and 65535.
-         */
-        const UINT16 = 183;
-
-        /**
-         * Unsigned 32-bit integers with values between 0 and 4294967295.
-         */
-        const UINT32 = 293;
-
-        /**
-         * Unsigned 64-bit integers with values between 0 and 18446744073709551615.
-         */
-        const UINT64 = 396;
+        const TIMEZONE = 64;
     }
 }

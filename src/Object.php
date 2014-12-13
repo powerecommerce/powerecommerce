@@ -33,56 +33,6 @@ namespace PowerEcommerce\System {
      */
     abstract class Object
     {
-        protected $value;
-
-        /**
-         * @param mixed $value
-         */
-        function __construct($value)
-        {
-            $this->value = $value;
-        }
-
-        /**
-         * @return mixed
-         */
-        function getValue()
-        {
-            return $this->value;
-        }
-
-        /**
-         * @param mixed $value
-         */
-        function setValue($value)
-        {
-            $this->value = $value;
-        }
-
-        /**
-         * @param \PowerEcommerce\System\Object $object
-         * @return bool
-         */
-        abstract function compare(Object $object);
-
-        /**
-         * @param \PowerEcommerce\System\Object $object
-         * @return \PowerEcommerce\System\Object
-         */
-        abstract function concat(Object $object);
-
-        /**
-         * @param \PowerEcommerce\System\Object $object
-         * @return bool
-         */
-        abstract function contains(Object $object);
-
-        /**
-         * @param int $type \PowerEcommerce\System\TypeCode
-         * @return mixed
-         */
-        abstract function format($type);
-
         /**
          * @return string
          */
@@ -95,17 +45,5 @@ namespace PowerEcommerce\System {
          * @return int TypeCode
          */
         abstract function getTypeCode();
-
-        /**
-         * @param \PowerEcommerce\System\Object[] $object
-         * @return \PowerEcommerce\System\Object
-         */
-        abstract function join(array $object);
-
-        /**
-         * @param \PowerEcommerce\System\Object $object
-         * @return bool
-         */
-        abstract function same(Object $object);
     }
 }
