@@ -39,7 +39,7 @@ namespace PowerEcommerce\System {
         protected $value = '';
 
         /**
-         * @param string|\PowerEcommerce\System\String $value
+         * @param string|\PowerEcommerce\System\Object $value
          */
         function __construct($value = '')
         {
@@ -47,7 +47,7 @@ namespace PowerEcommerce\System {
         }
 
         /**
-         * @param string|\PowerEcommerce\System\String $value
+         * @param string|\PowerEcommerce\System\Object $value
          * @return $this
          */
         function setValue($value)
@@ -55,16 +55,22 @@ namespace PowerEcommerce\System {
             $arg = new Argument($value);
 
             if ($arg->isString()) {
-                return $this->_setValue($value);
+                return $this->_set($value);
             }
 
-            if (!$arg->ofString()) {
-                return $arg->invalid();
-            }
+            $arg->strict(TypeCode::OBJECT);
 
             switch ($value->getTypeCode()) {
+                case TypeCode::BLANK:
+                case TypeCode::OBJECT:
+                    return $this->_set('');
+
+                case TypeCode::COLLECTION:
+                case TypeCode::DATETIME:
+                case TypeCode::NUMBER:
                 case TypeCode::STRING:
-                    return $this->_setValue($value);
+                case TypeCode::TIMEZONE:
+                    return $this->_set($value);
 
                 default:
                     return $arg->invalid();
@@ -75,7 +81,7 @@ namespace PowerEcommerce\System {
          * @param string $value
          * @return $this
          */
-        private function _setValue($value)
+        private function _set($value)
         {
             $this->value = (string)$value;
             return $this;
@@ -98,102 +104,41 @@ namespace PowerEcommerce\System {
         }
 
         /**
-         * @param string|\PowerEcommerce\System\String $value
+         * @param string|\PowerEcommerce\System\Object $value
          * @param bool $strict
          * @return bool
          */
         function compare($value, $strict = true)
         {
-            $arg = new Argument($value);
-            $value = $this->_value($arg, $value);
-
-            switch ($value->getTypeCode()) {
-                case TypeCode::STRING:
-                    if ($strict) {
-                        return 0 === strcmp($this, $value) ? true : false;
-                    }
-                    return 0 === strcasecmp($this, $value) ? true : false;
-
-                default:
-                    return $arg->invalid();
+            $value = new String($value);
+            if ($strict) {
+                return 0 === strcmp($this, $value) ? true : false;
             }
+            return 0 === strcasecmp($this, $value) ? true : false;
         }
 
         /**
-         * @param \PowerEcommerce\System\Argument $arg
-         * @param string|\PowerEcommerce\System\String $value
-         * @return \PowerEcommerce\System\String
-         */
-        private function _value(Argument $arg, $value)
-        {
-            if ($arg->isString()) {
-                return new String($value);
-            }
-
-            if (!$arg->ofString()) {
-                return $arg->invalid();
-            }
-
-            return $value;
-        }
-
-        /**
-         * @param string|\PowerEcommerce\System\String $value
+         * @param string|\PowerEcommerce\System\Object $value
          * @return $this
          */
         function concat($value)
         {
-            $arg = new Argument($value);
-            $value = $this->_value($arg, $value);
-
-            switch ($value->getTypeCode()) {
-                case TypeCode::STRING:
-                    $this->setValue($this . $value);
-                    break;
-
-                default:
-                    return $arg->invalid();
-            }
-            return $this;
+            $value = new String($value);
+            return $this->setValue($this . $value);
         }
 
         /**
-         * @param string|\PowerEcommerce\System\String $value
+         * @param string|\PowerEcommerce\System\Object $value
          * @param bool $strict
          * @return bool
          */
         function contains($value, $strict = true)
         {
-            $arg = new Argument($value);
-            $value = $this->_value($arg, $value);
-
-            switch ($value->getTypeCode()) {
-                case TypeCode::STRING:
-                    if ($strict) {
-                        return false === strpos($this->getValue(), $value->getValue()) ? false : true;
-                    }
-                    return false === stripos($this->getValue(), $value->getValue()) ? false : true;
-
-                default:
-                    return $arg->invalid();
+            $value = new String($value);
+            if ($strict) {
+                return false === strpos($this->getValue(), $value->getValue()) ? false : true;
             }
-        }
-
-        /**
-         * @param int $type \PowerEcommerce\System\TypeCode
-         * @return mixed
-         */
-        function format($type)
-        {
-            $arg = new Argument($type);
-
-            switch ($type) {
-                case TypeCode::STRING:
-                    return $this;
-
-                default:
-                    return $arg->invalid();
-            }
+            return false === stripos($this->getValue(), $value->getValue()) ? false : true;
         }
 
         /**
@@ -205,7 +150,7 @@ namespace PowerEcommerce\System {
         }
 
         /**
-         * @param string[]|\PowerEcommerce\System\String[] $value
+         * @param string[]|\PowerEcommerce\System\Object[] $value
          * @return $this
          */
         function join(array $value)
