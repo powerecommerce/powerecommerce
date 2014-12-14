@@ -40,5 +40,15 @@ namespace PowerEcommerce\System {
             $this->assertSame(TypeCode::getFlags(), $flags);
             $this->assertSame(TypeCode::getFlags(), $flags);
         }
+
+        function testUnique()
+        {
+            $reflector = new \ReflectionClass('\PowerEcommerce\System\TypeCode');
+            $flags = $reflector->getConstants();
+            array_walk_recursive($flags, function ($value, $key) use (&$flags) {
+                unset($flags[$key]);
+                $this->assertFalse(in_array($value, $flags));
+            });
+        }
     }
 }
