@@ -28,7 +28,7 @@ namespace PowerEcommerce\System {
      * Class TypeCode
      * @package PowerEcommerce\System
      */
-    abstract class TypeCode
+    class TypeCode
     {
         /**
          * A null reference.
@@ -38,31 +38,73 @@ namespace PowerEcommerce\System {
         /**
          * A type representing a Dependency Injection Container.
          */
-        const CONTAINER = 2;
+        const CONTAINER = 1 << 1;
 
         /**
          * A type representing a date and time value.
          */
-        const DATETIME = 4;
+        const DATETIME = 1 << 2;
 
         /**
          * A type representing a number value.
          */
-        const NUMBER = 8;
+        const NUMBER = 1 << 3;
 
         /**
          * A general type.
          */
-        const OBJECT = 16;
+        const OBJECT = 1 << 4;
 
         /**
          * Unicode character strings.
          */
-        const STRING = 32;
+        const STRING = 1 << 5;
 
         /**
          * Represents a time zone.
          */
-        const TIMEZONE = 64;
+        const TIMEZONE = 1 << 6;
+
+        /**
+         * Php
+         */
+        const PHP_ARRAY = 1 << 7;
+        const PHP_BOOL = 1 << 8;
+        const PHP_CALLABLE = 1 << 9;
+        const PHP_DOUBLE = 1 << 10;
+        const PHP_FLOAT = 1 << 11;
+        const PHP_INT = 1 << 12;
+        const PHP_INTEGER = 1 << 13;
+        const PHP_LONG = 1 << 14;
+        const PHP_NULL = 1 << 15;
+        const PHP_NUMERIC = 1 << 16;
+        const PHP_OBJECT = 1 << 17;
+        const PHP_REAL = 1 << 18;
+        const PHP_RESOURCE = 1 << 19;
+        const PHP_SCALAR = 1 << 20;
+        const PHP_STRING = 1 << 21;
+
+        /**
+         * @var int
+         */
+        private static $_flags = 0;
+
+        private function __construct()
+        {
+        }
+
+        /**
+         * @return int
+         */
+        static function getFlags()
+        {
+            if (0 !== self::$_flags) return self::$_flags;
+
+            $reflector = new \ReflectionClass('\PowerEcommerce\System\TypeCode');
+            $all = $reflector->getConstants();
+
+            foreach ($all as $const) self::$_flags |= $const;
+            return self::$_flags;
+        }
     }
 }
