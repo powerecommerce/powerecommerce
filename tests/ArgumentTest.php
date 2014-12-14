@@ -205,6 +205,12 @@ namespace PowerEcommerce\System {
             $this->assertFalse((new Argument(null))->ofBlank());
         }
 
+        function testOfCollection()
+        {
+            $this->assertTrue((new Argument(new Collection()))->ofCollection());
+            $this->assertFalse((new Argument(null))->ofCollection());
+        }
+
         function testOfContainer()
         {
             $this->assertTrue((new Argument(new Container()))->ofContainer());
@@ -257,12 +263,74 @@ namespace PowerEcommerce\System {
             $this->assertFalse((new Argument(null))->of(TypeCode::TIMEZONE));
         }
 
+        function testStrict()
+        {
+            $this->assertTrue((new Argument(new TimeZone()))->strict(TypeCode::PHP_NULL | TypeCode::PHP_ARRAY | TypeCode::TIMEZONE | TypeCode::BLANK));
+            $this->assertTrue((new Argument([]))->strict(TypeCode::PHP_NULL | TypeCode::PHP_ARRAY | TypeCode::TIMEZONE | TypeCode::BLANK));
+        }
+
+        /**
+         * @expectedException \InvalidArgumentException
+         */
+        function testStrictInvalidArgumentException()
+        {
+            $this->assertTrue((new Argument(''))->strict(TypeCode::PHP_NULL | TypeCode::PHP_ARRAY | TypeCode::TIMEZONE | TypeCode::BLANK));
+        }
+
         /**
          * @expectedException \InvalidArgumentException
          */
         function testInvalid()
         {
             (new Argument('Test'))->invalid();
+        }
+
+        function testAssertEquals()
+        {
+            $this->assertTrue((new Argument('1'))->assertEquals(1));
+            $this->assertTrue((new Argument('1'))->assertEquals('1'));
+            $this->assertFalse((new Argument('1'))->assertEquals(2));
+        }
+
+        function testGreaterThan()
+        {
+            $this->assertTrue((new Argument('1'))->assertGreaterThan(0));
+            $this->assertTrue((new Argument('1'))->assertGreaterThan('0.5'));
+            $this->assertFalse((new Argument('1'))->assertGreaterThan(2));
+        }
+
+        function testGreaterThanOrEqual()
+        {
+            $this->assertTrue((new Argument('1'))->assertGreaterThanOrEqual(0));
+            $this->assertTrue((new Argument('1'))->assertGreaterThanOrEqual('1'));
+            $this->assertFalse((new Argument('1'))->assertGreaterThanOrEqual(2));
+        }
+
+        function testInstanceOf()
+        {
+            $this->assertTrue((new Argument(new Blank()))->assertInstanceOf(new Blank()));
+            $this->assertFalse((new Argument(new Blank()))->assertInstanceOf(new Collection()));
+        }
+
+        function testLessThan()
+        {
+            $this->assertTrue((new Argument('1'))->assertLessThan(2));
+            $this->assertTrue((new Argument('1'))->assertLessThan('1.001'));
+            $this->assertFalse((new Argument('1'))->assertLessThan(0.7));
+        }
+
+        function testLessThanOrEqual()
+        {
+            $this->assertTrue((new Argument('1'))->assertLessThanOrEqual(2));
+            $this->assertTrue((new Argument('1'))->assertLessThanOrEqual('1.000'));
+            $this->assertFalse((new Argument('1'))->assertLessThanOrEqual(0.7));
+        }
+
+        function testSame()
+        {
+            $this->assertTrue((new Argument('1'))->assertSame('1'));
+            $this->assertTrue((new Argument(null))->assertSame(null));
+            $this->assertFalse((new Argument('1'))->assertSame(1));
         }
     }
 }

@@ -207,6 +207,14 @@ namespace PowerEcommerce\System {
         /**
          * @return bool
          */
+        function ofCollection()
+        {
+            return $this->_value instanceof Collection;
+        }
+
+        /**
+         * @return bool
+         */
         function ofContainer()
         {
             return $this->_value instanceof Container;
@@ -267,6 +275,81 @@ namespace PowerEcommerce\System {
             if (($flags & TypeCode::TIMEZONE) && $this->ofTimeZone()) return true;
 
             return false;
+        }
+
+        /**
+         * @param int $flags
+         * @return true|\InvalidArgumentException
+         */
+        function strict($flags)
+        {
+            if ($this->is($flags)) return true;
+            if ($this->of($flags)) return true;
+
+            return $this->invalid();
+        }
+
+        /**
+         * @param mixed $value
+         * @return bool
+         */
+        function assertEquals($value)
+        {
+            return $this->_value == $value;
+        }
+
+        /**
+         * @param mixed $value
+         * @return bool
+         */
+        function assertGreaterThan($value)
+        {
+            return $this->_value > $value;
+        }
+
+        /**
+         * @param mixed $value
+         * @return bool
+         */
+        function assertGreaterThanOrEqual($value)
+        {
+            return $this->_value >= $value;
+        }
+
+        /**
+         * @param mixed $value
+         * @return bool
+         */
+        function assertInstanceOf($value)
+        {
+            return $this->_value instanceof $value;
+        }
+
+        /**
+         * @param mixed $value
+         * @return bool
+         */
+        function assertLessThan($value)
+        {
+            return $this->_value < $value;
+        }
+
+        /**
+         * @param mixed $value
+         * @return bool
+         */
+        function assertLessThanOrEqual($value)
+        {
+            return $this->_value <= $value;
+        }
+
+        /**
+         * @param mixed $value
+         * @return bool
+         */
+        function assertSame($value)
+        {
+            return $this->_value === $value;
         }
 
         /**
