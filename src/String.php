@@ -136,8 +136,10 @@ namespace PowerEcommerce\System {
         {
             $value = new String($value);
             if ($strict) {
+                if (empty($this->getValue())) return $this->getValue() === $value->getValue();
                 return false === strpos($this->getValue(), $value->getValue()) ? false : true;
             }
+            if (empty($this->getValue())) return $this->getValue() == $value->getValue();
             return false === stripos($this->getValue(), $value->getValue()) ? false : true;
         }
 
