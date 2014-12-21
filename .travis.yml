@@ -7,7 +7,7 @@ before_install:
   - sudo apt-get update -qq
 before_script:
   # Change memory_limit for travis
-  - echo 'memory_limit = 37MB' >> ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/travis.ini
+  - echo 'memory_limit = -1' >> ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/travis.ini
   - phpenv rehash;
   - composer install --no-interaction --dev
 script:
