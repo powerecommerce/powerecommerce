@@ -36,6 +36,11 @@ namespace PowerEcommerce\System {
         const BLANK = 1;
 
         /**
+         * A type representing a array value.
+         */
+        const COLLECTION = 1 << 22;
+
+        /**
          * A type representing a Dependency Injection Container.
          */
         const CONTAINER = 1 << 1;

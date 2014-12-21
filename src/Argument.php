@@ -31,16 +31,29 @@ namespace PowerEcommerce\System {
     class Argument
     {
         /**
-         * @var mixed
+         * @var mixed[]
          */
-        private $_value;
+        private $_value = [];
 
         /**
-         * @param mixed $value
+         * @param mixed $value [, $value2, ...]
+         * @exception \InvalidArgumentException
          */
-        function __construct($value)
+        function __construct(...$value)
         {
+            if (!sizeof($value)) $this->invalid();
             $this->_value = $value;
+        }
+
+        /**
+         * @param string $funcName
+         * @return bool
+         */
+        private function _is($funcName)
+        {
+            $valid = true;
+            foreach ($this->_value as $value) $valid = $valid && $funcName($value);
+            return $valid;
         }
 
         /**
@@ -48,7 +61,7 @@ namespace PowerEcommerce\System {
          */
         function isArray()
         {
-            return is_array($this->_value);
+            return $this->_is('is_array');
         }
 
         /**
@@ -56,7 +69,7 @@ namespace PowerEcommerce\System {
          */
         function isBool()
         {
-            return is_bool($this->_value);
+            return $this->_is('is_bool');
         }
 
         /**
@@ -64,7 +77,7 @@ namespace PowerEcommerce\System {
          */
         function isCallable()
         {
-            return is_callable($this->_value);
+            return $this->_is('is_callable');
         }
 
         /**
@@ -72,7 +85,7 @@ namespace PowerEcommerce\System {
          */
         function isDouble()
         {
-            return is_double($this->_value);
+            return $this->_is('is_double');
         }
 
         /**
@@ -80,7 +93,7 @@ namespace PowerEcommerce\System {
          */
         function isFloat()
         {
-            return is_float($this->_value);
+            return $this->_is('is_float');
         }
 
         /**
@@ -88,7 +101,7 @@ namespace PowerEcommerce\System {
          */
         function isInt()
         {
-            return is_int($this->_value);
+            return $this->_is('is_int');
         }
 
         /**
@@ -96,7 +109,7 @@ namespace PowerEcommerce\System {
          */
         function isInteger()
         {
-            return is_integer($this->_value);
+            return $this->_is('is_integer');
         }
 
         /**
@@ -104,7 +117,7 @@ namespace PowerEcommerce\System {
          */
         function isLong()
         {
-            return is_long($this->_value);
+            return $this->_is('is_long');
         }
 
         /**
@@ -112,7 +125,9 @@ namespace PowerEcommerce\System {
          */
         function isNull()
         {
-            return (null === $this->_value);
+            $valid = true;
+            foreach ($this->_value as $value) $valid = $valid && (null === $value);
+            return $valid;
         }
 
         /**
@@ -120,7 +135,7 @@ namespace PowerEcommerce\System {
          */
         function isNumeric()
         {
-            return is_numeric($this->_value);
+            return $this->_is('is_numeric');
         }
 
         /**
@@ -128,7 +143,7 @@ namespace PowerEcommerce\System {
          */
         function isObject()
         {
-            return is_object($this->_value);
+            return $this->_is('is_object');
         }
 
         /**
@@ -136,7 +151,7 @@ namespace PowerEcommerce\System {
          */
         function isReal()
         {
-            return is_real($this->_value);
+            return $this->_is('is_real');
         }
 
         /**
@@ -144,7 +159,7 @@ namespace PowerEcommerce\System {
          */
         function isResource()
         {
-            return is_resource($this->_value);
+            return $this->_is('is_resource');
         }
 
         /**
@@ -152,7 +167,7 @@ namespace PowerEcommerce\System {
          */
         function isScalar()
         {
-            return is_scalar($this->_value);
+            return $this->_is('is_scalar');
         }
 
         /**
@@ -160,7 +175,7 @@ namespace PowerEcommerce\System {
          */
         function isString()
         {
-            return is_string($this->_value);
+            return $this->_is('is_string');
         }
 
         /**
@@ -168,7 +183,7 @@ namespace PowerEcommerce\System {
          */
         function isNumber()
         {
-            return is_numeric($this->_value);
+            return $this->_is('is_numeric');
         }
 
         /**
@@ -197,11 +212,23 @@ namespace PowerEcommerce\System {
         }
 
         /**
+         * @param string $className
+         * @return bool
+         */
+        private function _of($className)
+        {
+            $className = "\\PowerEcommerce\\System\\$className";
+            $valid = true;
+            foreach ($this->_value as $value) $valid = $valid && ($value instanceof $className);
+            return $valid;
+        }
+
+        /**
          * @return bool
          */
         function ofBlank()
         {
-            return $this->_value instanceof Blank;
+            return $this->_of('Blank');
         }
 
         /**
@@ -209,7 +236,7 @@ namespace PowerEcommerce\System {
          */
         function ofCollection()
         {
-            return $this->_value instanceof Collection;
+            return $this->_of('Collection');
         }
 
         /**
@@ -217,7 +244,7 @@ namespace PowerEcommerce\System {
          */
         function ofContainer()
         {
-            return $this->_value instanceof Container;
+            return $this->_of('Container');
         }
 
         /**
@@ -225,7 +252,7 @@ namespace PowerEcommerce\System {
          */
         function ofDateTime()
         {
-            return $this->_value instanceof DateTime;
+            return $this->_of('DateTime');
         }
 
         /**
@@ -233,7 +260,7 @@ namespace PowerEcommerce\System {
          */
         function ofNumber()
         {
-            return $this->_value instanceof Number;
+            return $this->_of('Number');
         }
 
         /**
@@ -241,7 +268,7 @@ namespace PowerEcommerce\System {
          */
         function ofObject()
         {
-            return $this->_value instanceof Object;
+            return $this->_of('Object');
         }
 
         /**
@@ -249,7 +276,7 @@ namespace PowerEcommerce\System {
          */
         function ofString()
         {
-            return $this->_value instanceof String;
+            return $this->_of('String');
         }
 
         /**
@@ -257,7 +284,7 @@ namespace PowerEcommerce\System {
          */
         function ofTimeZone()
         {
-            return $this->_value instanceof TimeZone;
+            return $this->_of('TimeZone');
         }
 
         /**
@@ -267,6 +294,7 @@ namespace PowerEcommerce\System {
         function of($flags)
         {
             if (($flags & TypeCode::BLANK) && $this->ofBlank()) return true;
+            if (($flags & TypeCode::COLLECTION) && $this->ofCollection()) return true;
             if (($flags & TypeCode::CONTAINER) && $this->ofContainer()) return true;
             if (($flags & TypeCode::DATETIME) && $this->ofDateTime()) return true;
             if (($flags & TypeCode::NUMBER) && $this->ofNumber()) return true;
@@ -279,13 +307,23 @@ namespace PowerEcommerce\System {
 
         /**
          * @param int $flags
-         * @return true|\InvalidArgumentException
+         * @return bool
          */
-        function strict($flags)
+        function isof($flags)
         {
             if ($this->is($flags)) return true;
             if ($this->of($flags)) return true;
 
+            return false;
+        }
+
+        /**
+         * @param int $flags
+         * @return true|\InvalidArgumentException
+         */
+        function strict($flags)
+        {
+            if ($this->isof($flags)) return true;
             return $this->invalid();
         }
 
@@ -295,7 +333,9 @@ namespace PowerEcommerce\System {
          */
         function assertEquals($value)
         {
-            return $this->_value == $value;
+            $valid = true;
+            foreach ($this->_value as $_value) $valid = $valid && ($_value == $value);
+            return $valid;
         }
 
         /**
@@ -304,7 +344,9 @@ namespace PowerEcommerce\System {
          */
         function assertGreaterThan($value)
         {
-            return $this->_value > $value;
+            $valid = true;
+            foreach ($this->_value as $_value) $valid = $valid && ($_value > $value);
+            return $valid;
         }
 
         /**
@@ -313,7 +355,9 @@ namespace PowerEcommerce\System {
          */
         function assertGreaterThanOrEqual($value)
         {
-            return $this->_value >= $value;
+            $valid = true;
+            foreach ($this->_value as $_value) $valid = $valid && ($_value >= $value);
+            return $valid;
         }
 
         /**
@@ -322,7 +366,9 @@ namespace PowerEcommerce\System {
          */
         function assertInstanceOf($value)
         {
-            return $this->_value instanceof $value;
+            $valid = true;
+            foreach ($this->_value as $_value) $valid = $valid && ($_value instanceof $value);
+            return $valid;
         }
 
         /**
@@ -331,7 +377,9 @@ namespace PowerEcommerce\System {
          */
         function assertLessThan($value)
         {
-            return $this->_value < $value;
+            $valid = true;
+            foreach ($this->_value as $_value) $valid = $valid && ($_value < $value);
+            return $valid;
         }
 
         /**
@@ -340,7 +388,9 @@ namespace PowerEcommerce\System {
          */
         function assertLessThanOrEqual($value)
         {
-            return $this->_value <= $value;
+            $valid = true;
+            foreach ($this->_value as $_value) $valid = $valid && ($_value <= $value);
+            return $valid;
         }
 
         /**
@@ -349,7 +399,9 @@ namespace PowerEcommerce\System {
          */
         function assertSame($value)
         {
-            return $this->_value === $value;
+            $valid = true;
+            foreach ($this->_value as $_value) $valid = $valid && ($_value === $value);
+            return $valid;
         }
 
         /**

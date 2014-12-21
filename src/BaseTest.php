@@ -25,34 +25,53 @@
 namespace PowerEcommerce\System {
 
     /**
-     * Class Object
-     *
-     * A general type.
-     *
+     * Class BaseTest
      * @package PowerEcommerce\System
      */
-    abstract class Object
+    class BaseTest extends \PHPUnit_Framework_TestCase
     {
-        /**
-         * @return string
-         */
-        function getHashCode()
+        static function _object()
         {
-            return spl_object_hash($this);
+            yield new Blank();
+            yield new Collection();
+            yield new DateTime();
+            yield new Number();
+            yield new String();
+            yield new TimeZone();
         }
 
-        /**
-         * @return int TypeCode
-         */
-        abstract function getTypeCode();
-
-        /**
-         * @param int $typeCode TypeCode
-         * @return \PowerEcommerce\System\Object
-         */
-        function format($typeCode)
+        static function _strict()
         {
-            return (new Converter($this))->format($typeCode);
+            yield [true, 1];
+            yield [true, -1];
+            yield [true, "1"];
+            yield [true, "-1"];
+            yield [true, "php"];
+
+            yield [false, 0];
+            yield [false, "0"];
+            yield [false, null];
+            yield [false, []];
+            yield [false, ""];
+
+            yield [1, true];
+            yield [1, "1"];
+
+            yield [0, false];
+            yield [0, "0"];
+            yield [0, null];
+            yield [0, "php"];
+            yield [0, ""];
+
+            yield [-1, true];
+            yield [-1, "-1"];
+
+            yield [null, []];
+            yield [null, ""];
+        }
+
+        public function testBase()
+        {
         }
     }
 }

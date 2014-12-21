@@ -2,8 +2,16 @@
 
 This is the fundamental part of the system.
 
-## Run tests
+## Tests
+
+### Run:
 
 ```
-$ ./vendor/bin/phpunit tests/
+$ ./vendor/bin/phpunit [--group <name> [--exclude-group <name>]] tests/
+```
+
+### Generate:
+
+```
+$ ./vendor/bin/phpunit-skelgen generate-test "<\name\space\class>" src/<filename> "<\name\space\classTest>" tests/<filenameTest>
 ```

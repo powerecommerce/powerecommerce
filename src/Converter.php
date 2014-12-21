@@ -25,26 +25,23 @@
 namespace PowerEcommerce\System {
 
     /**
-     * Class Object
-     *
-     * A general type.
-     *
+     * Class Converter
      * @package PowerEcommerce\System
      */
-    abstract class Object
+    class Converter
     {
         /**
-         * @return string
+         * @var \PowerEcommerce\System\Object
          */
-        function getHashCode()
-        {
-            return spl_object_hash($this);
-        }
+        protected $object;
 
         /**
-         * @return int TypeCode
+         * @param \PowerEcommerce\System\Object $object
          */
-        abstract function getTypeCode();
+        function __construct(Object $object)
+        {
+            $this->object = $object;
+        }
 
         /**
          * @param int $typeCode TypeCode
@@ -52,7 +49,45 @@ namespace PowerEcommerce\System {
          */
         function format($typeCode)
         {
-            return (new Converter($this))->format($typeCode);
+            $arg = new Argument($typeCode);
+            $arg->strict(TypeCode::PHP_INT);
+
+            return $this->_convert($typeCode);
+        }
+
+        /**
+         * @param int $typeCode TypeCode
+         * @return \PowerEcommerce\System\Object
+         */
+        private function _convert($typeCode)
+        {
+            $arg = new Argument($typeCode);
+
+            switch ($typeCode) {
+                case TypeCode::BLANK:
+                    return new Blank($this->object);
+
+                case TypeCode::OBJECT:
+                    return $this->object;
+
+                case TypeCode::COLLECTION:
+                    return new Collection($this->object);
+
+                case TypeCode::DATETIME:
+                    return new DateTime($this->object);
+
+                case TypeCode::NUMBER:
+                    return new Number($this->object);
+
+                case TypeCode::STRING:
+                    return new String($this->object);
+
+                case TypeCode::TIMEZONE:
+                    return new TimeZone($this->object);
+
+                default:
+                    return $arg->invalid();
+            }
         }
     }
 }
