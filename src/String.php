@@ -180,7 +180,7 @@ namespace PowerEcommerce\System {
          */
         function truncate($keepStart = null, $keepLength = null)
         {
-            if (null === $keepStart) {
+            if (null === $keepStart || $keepStart == $keepLength) {
                 return $this->setValue('');
             }
             return $this->setValue($this->substring($keepStart, $keepLength));

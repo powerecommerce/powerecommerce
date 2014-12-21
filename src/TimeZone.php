@@ -40,5 +40,13 @@ namespace PowerEcommerce\System {
         {
             return TypeCode::TIMEZONE;
         }
+
+        /**
+         * @return string
+         */
+        function __toString()
+        {
+            return '';
+        }
     }
 }

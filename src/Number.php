@@ -71,7 +71,7 @@ namespace PowerEcommerce\System {
         /**
          * @return int
          */
-        public function getPrecision()
+        function getPrecision()
         {
             return $this->precision;
         }
@@ -79,7 +79,7 @@ namespace PowerEcommerce\System {
         /**
          * @return int
          */
-        public function getRound()
+        function getRound()
         {
             return $this->round;
         }
@@ -96,7 +96,7 @@ namespace PowerEcommerce\System {
          * @param string|\PowerEcommerce\System\Object $amount
          * @return $this
          */
-        public function setAmount($amount)
+        function setAmount($amount)
         {
             $set = function ($value) {
                 $this->amount = (string)$value;
@@ -132,7 +132,7 @@ namespace PowerEcommerce\System {
          * @param int|string|\PowerEcommerce\System\Object $precision
          * @return $this
          */
-        public function setPrecision($precision)
+        function setPrecision($precision)
         {
             $set = function ($value) {
                 $this->precision = (int)"$value";
@@ -168,7 +168,7 @@ namespace PowerEcommerce\System {
          * @param int $round PHP_ROUND_HALF_DOWN|PHP_ROUND_HALF_UP
          * @return $this
          */
-        public function setRound($round)
+        function setRound($round)
         {
             $arg = new Argument($round);
             if ($arg->assertSame(PHP_ROUND_HALF_DOWN) || $arg->assertSame(PHP_ROUND_HALF_UP)) {
