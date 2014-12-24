@@ -22,11 +22,14 @@
  * THE SOFTWARE.
  */
 
-namespace PowerEcommerce\System {
+namespace PowerEcommerce\System\Object {
+    use PowerEcommerce\System\Data\Argument;
+    use PowerEcommerce\System\Object;
+    use PowerEcommerce\System\TypeCode;
 
     /**
      * Class Converter
-     * @package PowerEcommerce\System
+     * @package PowerEcommerce\System\Object
      */
     class Converter
     {
@@ -61,32 +64,18 @@ namespace PowerEcommerce\System {
          */
         private function _convert($typeCode)
         {
-            $arg = new Argument($typeCode);
+            $reflector = new \ReflectionClass('\PowerEcommerce\System\TypeCode');
+            $flags = $reflector->getConstants();
 
-            switch ($typeCode) {
-                case TypeCode::BLANK:
-                    return new Blank($this->object);
+            foreach ($flags as $name => $value) {
+                if ($typeCode == $value) {
+                    $name = ucfirst($name);
 
-                case TypeCode::OBJECT:
-                    return $this->object;
+                    $name == 'DateTime' && $name = 'DateTime';
+                    $name == 'TimeZone' && $name = 'TimeZone';
 
-                case TypeCode::COLLECTION:
-                    return new Collection($this->object);
-
-                case TypeCode::DATETIME:
-                    return new DateTime($this->object);
-
-                case TypeCode::NUMBER:
-                    return new Number($this->object);
-
-                case TypeCode::STRING:
-                    return new String($this->object);
-
-                case TypeCode::TIMEZONE:
-                    return new TimeZone($this->object);
-
-                default:
-                    return $arg->invalid();
+                    return new $name($this->object);
+                }
             }
         }
     }

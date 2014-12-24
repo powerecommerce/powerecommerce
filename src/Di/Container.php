@@ -22,31 +22,16 @@
  * THE SOFTWARE.
  */
 
-namespace PowerEcommerce\System {
+namespace PowerEcommerce\System\Di {
 
     /**
-     * Class Blank
+     * Class Container
      *
-     * A null reference.
+     * A type representing a Dependency Injection Container.
      *
      * @package PowerEcommerce\System
      */
-    class Blank extends Object
+    class Container extends \Pimple\Container
     {
-        /**
-         * @return int TypeCode
-         */
-        function getTypeCode()
-        {
-            return TypeCode::BLANK;
-        }
-
-        /**
-         * @return string
-         */
-        function __toString()
-        {
-            return '';
-        }
     }
 }

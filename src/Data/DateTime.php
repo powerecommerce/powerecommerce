@@ -22,31 +22,33 @@
  * THE SOFTWARE.
  */
 
-namespace PowerEcommerce\System {
+namespace PowerEcommerce\System\Data {
+    use PowerEcommerce\System\Object;
+    use PowerEcommerce\System\TypeCode;
 
     /**
-     * Class TimeZone
+     * Class DateTime
      *
-     * Represents a time zone.
+     * A type representing a date and time value.
      *
-     * @package PowerEcommerce\System
+     * @package PowerEcommerce\System\Data
      */
-    class TimeZone extends Object
+    class DateTime extends Object
     {
-        /**
-         * @return int TypeCode
-         */
-        function getTypeCode()
-        {
-            return TypeCode::TIMEZONE;
-        }
-
         /**
          * @return string
          */
         function __toString()
         {
             return '';
+        }
+
+        /**
+         * @return int TypeCode
+         */
+        function getTypeCode()
+        {
+            return TypeCode::DATETIME;
         }
     }
 }

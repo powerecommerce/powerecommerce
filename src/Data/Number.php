@@ -22,14 +22,16 @@
  * THE SOFTWARE.
  */
 
-namespace PowerEcommerce\System {
+namespace PowerEcommerce\System\Data {
+    use PowerEcommerce\System\Object;
+    use PowerEcommerce\System\TypeCode;
 
     /**
      * Class Number
      *
      * A type representing a number value.
      *
-     * @package PowerEcommerce\System
+     * @package PowerEcommerce\System\Data
      */
     class Number extends Object
     {
@@ -105,26 +107,17 @@ namespace PowerEcommerce\System {
 
             $arg = new Argument($amount);
 
-            if ($arg->isString()) {
-                return $set($amount);
-            }
-
+            if ($arg->isString()) return $set($amount);
             $arg->strict(TypeCode::OBJECT);
 
             switch ($amount->getTypeCode()) {
-                case TypeCode::BLANK:
-                case TypeCode::OBJECT:
-                    return $set('0');
-
                 case TypeCode::COLLECTION:
-                case TypeCode::DATETIME:
                 case TypeCode::NUMBER:
                 case TypeCode::STRING:
-                case TypeCode::TIMEZONE:
                     return $set($amount);
 
                 default:
-                    return $arg->invalid();
+                    return $set(0);
             }
         }
 
@@ -141,26 +134,17 @@ namespace PowerEcommerce\System {
 
             $arg = new Argument($precision);
 
-            if ($arg->is(TypeCode::PHP_STRING | TypeCode::PHP_INT)) {
-                return $set($precision);
-            }
-
+            if ($arg->is(TypeCode::PHP_STRING | TypeCode::PHP_INT)) return $set($precision);
             $arg->strict(TypeCode::OBJECT);
 
             switch ($precision->getTypeCode()) {
-                case TypeCode::BLANK:
-                case TypeCode::OBJECT:
-                    return $set('0');
-
                 case TypeCode::COLLECTION:
-                case TypeCode::DATETIME:
                 case TypeCode::NUMBER:
                 case TypeCode::STRING:
-                case TypeCode::TIMEZONE:
                     return $set($precision);
 
                 default:
-                    return $arg->invalid();
+                    return $set(0);
             }
         }
 
@@ -171,11 +155,12 @@ namespace PowerEcommerce\System {
         function setRound($round)
         {
             $arg = new Argument($round);
-            if ($arg->assertSame(PHP_ROUND_HALF_DOWN) || $arg->assertSame(PHP_ROUND_HALF_UP)) {
+
+            if ($arg->same(PHP_ROUND_HALF_DOWN) || $arg->same(PHP_ROUND_HALF_UP))
                 $this->round = $round;
-            } else {
+            else
                 $arg->invalid();
-            }
+
             return $this;
         }
 
@@ -186,7 +171,7 @@ namespace PowerEcommerce\System {
         private function round($amount)
         {
             $shift = 0;
-            $this->getPrecision() == 0 && $shift -= 1;
+            !$this->getPrecision() && $shift -= 1;
 
             return (substr($amount, -1) < 5)
                 ? substr($amount, 0, -1 + $shift)
@@ -195,7 +180,7 @@ namespace PowerEcommerce\System {
 
         /**
          * @param string $func
-         * @param \PowerEcommerce\System\Number $value
+         * @param \PowerEcommerce\System\Data\Number $value
          */
         private function _operation($func, Number $value)
         {
@@ -211,7 +196,7 @@ namespace PowerEcommerce\System {
         }
 
         /**
-         * @param \PowerEcommerce\System\Number $value
+         * @param \PowerEcommerce\System\Data\Number $value
          */
         function add(Number $value)
         {
@@ -219,7 +204,7 @@ namespace PowerEcommerce\System {
         }
 
         /**
-         * @param \PowerEcommerce\System\Number $value
+         * @param \PowerEcommerce\System\Data\Number $value
          */
         function divide(Number $value)
         {
@@ -227,7 +212,7 @@ namespace PowerEcommerce\System {
         }
 
         /**
-         * @param \PowerEcommerce\System\Number $value
+         * @param \PowerEcommerce\System\Data\Number $value
          */
         function modulo(Number $value)
         {
@@ -235,7 +220,7 @@ namespace PowerEcommerce\System {
         }
 
         /**
-         * @param \PowerEcommerce\System\Number $value
+         * @param \PowerEcommerce\System\Data\Number $value
          */
         function multiply(Number $value)
         {
@@ -243,7 +228,7 @@ namespace PowerEcommerce\System {
         }
 
         /**
-         * @param \PowerEcommerce\System\Number $value
+         * @param \PowerEcommerce\System\Data\Number $value
          */
         function subtract(Number $value)
         {
@@ -252,7 +237,7 @@ namespace PowerEcommerce\System {
 
         /**
          * @param int $targets
-         * @return \PowerEcommerce\System\Number[]
+         * @return \PowerEcommerce\System\Data\Number[]
          */
         function allocate($targets)
         {
@@ -260,7 +245,7 @@ namespace PowerEcommerce\System {
             $_targets->setAmount($targets);
 
             $one = clone $this;
-            $one->setAmount('1');
+            $one->setAmount(1);
 
             $part = clone $this;
             $part->divide($_targets);

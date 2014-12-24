@@ -22,14 +22,16 @@
  * THE SOFTWARE.
  */
 
-namespace PowerEcommerce\System {
+namespace PowerEcommerce\System\Data {
+    use PowerEcommerce\System\Object;
+    use PowerEcommerce\System\TypeCode;
 
     /**
      * Class Collection
      *
      * A type representing a array value.
      *
-     * @package PowerEcommerce\System
+     * @package PowerEcommerce\System\Data
      */
     class Collection extends Object implements \ArrayAccess, \Iterator
     {
@@ -50,7 +52,6 @@ namespace PowerEcommerce\System {
 
         /**
          * @param array|\PowerEcommerce\System\Object $value
-         * @exception \InvalidArgumentException
          */
         function __construct($value = [])
         {
@@ -58,37 +59,23 @@ namespace PowerEcommerce\System {
         }
 
         /**
-         * @see __construct
          * @param array|\PowerEcommerce\System\Object $value
-         * @exception \InvalidArgumentException
          * @return $this
          */
         function setValue($value)
         {
             $arg = new Argument($value);
 
-            if ($arg->isArray()) {
-                return $this->_set($value);
-            }
-
+            if ($arg->isArray()) return $this->_set($value);
             $arg->strict(TypeCode::OBJECT);
 
             switch ($value->getTypeCode()) {
-                case TypeCode::BLANK:
-                case TypeCode::OBJECT:
-                    return $this->_set([]);
-
                 case TypeCode::COLLECTION:
+                    /** @var \PowerEcommerce\System\Data\Collection $value */
                     return $this->_set($value->getValue());
 
-                case TypeCode::DATETIME:
-                case TypeCode::NUMBER:
-                case TypeCode::STRING:
-                case TypeCode::TIMEZONE:
-                    return $this->_set([$value]);
-
                 default:
-                    return $arg->invalid();
+                    return $this->_set([$value]);
             }
         }
 
@@ -99,13 +86,16 @@ namespace PowerEcommerce\System {
         private function _set(array $value)
         {
             $this->value = $value;
-            $this->_resetKeys();
-            return $this;
+            return $this->_resetKeys();
         }
 
+        /**
+         * @return $this
+         */
         private function _resetKeys()
         {
             $this->keys = array_keys($this->getValue());
+            return $this;
         }
 
         /**
@@ -114,6 +104,48 @@ namespace PowerEcommerce\System {
         function getValue()
         {
             return $this->value;
+        }
+
+        /**
+         * @param mixed $key
+         * @param mixed $value
+         * @param string $msg
+         * @return $this
+         */
+        function addItem($key, $value, $msg = 'This item already exists')
+        {
+            if ($this[$key]) return (new Argument())->invalid($msg);
+            return $this->setItem($key, $value);
+        }
+
+        /**
+         * @param mixed $key
+         * @param mixed $value
+         * @return $this
+         */
+        function setItem($key, $value)
+        {
+            $this[$key] = $value;
+            return $this;
+        }
+
+        /**
+         * @param mixed $key
+         * @return mixed
+         */
+        function getItem($key)
+        {
+            return $this[$key];
+        }
+
+        /**
+         * @param mixed $key
+         * @return $this
+         */
+        function deleteItem($key)
+        {
+            unset($this[$key]);
+            return $this;
         }
 
         /**
@@ -134,35 +166,28 @@ namespace PowerEcommerce\System {
             $value = new Collection($value);
             if ($strict) {
                 foreach ($this->getValue() as $_key => $_value) {
-                    if (
-                        (gettype($_value) !== gettype($value[$_key]))
+                    if ((gettype($_value) !== gettype($value[$_key]))
                         && !(new Argument($_value, $value[$_key]))->isof(TypeCode::STRING | TypeCode::PHP_STRING)
-                    )
-                        return false;
-                    if (
-                        (new Argument($_value))->isof(TypeCode::STRING | TypeCode::PHP_STRING)
+                    ) return false;
+
+                    if ((new Argument($_value))->isof(TypeCode::STRING | TypeCode::PHP_STRING)
                         && !(new String($_value))->compare($value[$_key])
-                    )
-                        return false;
-                    else if (
-                        !(new Argument($_value))->isof(TypeCode::STRING | TypeCode::PHP_STRING)
+                    ) return false;
+
+                    elseif (!(new Argument($_value))->isof(TypeCode::STRING | TypeCode::PHP_STRING)
                         && $_value !== $value[$_key]
-                    )
-                        return false;
+                    ) return false;
                 }
                 return true;
             }
             foreach ($this->getValue() as $_key => $_value) {
-                if (
-                    (new Argument($_value, $value[$_key]))->isof(TypeCode::STRING | TypeCode::PHP_STRING)
+                if ((new Argument($_value, $value[$_key]))->isof(TypeCode::STRING | TypeCode::PHP_STRING)
                     && !(new String($_value))->compare($value[$_key], false)
-                )
-                    return false;
-                else if (
-                    !(new Argument($_value, $value[$_key]))->isof(TypeCode::STRING | TypeCode::PHP_STRING)
+                ) return false;
+
+                elseif (!(new Argument($_value, $value[$_key]))->isof(TypeCode::STRING | TypeCode::PHP_STRING)
                     && $_value != $value[$_key]
-                )
-                    return false;
+                ) return false;
             }
             return true;
         }
@@ -189,19 +214,14 @@ namespace PowerEcommerce\System {
                 foreach ($value->getValue() as $_key => $_value) {
                     $valid = false;
                     foreach ($this->getValue() as $_key2 => $_value2) {
-                        if (
-                            (gettype($_value) !== gettype($_value2))
+                        if ((gettype($_value) !== gettype($_value2))
                             && !(new Argument($_value, $_value2))->isof(TypeCode::STRING | TypeCode::PHP_STRING)
-                        )
-                            continue;
-                        if ((
-                                (new Argument($_value))->isof(TypeCode::STRING | TypeCode::PHP_STRING)
+                        ) continue;
+
+                        if (((new Argument($_value))->isof(TypeCode::STRING | TypeCode::PHP_STRING)
                                 && (new String($_value))->compare($_value2, $strict)
-                            )
-                            || (
-                                !(new Argument($_value))->isof(TypeCode::STRING | TypeCode::PHP_STRING)
-                                && $_value === $_value2
-                            )
+                            ) || (!(new Argument($_value))->isof(TypeCode::STRING | TypeCode::PHP_STRING)
+                                && $_value === $_value2)
                         ) {
                             $valid = true;
                             break;
@@ -214,18 +234,12 @@ namespace PowerEcommerce\System {
             foreach ($value->getValue() as $_key => $_value) {
                 $valid = false;
                 foreach ($this->getValue() as $_key2 => $_value2) {
-                    if ((
-                            (new Argument($_value, $_value2))->isof(TypeCode::STRING | TypeCode::PHP_STRING)
+                    if (((new Argument($_value, $_value2))->isof(TypeCode::STRING | TypeCode::PHP_STRING)
                             && (new String($_value))->compare($_value2, $strict)
-                        )
-                        || (
-                            !(new Argument($_value, $_value2))->isof(TypeCode::STRING | TypeCode::PHP_STRING)
-                            && (
-                                (new Argument($_value, $_value2))->isObject()
-                                || (!(new Argument($_value))->isObject() && !(new Argument($_value2))->isObject())
-                            )
-                            && $_value == $_value2
-                        )
+                        ) || (!(new Argument($_value, $_value2))->isof(TypeCode::STRING | TypeCode::PHP_STRING)
+                            && ((new Argument($_value, $_value2))->isObject()
+                                || (!(new Argument($_value))->isObject() && !(new Argument($_value2))->isObject()))
+                            && $_value == $_value2)
                     ) {
                         $valid = true;
                         break;
@@ -250,9 +264,7 @@ namespace PowerEcommerce\System {
          */
         function join(array $value)
         {
-            foreach ($value as $item) {
-                $this->concat($item);
-            }
+            foreach ($value as $item) $this->concat($item);
             return $this;
         }
 
@@ -273,9 +285,7 @@ namespace PowerEcommerce\System {
          */
         function truncate($keepStart = null, $keepLength = null)
         {
-            if (null === $keepStart) {
-                return $this->setValue([]);
-            }
+            if (null === $keepStart) return $this->setValue([]);
             return $this->setValue($this->slice($keepStart, $keepLength));
         }
 
@@ -324,12 +334,8 @@ namespace PowerEcommerce\System {
          */
         function offsetSet($offset, $value)
         {
-            $arg = new Argument($offset);
-            if ($arg->isNull()) {
-                $this->value[] = $value;
-            } else {
-                $this->value[$offset] = $value;
-            }
+            if ((new Argument($offset))->isNull()) $this->value[] = $value;
+            else $this->value[$offset] = $value;
             $this->_resetKeys();
         }
 

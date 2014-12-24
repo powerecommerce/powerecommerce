@@ -22,32 +22,14 @@
  * THE SOFTWARE.
  */
 
-namespace PowerEcommerce\System;
+namespace PowerEcommerce\System\Di;
 
 use PowerEcommerce\System\Util\BaseUnit;
 
-class TypeCodeTest extends BaseUnit
+class ContainerTest extends BaseUnit
 {
-    function testGetFlags()
+    function testContainer()
     {
-        $flags = 0;
-
-        $reflector = new \ReflectionClass('\PowerEcommerce\System\TypeCode');
-        $all = $reflector->getConstants();
-        foreach ($all as $const) $flags |= $const;
-
-        $this->assertSame(TypeCode::getFlags(), $flags);
-        $this->assertSame(TypeCode::getFlags(), $flags);
-    }
-
-    function testUnique()
-    {
-        $reflector = new \ReflectionClass('\PowerEcommerce\System\TypeCode');
-        $flags = $reflector->getConstants();
-
-        array_walk_recursive($flags, function ($value, $key) use (&$flags) {
-            unset($flags[$key]);
-            $this->assertFalse(in_array($value, $flags));
-        });
     }
 }
+

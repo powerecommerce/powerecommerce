@@ -22,56 +22,50 @@
  * THE SOFTWARE.
  */
 
-namespace PowerEcommerce\System {
+namespace PowerEcommerce\System\Security\Component {
+    use PowerEcommerce\System\Data\Argument;
+    use PowerEcommerce\System\Security\Component;
+    use PowerEcommerce\System\TypeCode;
 
     /**
-     * Class BaseTest
-     * @package PowerEcommerce\System
+     * Class Privilege
+     * @package PowerEcommerce\System\Security\Component
      */
-    class BaseTest extends \PHPUnit_Framework_TestCase
+    class Privilege extends Component
     {
-        static function _object()
+        /**
+         * @param \PowerEcommerce\System\Security\Component $component
+         * @return $this
+         */
+        function attach(Component $component)
         {
-            yield new Blank();
-            yield new Collection();
-            yield new DateTime();
-            yield new Number();
-            yield new String();
-            yield new TimeZone();
+            (new Argument())->invalid();
         }
 
-        static function _strict()
+        /**
+         * @param \PowerEcommerce\System\Security\Component $component
+         * @return $this
+         */
+        function detach(Component $component)
         {
-            yield [true, 1];
-            yield [true, -1];
-            yield [true, "1"];
-            yield [true, "-1"];
-            yield [true, "php"];
-
-            yield [false, 0];
-            yield [false, "0"];
-            yield [false, null];
-            yield [false, []];
-            yield [false, ""];
-
-            yield [1, true];
-            yield [1, "1"];
-
-            yield [0, false];
-            yield [0, "0"];
-            yield [0, null];
-            yield [0, "php"];
-            yield [0, ""];
-
-            yield [-1, true];
-            yield [-1, "-1"];
-
-            yield [null, []];
-            yield [null, ""];
+            (new Argument())->invalid();
         }
 
-        public function testBase()
+        /**
+         * @param Component $component
+         * @return bool
+         */
+        function isGranted(Component ...$component)
         {
+            return true;
+        }
+
+        /**
+         * @return int TypeCode
+         */
+        function getTypeCode()
+        {
+            return TypeCode::PRIVILEGE;
         }
     }
 }

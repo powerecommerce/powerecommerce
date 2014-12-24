@@ -22,23 +22,29 @@
  * THE SOFTWARE.
  */
 
-namespace PowerEcommerce\System {
+namespace PowerEcommerce\System\Security {
+    use PowerEcommerce\System\Data\Argument;
+    use PowerEcommerce\System\Object;
+    use PowerEcommerce\System\TypeCode;
 
     /**
-     * Class DateTime
-     *
-     * A type representing a date and time value.
-     *
-     * @package PowerEcommerce\System
+     * Class Component
+     * @package PowerEcommerce\System\Security
      */
-    class DateTime extends Object
+    abstract class Component extends Object
     {
         /**
-         * @return int TypeCode
+         * @var string
          */
-        function getTypeCode()
+        protected $name;
+
+        /**
+         * @param string|\PowerEcommerce\System\Data\String $name
+         */
+        function __construct($name)
         {
-            return TypeCode::DATETIME;
+            (new Argument($name))->strict(TypeCode::PHP_STRING | TypeCode::STRING);
+            $this->name = (string)$name;
         }
 
         /**
@@ -46,7 +52,25 @@ namespace PowerEcommerce\System {
          */
         function __toString()
         {
-            return '';
+            return $this->name;
         }
+
+        /**
+         * @param \PowerEcommerce\System\Security\Component $component
+         * @return $this
+         */
+        abstract function attach(Component $component);
+
+        /**
+         * @param \PowerEcommerce\System\Security\Component $component
+         * @return $this
+         */
+        abstract function detach(Component $component);
+
+        /**
+         * @param Component $component
+         * @return bool
+         */
+        abstract function isGranted(Component ...$component);
     }
 }

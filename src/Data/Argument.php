@@ -22,27 +22,42 @@
  * THE SOFTWARE.
  */
 
-namespace PowerEcommerce\System {
+namespace PowerEcommerce\System\Data {
+    use PowerEcommerce\System\TypeCode;
 
     /**
      * Class Argument
-     * @package PowerEcommerce\System
+     * @package PowerEcommerce\System\Data
      */
-    class Argument
+    class Argument extends Assert
     {
         /**
          * @var mixed[]
          */
-        private $_value = [];
+        protected $value = [];
 
         /**
          * @param mixed $value [, $value2, ...]
-         * @exception \InvalidArgumentException
          */
         function __construct(...$value)
         {
-            if (!sizeof($value)) $this->invalid();
-            $this->_value = $value;
+            $this->setValue($value);
+        }
+
+        /**
+         * @return mixed[]
+         */
+        function getValue()
+        {
+            return $this->value;
+        }
+
+        /**
+         * @param mixed[] $value
+         */
+        function setValue(array $value)
+        {
+            $this->value = $value;
         }
 
         /**
@@ -51,9 +66,8 @@ namespace PowerEcommerce\System {
          */
         private function _is($funcName)
         {
-            $valid = true;
-            foreach ($this->_value as $value) $valid = $valid && $funcName($value);
-            return $valid;
+            foreach ($this->value as $value) if (!$funcName($value)) return false;
+            return true;
         }
 
         /**
@@ -125,9 +139,7 @@ namespace PowerEcommerce\System {
          */
         function isNull()
         {
-            $valid = true;
-            foreach ($this->_value as $value) $valid = $valid && (null === $value);
-            return $valid;
+            return $this->_is('is_null');
         }
 
         /**
@@ -213,54 +225,14 @@ namespace PowerEcommerce\System {
 
         /**
          * @param string $className
+         * @param string $namespace
          * @return bool
          */
-        private function _of($className)
+        private function _of($className, $namespace = '\\PowerEcommerce\\System\\')
         {
-            $className = "\\PowerEcommerce\\System\\$className";
-            $valid = true;
-            foreach ($this->_value as $value) $valid = $valid && ($value instanceof $className);
-            return $valid;
-        }
-
-        /**
-         * @return bool
-         */
-        function ofBlank()
-        {
-            return $this->_of('Blank');
-        }
-
-        /**
-         * @return bool
-         */
-        function ofCollection()
-        {
-            return $this->_of('Collection');
-        }
-
-        /**
-         * @return bool
-         */
-        function ofContainer()
-        {
-            return $this->_of('Container');
-        }
-
-        /**
-         * @return bool
-         */
-        function ofDateTime()
-        {
-            return $this->_of('DateTime');
-        }
-
-        /**
-         * @return bool
-         */
-        function ofNumber()
-        {
-            return $this->_of('Number');
+            $fullClassName = "$namespace$className";
+            foreach ($this->value as $value) if (!($value instanceof $fullClassName)) return false;
+            return true;
         }
 
         /**
@@ -274,9 +246,57 @@ namespace PowerEcommerce\System {
         /**
          * @return bool
          */
+        function ofArgument()
+        {
+            return $this->_of('Data\\Argument');
+        }
+
+        /**
+         * @return bool
+         */
+        function ofAssert()
+        {
+            return $this->_of('Data\\Assert');
+        }
+
+        /**
+         * @return bool
+         */
+        function ofBlank()
+        {
+            return $this->_of('Data\\Blank');
+        }
+
+        /**
+         * @return bool
+         */
+        function ofCollection()
+        {
+            return $this->_of('Data\\Collection');
+        }
+
+        /**
+         * @return bool
+         */
+        function ofDateTime()
+        {
+            return $this->_of('Data\\DateTime');
+        }
+
+        /**
+         * @return bool
+         */
+        function ofNumber()
+        {
+            return $this->_of('Data\\Number');
+        }
+
+        /**
+         * @return bool
+         */
         function ofString()
         {
-            return $this->_of('String');
+            return $this->_of('Data\\String');
         }
 
         /**
@@ -284,7 +304,39 @@ namespace PowerEcommerce\System {
          */
         function ofTimeZone()
         {
-            return $this->_of('TimeZone');
+            return $this->_of('Data\\TimeZone');
+        }
+
+        /**
+         * @return bool
+         */
+        function ofAcl()
+        {
+            return $this->_of('Security\\Component\\Acl');
+        }
+
+        /**
+         * @return bool
+         */
+        function ofPrivilege()
+        {
+            return $this->_of('Security\\Component\\Privilege');
+        }
+
+        /**
+         * @return bool
+         */
+        function ofResource()
+        {
+            return $this->_of('Security\\Component\\Resource');
+        }
+
+        /**
+         * @return bool
+         */
+        function ofRole()
+        {
+            return $this->_of('Security\\Component\\Role');
         }
 
         /**
@@ -293,14 +345,21 @@ namespace PowerEcommerce\System {
          */
         function of($flags)
         {
+            if (($flags & TypeCode::OBJECT) && $this->ofObject()) return true;
+
+            if (($flags & TypeCode::ARGUMENT) && $this->ofArgument()) return true;
+            if (($flags & TypeCode::ASSERT) && $this->ofAssert()) return true;
             if (($flags & TypeCode::BLANK) && $this->ofBlank()) return true;
             if (($flags & TypeCode::COLLECTION) && $this->ofCollection()) return true;
-            if (($flags & TypeCode::CONTAINER) && $this->ofContainer()) return true;
             if (($flags & TypeCode::DATETIME) && $this->ofDateTime()) return true;
             if (($flags & TypeCode::NUMBER) && $this->ofNumber()) return true;
-            if (($flags & TypeCode::OBJECT) && $this->ofObject()) return true;
             if (($flags & TypeCode::STRING) && $this->ofString()) return true;
             if (($flags & TypeCode::TIMEZONE) && $this->ofTimeZone()) return true;
+
+            if (($flags & TypeCode::ACL) && $this->ofAcl()) return true;
+            if (($flags & TypeCode::PRIVILEGE) && $this->ofPrivilege()) return true;
+            if (($flags & TypeCode::RESOURCE) && $this->ofResource()) return true;
+            if (($flags & TypeCode::ROLE) && $this->ofRole()) return true;
 
             return false;
         }
@@ -328,89 +387,20 @@ namespace PowerEcommerce\System {
         }
 
         /**
-         * @param mixed $value
-         * @return bool
-         */
-        function assertEquals($value)
-        {
-            $valid = true;
-            foreach ($this->_value as $_value) $valid = $valid && ($_value == $value);
-            return $valid;
-        }
-
-        /**
-         * @param mixed $value
-         * @return bool
-         */
-        function assertGreaterThan($value)
-        {
-            $valid = true;
-            foreach ($this->_value as $_value) $valid = $valid && ($_value > $value);
-            return $valid;
-        }
-
-        /**
-         * @param mixed $value
-         * @return bool
-         */
-        function assertGreaterThanOrEqual($value)
-        {
-            $valid = true;
-            foreach ($this->_value as $_value) $valid = $valid && ($_value >= $value);
-            return $valid;
-        }
-
-        /**
-         * @param mixed $value
-         * @return bool
-         */
-        function assertInstanceOf($value)
-        {
-            $valid = true;
-            foreach ($this->_value as $_value) $valid = $valid && ($_value instanceof $value);
-            return $valid;
-        }
-
-        /**
-         * @param mixed $value
-         * @return bool
-         */
-        function assertLessThan($value)
-        {
-            $valid = true;
-            foreach ($this->_value as $_value) $valid = $valid && ($_value < $value);
-            return $valid;
-        }
-
-        /**
-         * @param mixed $value
-         * @return bool
-         */
-        function assertLessThanOrEqual($value)
-        {
-            $valid = true;
-            foreach ($this->_value as $_value) $valid = $valid && ($_value <= $value);
-            return $valid;
-        }
-
-        /**
-         * @param mixed $value
-         * @return bool
-         */
-        function assertSame($value)
-        {
-            $valid = true;
-            foreach ($this->_value as $_value) $valid = $valid && ($_value === $value);
-            return $valid;
-        }
-
-        /**
-         * @param string $message
+         * @param string $msg
          * @return \InvalidArgumentException
          */
-        function invalid($message = null)
+        function invalid($msg = '')
         {
-            throw new \InvalidArgumentException($message);
+            throw new \InvalidArgumentException($msg);
+        }
+
+        /**
+         * @return int TypeCode
+         */
+        function getTypeCode()
+        {
+            return TypeCode::ARGUMENT;
         }
     }
 }

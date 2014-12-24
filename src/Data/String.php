@@ -22,14 +22,16 @@
  * THE SOFTWARE.
  */
 
-namespace PowerEcommerce\System {
+namespace PowerEcommerce\System\Data {
+    use PowerEcommerce\System\Object;
+    use PowerEcommerce\System\TypeCode;
 
     /**
      * Class String
      *
      * Unicode character strings.
      *
-     * @package PowerEcommerce\System
+     * @package PowerEcommerce\System\Data
      */
     class String extends Object
     {
@@ -54,26 +56,24 @@ namespace PowerEcommerce\System {
         {
             $arg = new Argument($value);
 
-            if ($arg->isString()) {
-                return $this->_set($value);
-            }
-
+            if ($arg->isString()) return $this->_set($value);
             $arg->strict(TypeCode::OBJECT);
 
             switch ($value->getTypeCode()) {
-                case TypeCode::BLANK:
-                case TypeCode::OBJECT:
-                    return $this->_set('');
-
                 case TypeCode::COLLECTION:
                 case TypeCode::DATETIME:
                 case TypeCode::NUMBER:
                 case TypeCode::STRING:
                 case TypeCode::TIMEZONE:
+
+                case TypeCode::ACL:
+                case TypeCode::PRIVILEGE:
+                case TypeCode::RESOURCE:
+                case TypeCode::ROLE:
                     return $this->_set($value);
 
                 default:
-                    return $arg->invalid();
+                    return $this->_set('');
             }
         }
 
@@ -111,9 +111,8 @@ namespace PowerEcommerce\System {
         function compare($value, $strict = true)
         {
             $value = new String($value);
-            if ($strict) {
-                return 0 === strcmp($this, $value) ? true : false;
-            }
+
+            if ($strict) return 0 === strcmp($this, $value) ? true : false;
             return 0 === strcasecmp($this, $value) ? true : false;
         }
 
@@ -136,10 +135,10 @@ namespace PowerEcommerce\System {
         {
             $value = new String($value);
             if ($strict) {
-                if (empty($this->getValue())) return $this->getValue() === $value->getValue();
+                if (!$this->getValue()) return $this->getValue() === $value->getValue();
                 return false === strpos($this->getValue(), $value->getValue()) ? false : true;
             }
-            if (empty($this->getValue())) return $this->getValue() == $value->getValue();
+            if (!$this->getValue()) return $this->getValue() == $value->getValue();
             return false === stripos($this->getValue(), $value->getValue()) ? false : true;
         }
 
@@ -157,9 +156,7 @@ namespace PowerEcommerce\System {
          */
         function join(array $value)
         {
-            foreach ($value as $item) {
-                $this->concat($item);
-            }
+            foreach ($value as $item) $this->concat($item);
             return $this;
         }
 
@@ -180,9 +177,7 @@ namespace PowerEcommerce\System {
          */
         function truncate($keepStart = null, $keepLength = null)
         {
-            if (null === $keepStart || $keepStart == $keepLength) {
-                return $this->setValue('');
-            }
+            if (null === $keepStart || $keepStart == $keepLength) return $this->setValue('');
             return $this->setValue($this->substring($keepStart, $keepLength));
         }
     }

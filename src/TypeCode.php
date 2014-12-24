@@ -31,6 +31,15 @@ namespace PowerEcommerce\System {
     class TypeCode
     {
         /**
+         * A type representing a access control list.
+         */
+        const ACL = 1 << 23;
+
+        const ARGUMENT = 1 << 26;
+
+        const ASSERT = 1 << 27;
+
+        /**
          * A null reference.
          */
         const BLANK = 1;
@@ -59,6 +68,18 @@ namespace PowerEcommerce\System {
          * A general type.
          */
         const OBJECT = 1 << 4;
+
+        const PRIVILEGE = 1 << 28;
+
+        /**
+         * A type representing a value to which access is controlled.
+         */
+        const RESOURCE = 1 << 24;
+
+        /**
+         * A type representing a value that may request access to a Resource.
+         */
+        const ROLE = 1 << 25;
 
         /**
          * Unicode character strings.

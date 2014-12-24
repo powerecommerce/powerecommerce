@@ -22,18 +22,33 @@
  * THE SOFTWARE.
  */
 
-namespace PowerEcommerce\System {
+namespace PowerEcommerce\System\Data {
+    use PowerEcommerce\System\Object;
+    use PowerEcommerce\System\TypeCode;
 
     /**
-     * Class ContainerTest
-     * @package PowerEcommerce\System
+     * Class Blank
+     *
+     * A null reference.
+     *
+     * @package PowerEcommerce\System\Data
      */
-    class ContainerTest extends \PHPUnit_Framework_TestCase
+    class Blank extends Object
     {
-        function testGetTypeCode()
+        /**
+         * @return string
+         */
+        function __toString()
         {
-            $this->assertSame((new Container())->getTypeCode(), TypeCode::CONTAINER);
-            $this->assertNotSame((new Container())->getTypeCode(), TypeCode::BLANK);
+            return '';
+        }
+
+        /**
+         * @return int TypeCode
+         */
+        function getTypeCode()
+        {
+            return TypeCode::BLANK;
         }
     }
 }

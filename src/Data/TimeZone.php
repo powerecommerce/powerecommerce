@@ -22,23 +22,33 @@
  * THE SOFTWARE.
  */
 
-namespace PowerEcommerce\System {
+namespace PowerEcommerce\System\Data {
+    use PowerEcommerce\System\Object;
+    use PowerEcommerce\System\TypeCode;
 
     /**
-     * Class Container
+     * Class TimeZone
      *
-     * A type representing a Dependency Injection Container.
+     * Represents a time zone.
      *
-     * @package PowerEcommerce\System
+     * @package PowerEcommerce\System\Data
      */
-    class Container extends \Pimple\Container
+    class TimeZone extends Object
     {
+        /**
+         * @return string
+         */
+        function __toString()
+        {
+            return '';
+        }
+
         /**
          * @return int TypeCode
          */
         function getTypeCode()
         {
-            return TypeCode::CONTAINER;
+            return TypeCode::TIMEZONE;
         }
     }
 }
