@@ -17,3 +17,9 @@ $ ./vendor/bin/phpunit [--group <name> [--exclude-group <name>]] tests/
 ```
 $ ./vendor/bin/phpunit-skelgen generate-test "<\name\space\class>" src/<filename> "<\name\space\classTest>" tests/<filenameTest>    
 ```
+
+### Coverage:
+
+```
+$ ./vendor/bin/phpunit --colors --coverage-html var/coverage/  tests/    
+```
