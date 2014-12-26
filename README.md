@@ -4,6 +4,12 @@
 
 This is the fundamental part of the system.
 
+## Install
+
+```
+$ composer install
+```
+
 ## Tests
 
 ### Run:
