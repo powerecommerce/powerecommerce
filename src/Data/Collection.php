@@ -112,10 +112,10 @@ namespace PowerEcommerce\System\Data {
          * @param string $msg
          * @return $this
          */
-        function addItem($key, $value, $msg = 'This item already exists')
+        function add($key, $value, $msg = 'This item already exists')
         {
             if ($this[$key]) return (new Argument())->invalid($msg);
-            return $this->setItem($key, $value);
+            return $this->set($key, $value);
         }
 
         /**
@@ -123,7 +123,7 @@ namespace PowerEcommerce\System\Data {
          * @param mixed $value
          * @return $this
          */
-        function setItem($key, $value)
+        function set($key, $value)
         {
             $this[$key] = $value;
             return $this;
@@ -133,7 +133,7 @@ namespace PowerEcommerce\System\Data {
          * @param mixed $key
          * @return mixed
          */
-        function getItem($key)
+        function get($key)
         {
             return $this[$key];
         }
@@ -142,7 +142,7 @@ namespace PowerEcommerce\System\Data {
          * @param mixed $key
          * @return $this
          */
-        function deleteItem($key)
+        function del($key)
         {
             unset($this[$key]);
             return $this;

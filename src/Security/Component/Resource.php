@@ -55,7 +55,7 @@ namespace PowerEcommerce\System\Security\Component {
         function attach(Component $component)
         {
             (new Argument($component))->strict(TypeCode::ROLE);
-            $this->children->addItem((string)$component, $component, 'This component already exists');
+            $this->children->add((string)$component, $component, 'This component already exists');
 
             return $this;
         }
@@ -67,7 +67,7 @@ namespace PowerEcommerce\System\Security\Component {
         function detach(Component $component)
         {
             (new Argument($component))->strict(TypeCode::ROLE);
-            $this->children->deleteItem((string)$component);
+            $this->children->del((string)$component);
 
             return $this;
         }
@@ -83,7 +83,7 @@ namespace PowerEcommerce\System\Security\Component {
             /** @var Component $item */
             foreach ($component as $item) {
                 if ($item->getTypeCode() === TypeCode::ROLE
-                    && !$this->children->getItem((string)$item)
+                    && !$this->children->get((string)$item)
                 ) return false;
 
                 if ($item->getTypeCode() === TypeCode::ROLE)

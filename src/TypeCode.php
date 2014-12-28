@@ -64,6 +64,8 @@ namespace PowerEcommerce\System {
          */
         const NUMBER = 1 << 3;
 
+        const REGEXP = 1 << 29;
+
         /**
          * A general type.
          */
@@ -90,6 +92,14 @@ namespace PowerEcommerce\System {
          * Represents a time zone.
          */
         const TIMEZONE = 1 << 6;
+
+        const HANDLE = 1 << 30;
+
+        const ROUTE = 1 << 31;
+
+        const ROUTER = 1 << 32;
+
+        const SERVICE = 1 << 33;
 
         /**
          * Php

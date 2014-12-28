@@ -22,75 +22,58 @@
  * THE SOFTWARE.
  */
 
-namespace PowerEcommerce\System\Security\Component {
+namespace PowerEcommerce\System\Routing\Component {
     use PowerEcommerce\System\Data\Argument;
-    use PowerEcommerce\System\Data\Collection;
-    use PowerEcommerce\System\Security\Component;
+    use PowerEcommerce\System\Routing\Component;
     use PowerEcommerce\System\TypeCode;
 
     /**
-     * Class Role
-     * @package PowerEcommerce\System\Security\Component
+     * Class Service
+     * @package PowerEcommerce\System\Routing\Component
      */
-    class Role extends Component
+    class Service extends Component
     {
         /**
-         * @var \PowerEcommerce\System\Data\Collection
+         * @var array
          */
-        private $children;
+        private $args = [];
 
         /**
          * @param string|\PowerEcommerce\System\Data\String $name
+         * @param array $args
          */
-        function __construct($name)
+        function __construct($name, array $args = [])
         {
-            $this->children = new Collection();
+            $this->args = $args;
             parent::__construct($name);
         }
 
         /**
-         * @param \PowerEcommerce\System\Security\Component $component
+         * @param \PowerEcommerce\System\Routing\Component $component
          * @return $this
          */
         function attach(Component $component)
         {
-            (new Argument($component))->strict(TypeCode::PRIVILEGE);
-            $this->children->add((string)$component, $component, 'This component already exists');
-
-            return $this;
+            (new Argument())->invalid();
         }
 
         /**
-         * @param \PowerEcommerce\System\Security\Component $component
+         * @param \PowerEcommerce\System\Routing\Component $component
          * @return $this
          */
         function detach(Component $component)
         {
-            (new Argument($component))->strict(TypeCode::PRIVILEGE);
-            $this->children->del((string)$component);
-
-            return $this;
+            (new Argument())->invalid();
         }
 
         /**
-         * @param Component $component
-         * @return bool
+         * @param \PowerEcommerce\System\Routing\Component $component
+         * @return \PowerEcommerce\System\Routing\Component
          */
-        function isGranted(Component ...$component)
+        function handle(Component $component)
         {
-            $granted = true;
-
-            /** @var Component $item */
-            foreach ($component as $item) {
-                if ($item->getTypeCode() === TypeCode::PRIVILEGE
-                    && !$this->children->get((string)$item)
-                ) return false;
-
-                if ($item->getTypeCode() === TypeCode::PRIVILEGE)
-                    $granted = $granted && $item->isGranted(...$component);
-            }
-
-            return $granted;
+            new $component(...$this->args);
+            return $this;
         }
 
         /**
@@ -98,7 +81,7 @@ namespace PowerEcommerce\System\Security\Component {
          */
         function getTypeCode()
         {
-            return TypeCode::ROLE;
+            return TypeCode::SERVICE;
         }
     }
 }

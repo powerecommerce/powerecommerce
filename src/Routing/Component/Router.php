@@ -22,52 +22,46 @@
  * THE SOFTWARE.
  */
 
-namespace PowerEcommerce\System\Security\Component {
+namespace PowerEcommerce\System\Routing\Component {
     use PowerEcommerce\System\Data\Argument;
     use PowerEcommerce\System\Data\Collection;
-    use PowerEcommerce\System\Security\Component;
+    use PowerEcommerce\System\Data\RegExp;
+    use PowerEcommerce\System\Routing\Component;
     use PowerEcommerce\System\TypeCode;
 
     /**
-     * Class Acl
+     * Class Router
      *
      * <code><?php
      *
-     * $p1 = new \PowerEcommerce\System\Security\Component\Privilege('p1');
-     * $p2 = new \PowerEcommerce\System\Security\Component\Privilege('p2');
+     * $handle = new \PowerEcommerce\System\Routing\Component\Handle('/handle/');
      *
-     * $r1 = new \PowerEcommerce\System\Security\Component\Role('r1');
-     * $r2 = new \PowerEcommerce\System\Security\Component\Role('r2');
-     * $r1->attach($p1);
+     * $s1 = new \PowerEcommerce\System\Routing\Component\Service('\PowerEcommerce\System\Routing\Component\Service', ['s1']);
      *
-     * $rs1 = new \PowerEcommerce\System\Security\Component\Resource('rs1');
-     * $rs2 = new \PowerEcommerce\System\Security\Component\Resource('rs2');
-     * $rs1->attach($r1);
+     * $r1 = new \PowerEcommerce\System\Routing\Component\Route(
+     * new \PowerEcommerce\System\Data\RegExp('=route/1='));
+     * $r1->attach($s1);
      *
-     * $a1 = new \PowerEcommerce\System\Security\Component\Acl('a1');
-     * $a1->attach($rs1);
+     * $r2 = new \PowerEcommerce\System\Routing\Component\Route(
+     * new \PowerEcommerce\System\Data\RegExp('=route/2='));
      *
-     * var_dump($a1->isGranted( //true
-     *      $p1, $rs1, $r1
-     * ));
+     * $router = new \PowerEcommerce\System\Routing\Component\Router('router');
+     * $router->attach($r1);
+     * $router->attach($r2);
      *
-     * var_dump($a1->isGranted( //false
-     *      $p1, $rs2, $r1
-     * ));
+     * var_dump($router->handle($handle)); //empty route
      *
-     * var_dump($a1->isGranted( //false
-     *      $p1, $rs1, $r2
-     * ));
+     * $r3 = new \PowerEcommerce\System\Routing\Component\Route(
+     * new \PowerEcommerce\System\Data\RegExp('=/?handle/?='));
+     * $router->attach($r3->attach($s1));
      *
-     * var_dump($a1->isGranted( //false
-     *      $p2, $rs1, $r1
-     * ));
+     * var_dump($router->handle($handle)); //route 3
      *
      * ?></code>
      *
-     * @package PowerEcommerce\System\Security\Component
+     * @package PowerEcommerce\System\Routing\Component
      */
-    class Acl extends Component
+    class Router extends Component
     {
         /**
          * @var \PowerEcommerce\System\Data\Collection
@@ -84,48 +78,45 @@ namespace PowerEcommerce\System\Security\Component {
         }
 
         /**
-         * @param \PowerEcommerce\System\Security\Component $component
+         * @param \PowerEcommerce\System\Routing\Component $component
          * @return $this
          */
         function attach(Component $component)
         {
-            (new Argument($component))->strict(TypeCode::RESOURCE);
-            $this->children->add((string)$component, $component, 'This component already exists');
+            (new Argument($component))->strict(TypeCode::ROUTE);
+            $this->children->add((string)$component, $component, 'This route already exists');
 
             return $this;
         }
 
         /**
-         * @param \PowerEcommerce\System\Security\Component $component
+         * @param \PowerEcommerce\System\Routing\Component $component
          * @return $this
          */
         function detach(Component $component)
         {
-            (new Argument($component))->strict(TypeCode::RESOURCE);
+            (new Argument($component))->strict(TypeCode::ROUTE);
             $this->children->del((string)$component);
 
             return $this;
         }
 
         /**
-         * @param Component $component
-         * @return bool
+         * @param \PowerEcommerce\System\Routing\Component $component
+         * @return \PowerEcommerce\System\Routing\Component\Route
          */
-        function isGranted(Component ...$component)
+        function handle(Component $component)
         {
-            $granted = true;
+            (new Argument($component))->strict(TypeCode::HANDLE);
+            $_route = new Route(new RegExp());
 
-            /** @var Component $item */
-            foreach ($component as $item) {
-                if ($item->getTypeCode() === TypeCode::RESOURCE
-                    && !$this->children->get((string)$item)
-                ) return false;
-
-                if ($item->getTypeCode() === TypeCode::RESOURCE)
-                    $granted = $granted && $item->isGranted(...$component);
+            /** @var \PowerEcommerce\System\Routing\Component\Route $route */
+            foreach ($this->children as $route) {
+                /** @var \PowerEcommerce\System\Routing\Component\Handle $component */
+                if ($component->handle($route)) return $route->handle($component);
             }
 
-            return $granted;
+            return $_route;
         }
 
         /**
@@ -133,7 +124,7 @@ namespace PowerEcommerce\System\Security\Component {
          */
         function getTypeCode()
         {
-            return TypeCode::ACL;
+            return TypeCode::ROUTER;
         }
     }
 }

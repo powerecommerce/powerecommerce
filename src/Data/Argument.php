@@ -294,6 +294,14 @@ namespace PowerEcommerce\System\Data {
         /**
          * @return bool
          */
+        function ofRegExp()
+        {
+            return $this->_of('Data\\RegExp');
+        }
+
+        /**
+         * @return bool
+         */
         function ofString()
         {
             return $this->_of('Data\\String');
@@ -340,6 +348,38 @@ namespace PowerEcommerce\System\Data {
         }
 
         /**
+         * @return bool
+         */
+        function ofHandle()
+        {
+            return $this->_of('Routing\\Component\\Handle');
+        }
+
+        /**
+         * @return bool
+         */
+        function ofRoute()
+        {
+            return $this->_of('Routing\\Component\\Route');
+        }
+
+        /**
+         * @return bool
+         */
+        function ofRouter()
+        {
+            return $this->_of('Routing\\Component\\Router');
+        }
+
+        /**
+         * @return bool
+         */
+        function ofService()
+        {
+            return $this->_of('Routing\\Component\\Service');
+        }
+
+        /**
          * @param int $flags
          * @return bool
          */
@@ -353,6 +393,7 @@ namespace PowerEcommerce\System\Data {
             if (($flags & TypeCode::COLLECTION) && $this->ofCollection()) return true;
             if (($flags & TypeCode::DATETIME) && $this->ofDateTime()) return true;
             if (($flags & TypeCode::NUMBER) && $this->ofNumber()) return true;
+            if (($flags & TypeCode::REGEXP) && $this->ofRegExp()) return true;
             if (($flags & TypeCode::STRING) && $this->ofString()) return true;
             if (($flags & TypeCode::TIMEZONE) && $this->ofTimeZone()) return true;
 
@@ -360,6 +401,11 @@ namespace PowerEcommerce\System\Data {
             if (($flags & TypeCode::PRIVILEGE) && $this->ofPrivilege()) return true;
             if (($flags & TypeCode::RESOURCE) && $this->ofResource()) return true;
             if (($flags & TypeCode::ROLE) && $this->ofRole()) return true;
+
+            if (($flags & TypeCode::HANDLE) && $this->ofHandle()) return true;
+            if (($flags & TypeCode::ROUTE) && $this->ofRoute()) return true;
+            if (($flags & TypeCode::ROUTER) && $this->ofRouter()) return true;
+            if (($flags & TypeCode::SERVICE) && $this->ofService()) return true;
 
             return false;
         }
