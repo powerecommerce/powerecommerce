@@ -2,13 +2,13 @@
 <html lang="en">
  <head>
   <meta charset="UTF-8">
-  <title>Code Coverage for /mnt/hgfs/shared/powerecommerce.co/local/system/src/Data/Collection.php</title>
+  <title>Code Coverage for /var/www/html/powerecommerce/src/System/Data/Collection.php</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link href="../../css/bootstrap.min.css" rel="stylesheet">
-  <link href="../../css/style.css" rel="stylesheet">
+  <link href="../../../css/bootstrap.min.css" rel="stylesheet">
+  <link href="../../../css/style.css" rel="stylesheet">
   <!--[if lt IE 9]>
-  <script src="../../js/html5shiv.min.js"></script>
-  <script src="../../js/respond.min.js"></script>
+  <script src="../../../js/html5shiv.min.js"></script>
+  <script src="../../../js/respond.min.js"></script>
   <![endif]-->
  </head>
  <body>
@@ -17,8 +17,9 @@
     <div class="row">
      <div class="col-md-12">
       <ol class="breadcrumb">
-        <li><a href="../../index.html">/mnt/hgfs/shared/powerecommerce.co/local/system</a></li>
-        <li><a href="../index.html">src</a></li>
+        <li><a href="../../../index.html">/var/www/html/powerecommerce</a></li>
+        <li><a href="../../index.html">src</a></li>
+        <li><a href="../index.html">System</a></li>
         <li><a href="index.html">Data</a></li>
         <li class="active">Collection.php</li>
 
@@ -206,7 +207,7 @@
      </tr>
 
      <tr>
-      <td class="danger" colspan="4">&nbsp;<a href="#115">addItem($key, $value, $msg = 'This item already exists')</a></td>
+      <td class="danger" colspan="4">&nbsp;<a href="#115">add($key, $value, $msg = 'This item already exists')</a></td>
       <td class="danger big">       <div class="progress">
          <div class="progress-bar progress-bar-danger" role="progressbar" aria-valuenow="0.00" aria-valuemin="0" aria-valuemax="100" style="width: 0.00%">
            <span class="sr-only">0.00% covered (danger)</span>
@@ -227,7 +228,7 @@
      </tr>
 
      <tr>
-      <td class="danger" colspan="4">&nbsp;<a href="#126">setItem($key, $value)</a></td>
+      <td class="danger" colspan="4">&nbsp;<a href="#126">set($key, $value)</a></td>
       <td class="danger big">       <div class="progress">
          <div class="progress-bar progress-bar-danger" role="progressbar" aria-valuenow="0.00" aria-valuemin="0" aria-valuemax="100" style="width: 0.00%">
            <span class="sr-only">0.00% covered (danger)</span>
@@ -248,7 +249,7 @@
      </tr>
 
      <tr>
-      <td class="danger" colspan="4">&nbsp;<a href="#136">getItem($key)</a></td>
+      <td class="danger" colspan="4">&nbsp;<a href="#136">get($key)</a></td>
       <td class="danger big">       <div class="progress">
          <div class="progress-bar progress-bar-danger" role="progressbar" aria-valuenow="0.00" aria-valuemin="0" aria-valuemax="100" style="width: 0.00%">
            <span class="sr-only">0.00% covered (danger)</span>
@@ -269,7 +270,7 @@
      </tr>
 
      <tr>
-      <td class="danger" colspan="4">&nbsp;<a href="#145">deleteItem($key)</a></td>
+      <td class="danger" colspan="4">&nbsp;<a href="#145">del($key)</a></td>
       <td class="danger big">       <div class="progress">
          <div class="progress-bar progress-bar-danger" role="progressbar" aria-valuenow="0.00" aria-valuemin="0" aria-valuemax="100" style="width: 0.00%">
            <span class="sr-only">0.00% covered (danger)</span>
@@ -765,10 +766,10 @@
      <tr><td><div align="right"><a name="112"></a><a href="#112">112</a></div></td><td class="codeLine"><span class="comment">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;@param&nbsp;string&nbsp;$msg</span></td></tr>
      <tr><td><div align="right"><a name="113"></a><a href="#113">113</a></div></td><td class="codeLine"><span class="comment">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;@return&nbsp;$this</span></td></tr>
      <tr><td><div align="right"><a name="114"></a><a href="#114">114</a></div></td><td class="codeLine"><span class="comment">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*/</span></td></tr>
-     <tr><td><div align="right"><a name="115"></a><a href="#115">115</a></div></td><td class="codeLine"><span class="default">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="keyword">function</span><span class="default">&nbsp;</span><span class="default">addItem</span><span class="keyword">(</span><span class="default">$key</span><span class="keyword">,</span><span class="default">&nbsp;</span><span class="default">$value</span><span class="keyword">,</span><span class="default">&nbsp;</span><span class="default">$msg</span><span class="default">&nbsp;</span><span class="keyword">=</span><span class="default">&nbsp;</span><span class="default">'This&nbsp;item&nbsp;already&nbsp;exists'</span><span class="keyword">)</span></td></tr>
+     <tr><td><div align="right"><a name="115"></a><a href="#115">115</a></div></td><td class="codeLine"><span class="default">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="keyword">function</span><span class="default">&nbsp;</span><span class="default">add</span><span class="keyword">(</span><span class="default">$key</span><span class="keyword">,</span><span class="default">&nbsp;</span><span class="default">$value</span><span class="keyword">,</span><span class="default">&nbsp;</span><span class="default">$msg</span><span class="default">&nbsp;</span><span class="keyword">=</span><span class="default">&nbsp;</span><span class="default">'This&nbsp;item&nbsp;already&nbsp;exists'</span><span class="keyword">)</span></td></tr>
      <tr><td><div align="right"><a name="116"></a><a href="#116">116</a></div></td><td class="codeLine"><span class="default">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="keyword">{</span></td></tr>
      <tr class="danger"><td><div align="right"><a name="117"></a><a href="#117">117</a></div></td><td class="codeLine"><span class="default">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="keyword">if</span><span class="default">&nbsp;</span><span class="keyword">(</span><span class="default">$this</span><span class="keyword">[</span><span class="default">$key</span><span class="keyword">]</span><span class="keyword">)</span><span class="default">&nbsp;</span><span class="keyword">return</span><span class="default">&nbsp;</span><span class="keyword">(</span><span class="keyword">new</span><span class="default">&nbsp;</span><span class="default">Argument</span><span class="keyword">(</span><span class="keyword">)</span><span class="keyword">)</span><span class="default">-&gt;</span><span class="default">invalid</span><span class="keyword">(</span><span class="default">$msg</span><span class="keyword">)</span><span class="keyword">;</span></td></tr>
-     <tr class="danger"><td><div align="right"><a name="118"></a><a href="#118">118</a></div></td><td class="codeLine"><span class="default">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="keyword">return</span><span class="default">&nbsp;</span><span class="default">$this</span><span class="default">-&gt;</span><span class="default">setItem</span><span class="keyword">(</span><span class="default">$key</span><span class="keyword">,</span><span class="default">&nbsp;</span><span class="default">$value</span><span class="keyword">)</span><span class="keyword">;</span></td></tr>
+     <tr class="danger"><td><div align="right"><a name="118"></a><a href="#118">118</a></div></td><td class="codeLine"><span class="default">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="keyword">return</span><span class="default">&nbsp;</span><span class="default">$this</span><span class="default">-&gt;</span><span class="default">set</span><span class="keyword">(</span><span class="default">$key</span><span class="keyword">,</span><span class="default">&nbsp;</span><span class="default">$value</span><span class="keyword">)</span><span class="keyword">;</span></td></tr>
      <tr class="warning"><td><div align="right"><a name="119"></a><a href="#119">119</a></div></td><td class="codeLine"><span class="default">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="keyword">}</span></td></tr>
      <tr><td><div align="right"><a name="120"></a><a href="#120">120</a></div></td><td class="codeLine"></td></tr>
      <tr><td><div align="right"><a name="121"></a><a href="#121">121</a></div></td><td class="codeLine"><span class="default">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="comment">/**</span></td></tr>
@@ -776,7 +777,7 @@
      <tr><td><div align="right"><a name="123"></a><a href="#123">123</a></div></td><td class="codeLine"><span class="comment">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;@param&nbsp;mixed&nbsp;$value</span></td></tr>
      <tr><td><div align="right"><a name="124"></a><a href="#124">124</a></div></td><td class="codeLine"><span class="comment">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;@return&nbsp;$this</span></td></tr>
      <tr><td><div align="right"><a name="125"></a><a href="#125">125</a></div></td><td class="codeLine"><span class="comment">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*/</span></td></tr>
-     <tr><td><div align="right"><a name="126"></a><a href="#126">126</a></div></td><td class="codeLine"><span class="default">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="keyword">function</span><span class="default">&nbsp;</span><span class="default">setItem</span><span class="keyword">(</span><span class="default">$key</span><span class="keyword">,</span><span class="default">&nbsp;</span><span class="default">$value</span><span class="keyword">)</span></td></tr>
+     <tr><td><div align="right"><a name="126"></a><a href="#126">126</a></div></td><td class="codeLine"><span class="default">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="keyword">function</span><span class="default">&nbsp;</span><span class="default">set</span><span class="keyword">(</span><span class="default">$key</span><span class="keyword">,</span><span class="default">&nbsp;</span><span class="default">$value</span><span class="keyword">)</span></td></tr>
      <tr><td><div align="right"><a name="127"></a><a href="#127">127</a></div></td><td class="codeLine"><span class="default">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="keyword">{</span></td></tr>
      <tr class="danger"><td><div align="right"><a name="128"></a><a href="#128">128</a></div></td><td class="codeLine"><span class="default">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="default">$this</span><span class="keyword">[</span><span class="default">$key</span><span class="keyword">]</span><span class="default">&nbsp;</span><span class="keyword">=</span><span class="default">&nbsp;</span><span class="default">$value</span><span class="keyword">;</span></td></tr>
      <tr class="danger"><td><div align="right"><a name="129"></a><a href="#129">129</a></div></td><td class="codeLine"><span class="default">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="keyword">return</span><span class="default">&nbsp;</span><span class="default">$this</span><span class="keyword">;</span></td></tr>
@@ -786,7 +787,7 @@
      <tr><td><div align="right"><a name="133"></a><a href="#133">133</a></div></td><td class="codeLine"><span class="comment">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;@param&nbsp;mixed&nbsp;$key</span></td></tr>
      <tr><td><div align="right"><a name="134"></a><a href="#134">134</a></div></td><td class="codeLine"><span class="comment">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;@return&nbsp;mixed</span></td></tr>
      <tr><td><div align="right"><a name="135"></a><a href="#135">135</a></div></td><td class="codeLine"><span class="comment">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*/</span></td></tr>
-     <tr><td><div align="right"><a name="136"></a><a href="#136">136</a></div></td><td class="codeLine"><span class="default">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="keyword">function</span><span class="default">&nbsp;</span><span class="default">getItem</span><span class="keyword">(</span><span class="default">$key</span><span class="keyword">)</span></td></tr>
+     <tr><td><div align="right"><a name="136"></a><a href="#136">136</a></div></td><td class="codeLine"><span class="default">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="keyword">function</span><span class="default">&nbsp;</span><span class="default">get</span><span class="keyword">(</span><span class="default">$key</span><span class="keyword">)</span></td></tr>
      <tr><td><div align="right"><a name="137"></a><a href="#137">137</a></div></td><td class="codeLine"><span class="default">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="keyword">{</span></td></tr>
      <tr class="danger"><td><div align="right"><a name="138"></a><a href="#138">138</a></div></td><td class="codeLine"><span class="default">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="keyword">return</span><span class="default">&nbsp;</span><span class="default">$this</span><span class="keyword">[</span><span class="default">$key</span><span class="keyword">]</span><span class="keyword">;</span></td></tr>
      <tr class="warning"><td><div align="right"><a name="139"></a><a href="#139">139</a></div></td><td class="codeLine"><span class="default">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="keyword">}</span></td></tr>
@@ -795,7 +796,7 @@
      <tr><td><div align="right"><a name="142"></a><a href="#142">142</a></div></td><td class="codeLine"><span class="comment">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;@param&nbsp;mixed&nbsp;$key</span></td></tr>
      <tr><td><div align="right"><a name="143"></a><a href="#143">143</a></div></td><td class="codeLine"><span class="comment">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;@return&nbsp;$this</span></td></tr>
      <tr><td><div align="right"><a name="144"></a><a href="#144">144</a></div></td><td class="codeLine"><span class="comment">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*/</span></td></tr>
-     <tr><td><div align="right"><a name="145"></a><a href="#145">145</a></div></td><td class="codeLine"><span class="default">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="keyword">function</span><span class="default">&nbsp;</span><span class="default">deleteItem</span><span class="keyword">(</span><span class="default">$key</span><span class="keyword">)</span></td></tr>
+     <tr><td><div align="right"><a name="145"></a><a href="#145">145</a></div></td><td class="codeLine"><span class="default">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="keyword">function</span><span class="default">&nbsp;</span><span class="default">del</span><span class="keyword">(</span><span class="default">$key</span><span class="keyword">)</span></td></tr>
      <tr><td><div align="right"><a name="146"></a><a href="#146">146</a></div></td><td class="codeLine"><span class="default">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="keyword">{</span></td></tr>
      <tr class="danger"><td><div align="right"><a name="147"></a><a href="#147">147</a></div></td><td class="codeLine"><span class="default">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="keyword">unset</span><span class="keyword">(</span><span class="default">$this</span><span class="keyword">[</span><span class="default">$key</span><span class="keyword">]</span><span class="keyword">)</span><span class="keyword">;</span></td></tr>
      <tr class="danger"><td><div align="right"><a name="148"></a><a href="#148">148</a></div></td><td class="codeLine"><span class="default">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="keyword">return</span><span class="default">&nbsp;</span><span class="default">$this</span><span class="keyword">;</span></td></tr>
@@ -1076,14 +1077,14 @@
      <span class="warning"><strong>Dead Code</strong></span>
     </p>
     <p>
-     <small>Generated by <a href="http://github.com/sebastianbergmann/php-code-coverage" target="_top">PHP_CodeCoverage 3.0-gde8096a</a> using <a href="http://php.net/" target="_top">PHP 5.6.4-1~dotdeb.1</a> and <a href="http://phpunit.de/">PHPUnit 4.6-g2a1f874</a> at Wed Dec 24 3:34:03 CET 2014.</small>
+     <small>Generated by <a href="http://github.com/sebastianbergmann/php-code-coverage" target="_top">PHP_CodeCoverage 2.0.13-10-g29326b2</a> using <a href="http://php.net/" target="_top">PHP 5.6.4-1+deb.sury.org~trusty+1</a> and <a href="http://phpunit.de/">PHPUnit 4.6-g42ee7e9</a> at Fri Jan 9 21:42:17 UTC 2015.</small>
     </p>
     <a title="Back to the top" id="toplink" href="#"><span class="glyphicon glyphicon-arrow-up"></span></a>
    </footer>
   </div>
-  <script src="../../js/jquery.min.js" type="text/javascript"></script>
-  <script src="../../js/bootstrap.min.js" type="text/javascript"></script>
-  <script src="../../js/holder.js" type="text/javascript"></script>
+  <script src="../../../js/jquery.min.js" type="text/javascript"></script>
+  <script src="../../../js/bootstrap.min.js" type="text/javascript"></script>
+  <script src="../../../js/holder.js" type="text/javascript"></script>
   <script type="text/javascript">
   $(function() {
    var $window   = $(window)

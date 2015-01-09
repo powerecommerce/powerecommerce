@@ -2,13 +2,13 @@
 <html lang="en">
  <head>
   <meta charset="UTF-8">
-  <title>Code Coverage for /mnt/hgfs/shared/powerecommerce.co/local/system/src/Security/Component/Resource.php</title>
+  <title>Code Coverage for /var/www/html/powerecommerce/src/System/Security/Component/Resource.php</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link href="../../../css/bootstrap.min.css" rel="stylesheet">
-  <link href="../../../css/style.css" rel="stylesheet">
+  <link href="../../../../css/bootstrap.min.css" rel="stylesheet">
+  <link href="../../../../css/style.css" rel="stylesheet">
   <!--[if lt IE 9]>
-  <script src="../../../js/html5shiv.min.js"></script>
-  <script src="../../../js/respond.min.js"></script>
+  <script src="../../../../js/html5shiv.min.js"></script>
+  <script src="../../../../js/respond.min.js"></script>
   <![endif]-->
  </head>
  <body>
@@ -17,8 +17,9 @@
     <div class="row">
      <div class="col-md-12">
       <ol class="breadcrumb">
-        <li><a href="../../../index.html">/mnt/hgfs/shared/powerecommerce.co/local/system</a></li>
-        <li><a href="../../index.html">src</a></li>
+        <li><a href="../../../../index.html">/var/www/html/powerecommerce</a></li>
+        <li><a href="../../../index.html">src</a></li>
+        <li><a href="../../index.html">System</a></li>
         <li><a href="../index.html">Security</a></li>
         <li><a href="index.html">Component</a></li>
         <li class="active">Resource.php</li>
@@ -268,7 +269,7 @@
      <tr><td><div align="right"><a name="55"></a><a href="#55">55</a></div></td><td class="codeLine"><span class="default">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="keyword">function</span><span class="default">&nbsp;</span><span class="default">attach</span><span class="keyword">(</span><span class="default">Component</span><span class="default">&nbsp;</span><span class="default">$component</span><span class="keyword">)</span></td></tr>
      <tr><td><div align="right"><a name="56"></a><a href="#56">56</a></div></td><td class="codeLine"><span class="default">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="keyword">{</span></td></tr>
      <tr class="danger"><td><div align="right"><a name="57"></a><a href="#57">57</a></div></td><td class="codeLine"><span class="default">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="keyword">(</span><span class="keyword">new</span><span class="default">&nbsp;</span><span class="default">Argument</span><span class="keyword">(</span><span class="default">$component</span><span class="keyword">)</span><span class="keyword">)</span><span class="default">-&gt;</span><span class="default">strict</span><span class="keyword">(</span><span class="default">TypeCode</span><span class="default">::</span><span class="default">ROLE</span><span class="keyword">)</span><span class="keyword">;</span></td></tr>
-     <tr class="danger"><td><div align="right"><a name="58"></a><a href="#58">58</a></div></td><td class="codeLine"><span class="default">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="default">$this</span><span class="default">-&gt;</span><span class="default">children</span><span class="default">-&gt;</span><span class="default">addItem</span><span class="keyword">(</span><span class="default">(string)</span><span class="default">$component</span><span class="keyword">,</span><span class="default">&nbsp;</span><span class="default">$component</span><span class="keyword">,</span><span class="default">&nbsp;</span><span class="default">'This&nbsp;component&nbsp;already&nbsp;exists'</span><span class="keyword">)</span><span class="keyword">;</span></td></tr>
+     <tr class="danger"><td><div align="right"><a name="58"></a><a href="#58">58</a></div></td><td class="codeLine"><span class="default">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="default">$this</span><span class="default">-&gt;</span><span class="default">children</span><span class="default">-&gt;</span><span class="default">add</span><span class="keyword">(</span><span class="default">(string)</span><span class="default">$component</span><span class="keyword">,</span><span class="default">&nbsp;</span><span class="default">$component</span><span class="keyword">,</span><span class="default">&nbsp;</span><span class="default">'This&nbsp;component&nbsp;already&nbsp;exists'</span><span class="keyword">)</span><span class="keyword">;</span></td></tr>
      <tr><td><div align="right"><a name="59"></a><a href="#59">59</a></div></td><td class="codeLine"></td></tr>
      <tr class="danger"><td><div align="right"><a name="60"></a><a href="#60">60</a></div></td><td class="codeLine"><span class="default">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="keyword">return</span><span class="default">&nbsp;</span><span class="default">$this</span><span class="keyword">;</span></td></tr>
      <tr class="warning"><td><div align="right"><a name="61"></a><a href="#61">61</a></div></td><td class="codeLine"><span class="default">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="keyword">}</span></td></tr>
@@ -280,7 +281,7 @@
      <tr><td><div align="right"><a name="67"></a><a href="#67">67</a></div></td><td class="codeLine"><span class="default">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="keyword">function</span><span class="default">&nbsp;</span><span class="default">detach</span><span class="keyword">(</span><span class="default">Component</span><span class="default">&nbsp;</span><span class="default">$component</span><span class="keyword">)</span></td></tr>
      <tr><td><div align="right"><a name="68"></a><a href="#68">68</a></div></td><td class="codeLine"><span class="default">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="keyword">{</span></td></tr>
      <tr class="danger"><td><div align="right"><a name="69"></a><a href="#69">69</a></div></td><td class="codeLine"><span class="default">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="keyword">(</span><span class="keyword">new</span><span class="default">&nbsp;</span><span class="default">Argument</span><span class="keyword">(</span><span class="default">$component</span><span class="keyword">)</span><span class="keyword">)</span><span class="default">-&gt;</span><span class="default">strict</span><span class="keyword">(</span><span class="default">TypeCode</span><span class="default">::</span><span class="default">ROLE</span><span class="keyword">)</span><span class="keyword">;</span></td></tr>
-     <tr class="danger"><td><div align="right"><a name="70"></a><a href="#70">70</a></div></td><td class="codeLine"><span class="default">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="default">$this</span><span class="default">-&gt;</span><span class="default">children</span><span class="default">-&gt;</span><span class="default">deleteItem</span><span class="keyword">(</span><span class="default">(string)</span><span class="default">$component</span><span class="keyword">)</span><span class="keyword">;</span></td></tr>
+     <tr class="danger"><td><div align="right"><a name="70"></a><a href="#70">70</a></div></td><td class="codeLine"><span class="default">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="default">$this</span><span class="default">-&gt;</span><span class="default">children</span><span class="default">-&gt;</span><span class="default">del</span><span class="keyword">(</span><span class="default">(string)</span><span class="default">$component</span><span class="keyword">)</span><span class="keyword">;</span></td></tr>
      <tr><td><div align="right"><a name="71"></a><a href="#71">71</a></div></td><td class="codeLine"></td></tr>
      <tr class="danger"><td><div align="right"><a name="72"></a><a href="#72">72</a></div></td><td class="codeLine"><span class="default">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="keyword">return</span><span class="default">&nbsp;</span><span class="default">$this</span><span class="keyword">;</span></td></tr>
      <tr class="warning"><td><div align="right"><a name="73"></a><a href="#73">73</a></div></td><td class="codeLine"><span class="default">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="keyword">}</span></td></tr>
@@ -296,7 +297,7 @@
      <tr><td><div align="right"><a name="83"></a><a href="#83">83</a></div></td><td class="codeLine"><span class="default">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="comment">/**&nbsp;@var&nbsp;Component&nbsp;$item&nbsp;*/</span></td></tr>
      <tr class="danger"><td><div align="right"><a name="84"></a><a href="#84">84</a></div></td><td class="codeLine"><span class="default">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="keyword">foreach</span><span class="default">&nbsp;</span><span class="keyword">(</span><span class="default">$component</span><span class="default">&nbsp;</span><span class="keyword">as</span><span class="default">&nbsp;</span><span class="default">$item</span><span class="keyword">)</span><span class="default">&nbsp;</span><span class="keyword">{</span></td></tr>
      <tr class="danger"><td><div align="right"><a name="85"></a><a href="#85">85</a></div></td><td class="codeLine"><span class="default">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="keyword">if</span><span class="default">&nbsp;</span><span class="keyword">(</span><span class="default">$item</span><span class="default">-&gt;</span><span class="default">getTypeCode</span><span class="keyword">(</span><span class="keyword">)</span><span class="default">&nbsp;</span><span class="default">===</span><span class="default">&nbsp;</span><span class="default">TypeCode</span><span class="default">::</span><span class="default">ROLE</span></td></tr>
-     <tr class="danger"><td><div align="right"><a name="86"></a><a href="#86">86</a></div></td><td class="codeLine"><span class="default">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="default">&amp;&amp;</span><span class="default">&nbsp;</span><span class="keyword">!</span><span class="default">$this</span><span class="default">-&gt;</span><span class="default">children</span><span class="default">-&gt;</span><span class="default">getItem</span><span class="keyword">(</span><span class="default">(string)</span><span class="default">$item</span><span class="keyword">)</span></td></tr>
+     <tr class="danger"><td><div align="right"><a name="86"></a><a href="#86">86</a></div></td><td class="codeLine"><span class="default">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="default">&amp;&amp;</span><span class="default">&nbsp;</span><span class="keyword">!</span><span class="default">$this</span><span class="default">-&gt;</span><span class="default">children</span><span class="default">-&gt;</span><span class="default">get</span><span class="keyword">(</span><span class="default">(string)</span><span class="default">$item</span><span class="keyword">)</span></td></tr>
      <tr class="danger"><td><div align="right"><a name="87"></a><a href="#87">87</a></div></td><td class="codeLine"><span class="default">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="keyword">)</span><span class="default">&nbsp;</span><span class="keyword">return</span><span class="default">&nbsp;</span><span class="default">false</span><span class="keyword">;</span></td></tr>
      <tr><td><div align="right"><a name="88"></a><a href="#88">88</a></div></td><td class="codeLine"></td></tr>
      <tr class="danger"><td><div align="right"><a name="89"></a><a href="#89">89</a></div></td><td class="codeLine"><span class="default">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="keyword">if</span><span class="default">&nbsp;</span><span class="keyword">(</span><span class="default">$item</span><span class="default">-&gt;</span><span class="default">getTypeCode</span><span class="keyword">(</span><span class="keyword">)</span><span class="default">&nbsp;</span><span class="default">===</span><span class="default">&nbsp;</span><span class="default">TypeCode</span><span class="default">::</span><span class="default">ROLE</span><span class="keyword">)</span></td></tr>
@@ -327,14 +328,14 @@
      <span class="warning"><strong>Dead Code</strong></span>
     </p>
     <p>
-     <small>Generated by <a href="http://github.com/sebastianbergmann/php-code-coverage" target="_top">PHP_CodeCoverage 3.0-gde8096a</a> using <a href="http://php.net/" target="_top">PHP 5.6.4-1~dotdeb.1</a> and <a href="http://phpunit.de/">PHPUnit 4.6-g2a1f874</a> at Wed Dec 24 3:34:03 CET 2014.</small>
+     <small>Generated by <a href="http://github.com/sebastianbergmann/php-code-coverage" target="_top">PHP_CodeCoverage 2.0.13-10-g29326b2</a> using <a href="http://php.net/" target="_top">PHP 5.6.4-1+deb.sury.org~trusty+1</a> and <a href="http://phpunit.de/">PHPUnit 4.6-g42ee7e9</a> at Fri Jan 9 21:42:17 UTC 2015.</small>
     </p>
     <a title="Back to the top" id="toplink" href="#"><span class="glyphicon glyphicon-arrow-up"></span></a>
    </footer>
   </div>
-  <script src="../../../js/jquery.min.js" type="text/javascript"></script>
-  <script src="../../../js/bootstrap.min.js" type="text/javascript"></script>
-  <script src="../../../js/holder.js" type="text/javascript"></script>
+  <script src="../../../../js/jquery.min.js" type="text/javascript"></script>
+  <script src="../../../../js/bootstrap.min.js" type="text/javascript"></script>
+  <script src="../../../../js/holder.js" type="text/javascript"></script>
   <script type="text/javascript">
   $(function() {
    var $window   = $(window)
