@@ -1,15 +1,14 @@
 {
-  "name": "powerecommerce/system",
-  "description": "Power Ecommerce System Namespace",
+  "name": "powerecommerce/powerecommerce",
+  "description": "Power Ecommerce",
   "license": "MIT",
   "keywords": [
-    "powerecommerce",
-    "system"
+    "powerecommerce"
   ],
   "authors": [
     {
       "name": "Tomasz Duda",
-      "email": "tomek+github@ddart.pl"
+      "email": "tomek+powerecommerce@ddart.pl"
     }
   ],
   "require": {
@@ -25,7 +24,7 @@
   },
   "autoload": {
     "psr-4": {
-      "PowerEcommerce\\System\\": "src"
+      "PowerEcommerce\\": "src"
     }
   }
 }
