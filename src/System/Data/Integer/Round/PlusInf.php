@@ -22,55 +22,30 @@
  * THE SOFTWARE.
  */
 
-namespace PowerEcommerce\System\Security {
-    use PowerEcommerce\System\Data\Argument;
-    use PowerEcommerce\System\Object;
-    use PowerEcommerce\System\TypeCode;
+namespace PowerEcommerce\System\Data\Integer\Round {
+    use PowerEcommerce\System\Data\Integer;
 
     /**
-     * Class Component
-     * @package PowerEcommerce\System\Security
+     * Class PlusInf
+     * @package PowerEcommerce\System\Data\Integer\Round
      */
-    abstract class Component extends Object
+    class PlusInf extends Integer\Round
     {
         /**
-         * @var string
+         * @param void
          */
-        protected $name;
-
-        /**
-         * @param string|\PowerEcommerce\System\Data\String $name
-         */
-        function __construct($name)
+        function __construct()
         {
-            (new Argument($name))->strict(TypeCode::PHP_STRING | TypeCode::STRING);
-            $this->name = (string)$name;
+            parent::__construct();
         }
 
         /**
-         * @return string
+         * @param void
+         * @return $this
          */
-        function __toString()
+        function setValue()
         {
-            return $this->name;
+            return parent::setValue(GMP_ROUND_PLUSINF);
         }
-
-        /**
-         * @param \PowerEcommerce\System\Security\Component $component
-         * @return $this
-         */
-        abstract function attach(Component $component);
-
-        /**
-         * @param \PowerEcommerce\System\Security\Component $component
-         * @return $this
-         */
-        abstract function detach(Component $component);
-
-        /**
-         * @param Component $component
-         * @return bool
-         */
-        abstract function isGranted(Component ...$component);
     }
 }

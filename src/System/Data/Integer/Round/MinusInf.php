@@ -22,50 +22,30 @@
  * THE SOFTWARE.
  */
 
-namespace PowerEcommerce\System\Security\Component {
-    use PowerEcommerce\System\Data\Argument;
-    use PowerEcommerce\System\Security\Component;
-    use PowerEcommerce\System\TypeCode;
+namespace PowerEcommerce\System\Data\Integer\Round {
+    use PowerEcommerce\System\Data\Integer;
 
     /**
-     * Class Privilege
-     * @package PowerEcommerce\System\Security\Component
+     * Class MinusInf
+     * @package PowerEcommerce\System\Data\Integer\Round
      */
-    class Privilege extends Component
+    class MinusInf extends Integer\Round
     {
         /**
-         * @param \PowerEcommerce\System\Security\Component $component
+         * @param void
+         */
+        function __construct()
+        {
+            parent::__construct();
+        }
+
+        /**
+         * @param void
          * @return $this
          */
-        function attach(Component $component)
+        function setValue()
         {
-            (new Argument())->invalid();
-        }
-
-        /**
-         * @param \PowerEcommerce\System\Security\Component $component
-         * @return $this
-         */
-        function detach(Component $component)
-        {
-            (new Argument())->invalid();
-        }
-
-        /**
-         * @param Component $component
-         * @return bool
-         */
-        function isGranted(Component ...$component)
-        {
-            return true;
-        }
-
-        /**
-         * @return int TypeCode
-         */
-        function getTypeCode()
-        {
-            return TypeCode::PRIVILEGE;
+            return parent::setValue(GMP_ROUND_MINUSINF);
         }
     }
 }

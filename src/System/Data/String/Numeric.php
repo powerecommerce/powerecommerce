@@ -22,31 +22,31 @@
  * THE SOFTWARE.
  */
 
-namespace PowerEcommerce\System\Data {
-    use PowerEcommerce\System\Object;
+namespace PowerEcommerce\System\Data\String {
+    use PowerEcommerce\System\Data\String;
 
     /**
-     * Class Blank
-     * @package PowerEcommerce\System\Data
+     * Class Numeric
+     * @package PowerEcommerce\System\Data\String
      */
-    class Blank extends Object
+    class Numeric extends String
     {
         /**
-         * @param null $value
+         * @param string|\PowerEcommerce\System\Object $value
          */
-        function __construct($value = null)
+        function __construct($value = '0')
         {
             parent::__construct($value);
         }
 
         /**
-         * @param null $value
+         * @param string|\PowerEcommerce\System\Object $value Numeric values only
          * @return $this
          */
         function setValue($value)
         {
-            $value = $this->factory($value);
-            !$value->isNull() && $value->invalid('Null values only');
+            $value = $value->factory($value);
+            !$value->isNumeric() && $value->invalid('Numeric values only');
 
             return parent::setValue($value->getValue());
         }

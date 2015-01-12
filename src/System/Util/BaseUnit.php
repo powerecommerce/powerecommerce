@@ -23,18 +23,13 @@
  */
 
 namespace PowerEcommerce\System\Util {
-    use PowerEcommerce\System\Data\Argument;
-    use PowerEcommerce\System\Data\Assert;
-    use PowerEcommerce\System\Data\Collection;
-    use PowerEcommerce\System\Data\String;
-    use PowerEcommerce\System\Data\DateTime;
-    use PowerEcommerce\System\Data\TimeZone;
-    use PowerEcommerce\System\Data\Number;
     use PowerEcommerce\System\Data\Blank;
-    use PowerEcommerce\System\Security\Component\Acl;
-    use PowerEcommerce\System\Security\Component\Privilege;
-    use PowerEcommerce\System\Security\Component\Resource;
-    use PowerEcommerce\System\Security\Component\Role;
+    use PowerEcommerce\System\Data\Boolean;
+    use PowerEcommerce\System\Data\Collection;
+    use PowerEcommerce\System\Data\Float;
+    use PowerEcommerce\System\Data\Integer;
+    use PowerEcommerce\System\Data\String;
+    use PowerEcommerce\System\Object;
 
     /**
      * Class BaseUnit
@@ -47,19 +42,14 @@ namespace PowerEcommerce\System\Util {
          */
         static function _object()
         {
-            yield new Argument();
-            yield new Assert();
+            yield new Object();
             yield new Blank();
+            yield new Boolean(true);
+            yield new Boolean(false);
             yield new Collection();
-            yield new DateTime();
-            yield new Number();
+            yield new Float();
+            yield new Integer();
             yield new String();
-            yield new TimeZone();
-
-            yield new Acl('');
-            yield new Privilege('');
-            yield new Resource('');
-            yield new Role('');
         }
 
         /**

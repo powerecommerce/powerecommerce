@@ -22,55 +22,30 @@
  * THE SOFTWARE.
  */
 
-namespace PowerEcommerce\System\Routing {
-    use PowerEcommerce\System\Data\Argument;
-    use PowerEcommerce\System\Object;
-    use PowerEcommerce\System\TypeCode;
+namespace PowerEcommerce\System\Data\Float\Round {
+    use PowerEcommerce\System\Data\Float\Round;
 
     /**
-     * Class Component
-     * @package PowerEcommerce\System\Routing
+     * Class HalfDown
+     * @package PowerEcommerce\System\Data\Float\Round
      */
-    abstract class Component extends Object
+    class HalfDown extends Round
     {
         /**
-         * @var string
+         * @param void
          */
-        protected $name;
-
-        /**
-         * @param string|\PowerEcommerce\System\Data\String $name
-         */
-        function __construct($name)
+        function __construct()
         {
-            (new Argument($name))->strict(TypeCode::PHP_STRING | TypeCode::STRING);
-            $this->name = (string)$name;
+            parent::__construct();
         }
 
         /**
-         * @return string
+         * @param void
+         * @return $this
          */
-        function __toString()
+        function setValue()
         {
-            return $this->name;
+            return parent::setValue(PHP_ROUND_HALF_DOWN);
         }
-
-        /**
-         * @param \PowerEcommerce\System\Routing\Component $component
-         * @return $this
-         */
-        abstract function attach(Component $component);
-
-        /**
-         * @param \PowerEcommerce\System\Routing\Component $component
-         * @return $this
-         */
-        abstract function detach(Component $component);
-
-        /**
-         * @param \PowerEcommerce\System\Routing\Component $component
-         * @return \PowerEcommerce\System\Routing\Component
-         */
-        abstract function handle(Component $component);
     }
 }

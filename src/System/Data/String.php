@@ -23,162 +23,139 @@
  */
 
 namespace PowerEcommerce\System\Data {
+    use PowerEcommerce\System\Data\String\Pattern;
+    use PowerEcommerce\System\Data\String\Strict;
     use PowerEcommerce\System\Object;
-    use PowerEcommerce\System\TypeCode;
 
     /**
      * Class String
-     *
-     * Unicode character strings.
-     *
      * @package PowerEcommerce\System\Data
      */
     class String extends Object
     {
         /**
-         * @var string
-         */
-        protected $value = '';
-
-        /**
          * @param string|\PowerEcommerce\System\Object $value
          */
         function __construct($value = '')
         {
-            $this->setValue($value);
+            parent::__construct($value);
         }
 
         /**
-         * @param string|\PowerEcommerce\System\Object $value
+         * @param string|\PowerEcommerce\System\Object $value String values only
          * @return $this
          */
         function setValue($value)
         {
-            $arg = new Argument($value);
+            $value = $this->factory($value);
+            !$value->isString() && $value->invalid('String values only');
 
-            if ($arg->isString()) return $this->_set($value);
-            $arg->strict(TypeCode::OBJECT);
+            return parent::setValue($value->getValue());
+        }
 
-            switch ($value->getTypeCode()) {
-                case TypeCode::COLLECTION:
-                case TypeCode::DATETIME:
-                case TypeCode::NUMBER:
-                case TypeCode::STRING:
-                case TypeCode::TIMEZONE:
+        /**
+         * @param \PowerEcommerce\System\Data\String $value
+         * @param \PowerEcommerce\System\Data\String\Strict $strict
+         * @return \PowerEcommerce\System\Data\Boolean
+         */
+        function compare(String $value, Strict $strict = null)
+        {
+            $strict = new Strict($this->factory($strict)->defaults(new Strict()));
 
-                case TypeCode::ACL:
-                case TypeCode::PRIVILEGE:
-                case TypeCode::RESOURCE:
-                case TypeCode::ROLE:
-                    return $this->_set($value);
+            $true = new Boolean(true);
+            $false = new Boolean(false);
 
-                default:
-                    return $this->_set('');
+            if ($strict->isTrue()) {
+                return 0 === strcmp($this, $value) ? $true : $false;
             }
+            return 0 === strcasecmp($this, $value) ? $true : $false;
         }
 
         /**
-         * @param string $value
+         * @param \PowerEcommerce\System\Data\String $value
          * @return $this
          */
-        private function _set($value)
+        function concat(String $value)
         {
-            $this->value = (string)$value;
-            return $this;
-        }
-
-        /**
-         * @return string
-         */
-        public function getValue()
-        {
-            return $this->value;
-        }
-
-        /**
-         * @return string
-         */
-        function __toString()
-        {
-            return $this->getValue();
-        }
-
-        /**
-         * @param string|\PowerEcommerce\System\Object $value
-         * @param bool $strict
-         * @return bool
-         */
-        function compare($value, $strict = true)
-        {
-            $value = new String($value);
-
-            if ($strict) return 0 === strcmp($this, $value) ? true : false;
-            return 0 === strcasecmp($this, $value) ? true : false;
-        }
-
-        /**
-         * @param string|\PowerEcommerce\System\Object $value
-         * @return $this
-         */
-        function concat($value)
-        {
-            $value = new String($value);
             return $this->setValue($this . $value);
         }
 
         /**
-         * @param string|\PowerEcommerce\System\Object $value
-         * @param bool $strict
-         * @return bool
+         * @param \PowerEcommerce\System\Data\String $value
+         * @param \PowerEcommerce\System\Data\String\Strict $strict
+         * @return \PowerEcommerce\System\Data\Boolean
          */
-        function contains($value, $strict = true)
+        function contains(String $value, Strict $strict = null)
         {
-            $value = new String($value);
-            if ($strict) {
-                if (!$this->getValue()) return $this->getValue() === $value->getValue();
-                return false === strpos($this->getValue(), $value->getValue()) ? false : true;
+            $strict = new Strict($this->factory($strict)->defaults(new Strict()));
+
+            $true = new Boolean(true);
+            $false = new Boolean(false);
+
+            if ($strict->isTrue()) {
+                return false === strpos($this->getValue(), $value->getValue()) ? $false : $true;
             }
-            if (!$this->getValue()) return $this->getValue() == $value->getValue();
-            return false === stripos($this->getValue(), $value->getValue()) ? false : true;
+            return false === stripos($this->getValue(), $value->getValue()) ? $false : $true;
         }
 
         /**
-         * @return int TypeCode
+         * @param \PowerEcommerce\System\Data\Integer $start
+         * @param \PowerEcommerce\System\Data\Integer $length
+         * @return \PowerEcommerce\System\Data\String
          */
-        function getTypeCode()
+        function substring(Integer $start, Integer $length = null)
         {
-            return TypeCode::STRING;
+            if (null === $length) {
+                return new String((string)substr($this, (string)$start));
+            }
+            return new String((string)substr($this, (string)$start, (string)$length));
         }
 
         /**
-         * @param string[]|\PowerEcommerce\System\Object[] $value
+         * @param \PowerEcommerce\System\Data\Integer $keepLength
+         * @param \PowerEcommerce\System\Data\Integer $keepStart
          * @return $this
          */
-        function join(array $value)
+        function truncate(Integer $keepLength = null, Integer $keepStart = null)
         {
-            foreach ($value as $item) $this->concat($item);
-            return $this;
-        }
-
-        /**
-         * @param int $start
-         * @param int|null $length
-         * @return string
-         */
-        function substring($start, $length = null)
-        {
-            return substr($this, $start, $length);
-        }
-
-        /**
-         * @param int|null $keepStart
-         * @param int|null $keepLength
-         * @return $this
-         */
-        function truncate($keepStart = null, $keepLength = null)
-        {
-            if (null === $keepStart || $keepStart == $keepLength) return $this->setValue('');
+            if (null === $keepStart && null === $keepLength) {
+                return $this->setValue('');
+            }
+            null === $keepStart && $keepStart = new Integer(0);
             return $this->setValue($this->substring($keepStart, $keepLength));
+        }
+
+        /**
+         * @return \PowerEcommerce\System\Data\Integer
+         */
+        function length()
+        {
+            return new Integer(strlen($this));
+        }
+
+        /**
+         * @param \PowerEcommerce\System\Data\String\Pattern $pattern
+         * @return \PowerEcommerce\System\Data\Boolean
+         */
+        function match(Pattern $pattern)
+        {
+            $result = preg_match($pattern, $this);
+            return new Boolean(1 === $result ? true : false);
+        }
+
+        /**
+         * @param \PowerEcommerce\System\Data\String $delimiter
+         * @param \PowerEcommerce\System\Data\Integer $limit
+         * @return \PowerEcommerce\System\Data\Collection
+         */
+        function explode(String $delimiter, Integer $limit = null)
+        {
+            $collection = new Collection();
+
+            if (null === $limit) {
+                return $collection->setValue($collection->encode(explode($delimiter, $this)));
+            }
+            return $collection->setValue($collection->encode(explode($delimiter, $this, (string)$limit)));
         }
     }
 }

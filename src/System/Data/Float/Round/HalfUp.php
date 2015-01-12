@@ -22,33 +22,30 @@
  * THE SOFTWARE.
  */
 
-namespace PowerEcommerce\System\Data {
-    use PowerEcommerce\System\Object;
+namespace PowerEcommerce\System\Data\Float\Round {
+    use PowerEcommerce\System\Data\Float\Round;
 
     /**
-     * Class Blank
-     * @package PowerEcommerce\System\Data
+     * Class HalfUp
+     * @package PowerEcommerce\System\Data\Float\Round
      */
-    class Blank extends Object
+    class HalfUp extends Round
     {
         /**
-         * @param null $value
+         * @param void
          */
-        function __construct($value = null)
+        function __construct()
         {
-            parent::__construct($value);
+            parent::__construct();
         }
 
         /**
-         * @param null $value
+         * @param void
          * @return $this
          */
-        function setValue($value)
+        function setValue()
         {
-            $value = $this->factory($value);
-            !$value->isNull() && $value->invalid('Null values only');
-
-            return parent::setValue($value->getValue());
+            return parent::setValue(PHP_ROUND_HALF_UP);
         }
     }
 }

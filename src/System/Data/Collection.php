@@ -24,31 +24,27 @@
 
 namespace PowerEcommerce\System\Data {
     use PowerEcommerce\System\Object;
-    use PowerEcommerce\System\TypeCode;
 
     /**
      * Class Collection
-     *
-     * A type representing a array value.
-     *
      * @package PowerEcommerce\System\Data
      */
-    class Collection extends Object implements \ArrayAccess, \Iterator
+    class Collection extends Object implements \Iterator
     {
         /**
-         * @var array
+         * @var \PowerEcommerce\System\Object[]
          */
         protected $value = [];
 
         /**
-         * @var array
+         * @var string[]
          */
-        protected $keys = [];
+        private $keys = [];
 
         /**
-         * @var int
+         * @var integer
          */
-        protected $position = 0;
+        private $position = 0;
 
         /**
          * @param array|\PowerEcommerce\System\Object $value
@@ -59,92 +55,89 @@ namespace PowerEcommerce\System\Data {
         }
 
         /**
+         * @param array $data
+         * @return array
+         */
+        function encode(array $data)
+        {
+            $encode = [];
+
+            foreach ($data as $key => $value) {
+                $encode[(string)$key] = $this->factory($value);
+            }
+
+            return $encode;
+        }
+
+        /**
          * @param array|\PowerEcommerce\System\Object $value
          * @return $this
          */
         function setValue($value)
         {
-            $arg = new Argument($value);
-
-            if ($arg->isArray()) return $this->_set($value);
-            $arg->strict(TypeCode::OBJECT);
-
-            switch ($value->getTypeCode()) {
-                case TypeCode::COLLECTION:
-                    /** @var \PowerEcommerce\System\Data\Collection $value */
-                    return $this->_set($value->getValue());
-
-                default:
-                    return $this->_set([$value]);
-            }
+            $this->clear();
+            return $this->value($value, 'set');
         }
 
         /**
-         * @param array $value
+         * @param array|\PowerEcommerce\System\Object $value
          * @return $this
          */
-        private function _set(array $value)
+        function addValue($value)
         {
-            $this->value = $value;
-            return $this->_resetKeys();
+            return $this->value($value, 'add');
         }
 
         /**
+         * @param \PowerEcommerce\System\Data\String $key
+         * @param \PowerEcommerce\System\Object $value
          * @return $this
          */
-        private function _resetKeys()
+        function add(String $key, Object $value)
         {
-            $this->keys = array_keys($this->getValue());
-            return $this;
-        }
+            !($this->get($key) instanceof \PowerEcommerce\System\Data\Blank)
+            && $value->invalid('This item already exists');
 
-        /**
-         * @return array
-         */
-        function getValue()
-        {
-            return $this->value;
-        }
-
-        /**
-         * @param mixed $key
-         * @param mixed $value
-         * @param string $msg
-         * @return $this
-         */
-        function add($key, $value, $msg = 'This item already exists')
-        {
-            if ($this[$key]) return (new Argument())->invalid($msg);
             return $this->set($key, $value);
         }
 
         /**
-         * @param mixed $key
-         * @param mixed $value
+         * @param \PowerEcommerce\System\Data\String $key
+         * @param \PowerEcommerce\System\Object $value
          * @return $this
          */
-        function set($key, $value)
+        function set(String $key, Object $value)
         {
-            $this[$key] = $value;
+            $this->value[(string)$key] = $value;
             return $this;
         }
 
         /**
-         * @param mixed $key
-         * @return mixed
+         * @param \PowerEcommerce\System\Data\String $key
+         * @return \PowerEcommerce\System\Object|\PowerEcommerce\System\Data\Blank
          */
-        function get($key)
+        function get(String $key)
         {
-            return $this[$key];
+            return isset($this->value[(string)$key])
+                ? $this->value[(string)$key] : new Blank();
         }
 
         /**
-         * @param mixed $key
+         * @param \PowerEcommerce\System\Data\String $key
          * @return $this
          */
-        function del($key)
+        function del(String $key)
         {
-            unset($this[$key]);
+            unset($this->value[(string)$key]);
+            return $this;
+        }
+
+        /**
+         * @return $this
+         */
+        function clear()
+        {
+            $this->value = [];
             return $this;
         }
 
@@ -153,205 +146,7 @@ namespace PowerEcommerce\System\Data {
          */
         function __toString()
         {
-            return implode('', $this->getValue());
-        }
-
-        /**
-         * @param array|\PowerEcommerce\System\Object $value
-         * @param bool $strict
-         * @return bool
-         */
-        function compare($value, $strict = true)
-        {
-            $value = new Collection($value);
-            if ($strict) {
-                foreach ($this->getValue() as $_key => $_value) {
-                    if ((gettype($_value) !== gettype($value[$_key]))
-                        && !(new Argument($_value, $value[$_key]))->isof(TypeCode::STRING | TypeCode::PHP_STRING)
-                    ) return false;
-
-                    if ((new Argument($_value))->isof(TypeCode::STRING | TypeCode::PHP_STRING)
-                        && !(new String($_value))->compare($value[$_key])
-                    ) return false;
-
-                    elseif (!(new Argument($_value))->isof(TypeCode::STRING | TypeCode::PHP_STRING)
-                        && $_value !== $value[$_key]
-                    ) return false;
-                }
-                return true;
-            }
-            foreach ($this->getValue() as $_key => $_value) {
-                if ((new Argument($_value, $value[$_key]))->isof(TypeCode::STRING | TypeCode::PHP_STRING)
-                    && !(new String($_value))->compare($value[$_key], false)
-                ) return false;
-
-                elseif (!(new Argument($_value, $value[$_key]))->isof(TypeCode::STRING | TypeCode::PHP_STRING)
-                    && $_value != $value[$_key]
-                ) return false;
-            }
-            return true;
-        }
-
-        /**
-         * @param array|\PowerEcommerce\System\Object $value
-         * @return $this
-         */
-        function concat($value)
-        {
-            $value = new Collection($value);
-            return $this->setValue(array_merge($this->getValue(), $value->getValue()));
-        }
-
-        /**
-         * @param mixed $value
-         * @param bool $strict
-         * @return bool
-         */
-        function contains($value, $strict = true)
-        {
-            $value = new Collection($value);
-            if ($strict) {
-                foreach ($value->getValue() as $_key => $_value) {
-                    $valid = false;
-                    foreach ($this->getValue() as $_key2 => $_value2) {
-                        if ((gettype($_value) !== gettype($_value2))
-                            && !(new Argument($_value, $_value2))->isof(TypeCode::STRING | TypeCode::PHP_STRING)
-                        ) continue;
-
-                        if (((new Argument($_value))->isof(TypeCode::STRING | TypeCode::PHP_STRING)
-                                && (new String($_value))->compare($_value2, $strict)
-                            ) || (!(new Argument($_value))->isof(TypeCode::STRING | TypeCode::PHP_STRING)
-                                && $_value === $_value2)
-                        ) {
-                            $valid = true;
-                            break;
-                        }
-                    }
-                    if (!$valid) return false;
-                }
-                return true;
-            }
-            foreach ($value->getValue() as $_key => $_value) {
-                $valid = false;
-                foreach ($this->getValue() as $_key2 => $_value2) {
-                    if (((new Argument($_value, $_value2))->isof(TypeCode::STRING | TypeCode::PHP_STRING)
-                            && (new String($_value))->compare($_value2, $strict)
-                        ) || (!(new Argument($_value, $_value2))->isof(TypeCode::STRING | TypeCode::PHP_STRING)
-                            && ((new Argument($_value, $_value2))->isObject()
-                                || (!(new Argument($_value))->isObject() && !(new Argument($_value2))->isObject()))
-                            && $_value == $_value2)
-                    ) {
-                        $valid = true;
-                        break;
-                    }
-                }
-                if (!$valid) return false;
-            }
-            return true;
-        }
-
-        /**
-         * @return int TypeCode
-         */
-        function getTypeCode()
-        {
-            return TypeCode::COLLECTION;
-        }
-
-        /**
-         * @param array[]|\PowerEcommerce\System\Object[] $value
-         * @return $this
-         */
-        function join(array $value)
-        {
-            foreach ($value as $item) $this->concat($item);
-            return $this;
-        }
-
-        /**
-         * @param int $start
-         * @param int|null $length
-         * @return array
-         */
-        function slice($start, $length = null)
-        {
-            return array_slice($this->getValue(), $start, $length);
-        }
-
-        /**
-         * @param int|null $keepStart
-         * @param int|null $keepLength
-         * @return $this
-         */
-        function truncate($keepStart = null, $keepLength = null)
-        {
-            if (null === $keepStart) return $this->setValue([]);
-            return $this->setValue($this->slice($keepStart, $keepLength));
-        }
-
-        /**
-         * (PHP 5 &gt;= 5.0.0)<br/>
-         * Whether a offset exists
-         * @link http://php.net/manual/en/arrayaccess.offsetexists.php
-         * @param mixed $offset <p>
-         * An offset to check for.
-         * </p>
-         * @return boolean true on success or false on failure.
-         * </p>
-         * <p>
-         * The return value will be casted to boolean if non-boolean was returned.
-         */
-        function offsetExists($offset)
-        {
-            return isset($this->value[$offset]);
-        }
-
-        /**
-         * (PHP 5 &gt;= 5.0.0)<br/>
-         * Offset to retrieve
-         * @link http://php.net/manual/en/arrayaccess.offsetget.php
-         * @param mixed $offset <p>
-         * The offset to retrieve.
-         * </p>
-         * @return mixed Can return all value types.
-         */
-        function offsetGet($offset)
-        {
-            return isset($this->value[$offset]) ? $this->value[$offset] : null;
-        }
-
-        /**
-         * (PHP 5 &gt;= 5.0.0)<br/>
-         * Offset to set
-         * @link http://php.net/manual/en/arrayaccess.offsetset.php
-         * @param mixed $offset <p>
-         * The offset to assign the value to.
-         * </p>
-         * @param mixed $value <p>
-         * The value to set.
-         * </p>
-         * @return void
-         */
-        function offsetSet($offset, $value)
-        {
-            if ((new Argument($offset))->isNull()) $this->value[] = $value;
-            else $this->value[$offset] = $value;
-            $this->_resetKeys();
-        }
-
-        /**
-         * (PHP 5 &gt;= 5.0.0)<br/>
-         * Offset to unset
-         * @link http://php.net/manual/en/arrayaccess.offsetunset.php
-         * @param mixed $offset <p>
-         * The offset to unset.
-         * </p>
-         * @return void
-         */
-        function offsetUnset($offset)
-        {
-            unset($this->value[$offset]);
-            $this->_resetKeys();
+            return '';
         }
 
         /**
@@ -408,6 +203,44 @@ namespace PowerEcommerce\System\Data {
         function rewind()
         {
             $this->position = 0;
+        }
+
+        /**
+         * @param array|\PowerEcommerce\System\Object $value
+         * @param string $func set|add
+         * @return Collection
+         */
+        private function value($value, $func)
+        {
+            $value = $this->factory($value);
+
+            if ($value->isArray() || $value instanceof \PowerEcommerce\System\Data\Collection) {
+                return $this->valueHelper($value->getValue(), $func);
+            }
+
+            $value->invalid('Array values only');
+        }
+
+        /**
+         * @param array $value
+         * @param string $func set|add
+         * @return $this
+         */
+        private function valueHelper(array $value, $func)
+        {
+            foreach ($value as $key => $object) {
+                $this->$func(new String((string)$key), $object);
+            }
+            return $this->resetKeys();
+        }
+
+        /**
+         * @return $this
+         */
+        private function resetKeys()
+        {
+            $this->keys = array_keys($this->getValue());
+            return $this;
         }
     }
 }

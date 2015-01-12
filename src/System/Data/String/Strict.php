@@ -22,33 +22,30 @@
  * THE SOFTWARE.
  */
 
-namespace PowerEcommerce\System\Data {
-    use PowerEcommerce\System\Object;
-    use PowerEcommerce\System\TypeCode;
+namespace PowerEcommerce\System\Data\String {
+    use PowerEcommerce\System\Data\Boolean;
 
     /**
-     * Class TimeZone
-     *
-     * Represents a time zone.
-     *
-     * @package PowerEcommerce\System\Data
+     * Class Strict
+     * @package PowerEcommerce\System\Data\String
      */
-    class TimeZone extends Object
+    class Strict extends Boolean
     {
         /**
-         * @return string
+         * @param boolean|\PowerEcommerce\System\Object $value
          */
-        function __toString()
+        function __construct($value = true)
         {
-            return '';
+            parent::__construct($value);
         }
 
         /**
-         * @return int TypeCode
+         * @param boolean|\PowerEcommerce\System\Object $value
+         * @return $this
          */
-        function getTypeCode()
+        function setValue($value)
         {
-            return TypeCode::TIMEZONE;
+            return parent::setValue($this->factory($value)->getValue());
         }
     }
 }

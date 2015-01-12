@@ -23,17 +23,44 @@
  */
 
 namespace PowerEcommerce\System {
-    use PowerEcommerce\System\Object\Converter;
 
     /**
      * Class Object
-     *
-     * A general type.
-     *
      * @package PowerEcommerce\System
      */
-    abstract class Object
+    class Object
     {
+        /**
+         * @var mixed
+         */
+        protected $value;
+
+        /**
+         * @param mixed $value
+         */
+        function __construct($value = null)
+        {
+            $this->setValue($value);
+        }
+
+        /**
+         * @return mixed
+         */
+        function getValue()
+        {
+            return $this->value;
+        }
+
+        /**
+         * @param mixed $value
+         * @return $this
+         */
+        function setValue($value)
+        {
+            $this->value = $value;
+            return $this;
+        }
+
         /**
          * @return string
          */
@@ -43,17 +70,213 @@ namespace PowerEcommerce\System {
         }
 
         /**
-         * @return int TypeCode
+         * @return boolean
          */
-        abstract function getTypeCode();
+        function isArray()
+        {
+            return $this->_is('array');
+        }
 
         /**
-         * @param int $typeCode TypeCode
+         * @return boolean
+         */
+        function isBool()
+        {
+            return $this->_is('bool');
+        }
+
+        /**
+         * @return boolean
+         */
+        function isBoolean()
+        {
+            return $this->_is('bool');
+        }
+
+        /**
+         * @return boolean
+         */
+        function isCallable()
+        {
+            return $this->_is('callable');
+        }
+
+        /**
+         * @return boolean
+         */
+        function isDouble()
+        {
+            return $this->_is('double');
+        }
+
+        /**
+         * @return boolean
+         */
+        function isFloat()
+        {
+            return $this->_is('float');
+        }
+
+        /**
+         * @return boolean
+         */
+        function isInt()
+        {
+            return $this->_is('int');
+        }
+
+        /**
+         * @return boolean
+         */
+        function isInteger()
+        {
+            return $this->_is('integer');
+        }
+
+        /**
+         * @return boolean
+         */
+        function isLong()
+        {
+            return $this->_is('long');
+        }
+
+        /**
+         * @return boolean
+         */
+        function isNull()
+        {
+            return $this->_is('null');
+        }
+
+        /**
+         * @return boolean
+         */
+        function isNumeric()
+        {
+            return $this->_is('numeric');
+        }
+
+        /**
+         * @return boolean
+         */
+        function isObject()
+        {
+            return $this->_is('object');
+        }
+
+        /**
+         * @return boolean
+         */
+        function isReal()
+        {
+            return $this->_is('real');
+        }
+
+        /**
+         * @return boolean
+         */
+        function isResource()
+        {
+            return $this->_is('resource');
+        }
+
+        /**
+         * @return boolean
+         */
+        function isScalar()
+        {
+            return $this->_is('scalar');
+        }
+
+        /**
+         * @return boolean
+         */
+        function isString()
+        {
+            return $this->_is('string');
+        }
+
+        /**
+         * @return boolean
+         */
+        function isNumber()
+        {
+            return $this->_is('numeric');
+        }
+
+        /**
+         * @param string $msg
+         * @return \InvalidArgumentException
+         */
+        function invalid($msg = '')
+        {
+            throw new \InvalidArgumentException($msg);
+        }
+
+        /**
+         * @param mixed $value
+         * @return $this
+         */
+        function defaults($value)
+        {
+            null === $this->getValue() && $this->setValue($value);
+            return $this;
+        }
+
+        /**
+         * @param mixed $value
+         * @return $this|\PowerEcommerce\System\Object
+         */
+        function factory($value = '__clone__')
+        {
+            if ('__clone__' === $value) return (clone $this);
+            if (null === $value) return new Object();
+            if ($value instanceof \PowerEcommerce\System\Object) return $value;
+
+            return new Object($value);
+        }
+
+        /**
+         * @param \PowerEcommerce\System\Object $object
          * @return \PowerEcommerce\System\Object
          */
-        function format($typeCode)
+        function cast(Object $object)
         {
-            return (new Converter($this))->format($typeCode);
+            if ($this->getValue() instanceof \PowerEcommerce\System\Object) {
+                return $object->setValue($this->getValue());
+            }
+            return $object->setValue($this->toString());
+        }
+
+        /**
+         * @return string
+         */
+        function __toString()
+        {
+            return (string)$this->getValue();
+        }
+
+        /**
+         * @return string
+         */
+        function toString()
+        {
+            return $this->__toString();
+        }
+
+        /**
+         * @param string $funcName
+         * @param mixed $value
+         * @return boolean
+         */
+        protected function _is($funcName, $value = null)
+        {
+            null === $value && $value = $this->getValue();
+            $funcName = 'is_' . $funcName;
+
+            if (!$funcName($value)) return false;
+            return true;
         }
     }
 }

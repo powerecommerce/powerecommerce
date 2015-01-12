@@ -22,33 +22,14 @@
  * THE SOFTWARE.
  */
 
-namespace PowerEcommerce\System\Data {
-    use PowerEcommerce\System\Object;
+namespace PowerEcommerce\System\Data\Integer {
+    use PowerEcommerce\System\Data\Integer;
 
     /**
-     * Class Blank
-     * @package PowerEcommerce\System\Data
+     * Class Round
+     * @package PowerEcommerce\System\Data\Integer
      */
-    class Blank extends Object
+    abstract class Round extends Integer
     {
-        /**
-         * @param null $value
-         */
-        function __construct($value = null)
-        {
-            parent::__construct($value);
-        }
-
-        /**
-         * @param null $value
-         * @return $this
-         */
-        function setValue($value)
-        {
-            $value = $this->factory($value);
-            !$value->isNull() && $value->invalid('Null values only');
-
-            return parent::setValue($value->getValue());
-        }
     }
 }

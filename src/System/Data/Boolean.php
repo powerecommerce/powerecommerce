@@ -22,61 +22,41 @@
  * THE SOFTWARE.
  */
 
-namespace PowerEcommerce\System\Object {
-    use PowerEcommerce\System\Data\Argument;
+namespace PowerEcommerce\System\Data {
     use PowerEcommerce\System\Object;
-    use PowerEcommerce\System\TypeCode;
 
     /**
-     * Class Converter
-     * @package PowerEcommerce\System\Object
+     * Class Boolean
+     * @package PowerEcommerce\System\Data
      */
-    class Converter
+    class Boolean extends Object
     {
         /**
-         * @var \PowerEcommerce\System\Object
+         * @param boolean|\PowerEcommerce\System\Object $value Boolean values only
+         * @return $this
          */
-        protected $object;
-
-        /**
-         * @param \PowerEcommerce\System\Object $object
-         */
-        function __construct(Object $object)
+        function setValue($value)
         {
-            $this->object = $object;
+            $value = $this->factory($value);
+            !$value->isBoolean() && $value->invalid('Boolean values only');
+
+            return parent::setValue($value->getValue());
         }
 
         /**
-         * @param int $typeCode TypeCode
-         * @return \PowerEcommerce\System\Object
+         * @return boolean
          */
-        function format($typeCode)
+        function isTrue()
         {
-            $arg = new Argument($typeCode);
-            $arg->strict(TypeCode::PHP_INT);
-
-            return $this->_convert($typeCode);
+            return $this->getValue() === true;
         }
 
         /**
-         * @param int $typeCode TypeCode
-         * @return \PowerEcommerce\System\Object
+         * @return boolean
          */
-        private function _convert($typeCode)
+        function isFalse()
         {
-            $reflector = new \ReflectionClass('\PowerEcommerce\System\TypeCode');
-            $flags = $reflector->getConstants();
-
-            foreach ($flags as $name => $value) {
-                if ($typeCode == $value) {
-                    $name = ucfirst($name);
-
-                    $name == 'DateTime' && $name = 'DateTime';
-                    $name == 'TimeZone' && $name = 'TimeZone';
-
-                    return new $name($this->object);
-                }
-            }
+            return $this->getValue() === false;
         }
     }
 }

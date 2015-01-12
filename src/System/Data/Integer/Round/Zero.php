@@ -22,32 +22,30 @@
  * THE SOFTWARE.
  */
 
-namespace PowerEcommerce\System;
+namespace PowerEcommerce\System\Data\Integer\Round {
+    use PowerEcommerce\System\Data\Integer;
 
-use PowerEcommerce\System\Util\BaseUnit;
-
-class TypeCodeTest extends BaseUnit
-{
-    function testGetFlags()
+    /**
+     * Class Zero
+     * @package PowerEcommerce\System\Data\Integer\Round
+     */
+    class Zero extends Integer\Round
     {
-        $flags = 0;
+        /**
+         * @param void
+         */
+        function __construct()
+        {
+            parent::__construct();
+        }
 
-        $reflector = new \ReflectionClass('\PowerEcommerce\System\TypeCode');
-        $all = $reflector->getConstants();
-        foreach ($all as $const) $flags |= $const;
-
-        $this->assertSame(TypeCode::getFlags(), $flags);
-        $this->assertSame(TypeCode::getFlags(), $flags);
-    }
-
-    function testUnique()
-    {
-        $reflector = new \ReflectionClass('\PowerEcommerce\System\TypeCode');
-        $flags = $reflector->getConstants();
-
-        array_walk_recursive($flags, function ($value, $key) use (&$flags) {
-            unset($flags[$key]);
-            $this->assertFalse(in_array($value, $flags));
-        });
+        /**
+         * @param void
+         * @return $this
+         */
+        function setValue()
+        {
+            return parent::setValue(GMP_ROUND_ZERO);
+        }
     }
 }

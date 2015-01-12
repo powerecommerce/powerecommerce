@@ -22,33 +22,14 @@
  * THE SOFTWARE.
  */
 
-namespace PowerEcommerce\System\Data {
-    use PowerEcommerce\System\Object;
-    use PowerEcommerce\System\TypeCode;
+namespace PowerEcommerce\System\Data\Float {
+    use PowerEcommerce\System\Data\Integer;
 
     /**
-     * Class DateTime
-     *
-     * A type representing a date and time value.
-     *
-     * @package PowerEcommerce\System\Data
+     * Class Round
+     * @package PowerEcommerce\System\Data\Float
      */
-    class DateTime extends Object
+    abstract class Round extends Integer
     {
-        /**
-         * @return string
-         */
-        function __toString()
-        {
-            return '';
-        }
-
-        /**
-         * @return int TypeCode
-         */
-        function getTypeCode()
-        {
-            return TypeCode::DATETIME;
-        }
     }
 }
