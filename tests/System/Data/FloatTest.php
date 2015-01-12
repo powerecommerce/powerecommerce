@@ -24,7 +24,6 @@
 
 namespace PowerEcommerce\System\Data;
 
-use PowerEcommerce\System\Object;
 use PowerEcommerce\System\Util\BaseUnit;
 use PowerEcommerce\System\Util\DataGenerator;
 

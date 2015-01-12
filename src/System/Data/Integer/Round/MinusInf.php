@@ -24,12 +24,13 @@
 
 namespace PowerEcommerce\System\Data\Integer\Round {
     use PowerEcommerce\System\Data\Integer;
+    use PowerEcommerce\System\Data\Integer\Round;
 
     /**
      * Class MinusInf
      * @package PowerEcommerce\System\Data\Integer\Round
      */
-    class MinusInf extends Integer\Round
+    class MinusInf extends Round
     {
         /**
          * @param void
@@ -40,10 +41,10 @@ namespace PowerEcommerce\System\Data\Integer\Round {
         }
 
         /**
-         * @param void
+         * @param integer $value GMP_ROUND_MINUSINF
          * @return $this
          */
-        function setValue()
+        function setValue($value)
         {
             return parent::setValue(GMP_ROUND_MINUSINF);
         }

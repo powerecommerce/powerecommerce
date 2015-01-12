@@ -40,10 +40,10 @@ namespace PowerEcommerce\System\Data\Float\Round {
         }
 
         /**
-         * @param void
+         * @param integer $value PHP_ROUND_HALF_DOWN
          * @return $this
          */
-        function setValue()
+        function setValue($value)
         {
             return parent::setValue(PHP_ROUND_HALF_DOWN);
         }
