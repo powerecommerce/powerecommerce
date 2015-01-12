@@ -48,18 +48,14 @@ class FloatTest extends BaseUnit
 
     function testMain()
     {
-//        $data = new Float();
-//
-//        $this->assertSame(spl_object_hash($data), $data->getHashCode());
-//
-//        $this->assertSame('0', (string)$data->getValue());
-//
-//        $this->assertNotSame(7, $data->getValue());
-//        $this->assertNotSame('7', $data->getValue());
-//
-//        $this->assertSame('7', (string)$data->setValue(7)->getValue());
-//        $this->assertSame('7', (string)$data->setValue(new Object('7'))->getValue());
-//        $this->assertSame('7', (string)$data);
+        $data = new Float();
+
+        $this->assertSame(spl_object_hash($data), $data->getHashCode());
+
+        $this->assertSame('0.', $data->toString());
+
+        $this->assertNotSame(7, $data->getValue());
+        $this->assertNotSame('7', $data->getValue());
     }
 
     function testConstructorInvalidArgumentException()
