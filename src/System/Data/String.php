@@ -54,6 +54,24 @@ namespace PowerEcommerce\System\Data {
         }
 
         /**
+         * @return $this
+         */
+        function clear()
+        {
+            return $this->setValue('');
+        }
+
+        /**
+         * @param string|\PowerEcommerce\System\Object $value
+         * @return $this
+         */
+        function defaults($value)
+        {
+            '' === $this->getValue() && $this->setValue($value);
+            return $this;
+        }
+
+        /**
          * @param \PowerEcommerce\System\Data\String $value
          * @param \PowerEcommerce\System\Data\String\Strict $strict
          * @return \PowerEcommerce\System\Data\Boolean
@@ -155,7 +173,7 @@ namespace PowerEcommerce\System\Data {
             if (null === $limit) {
                 return $collection->setValue($collection->encode(explode($delimiter, $this)));
             }
-            return $collection->setValue($collection->encode(explode($delimiter, $this, (string)$limit)));
+            return $collection->setValue($collection->encode(explode($delimiter, $this, $limit->toString())));
         }
     }
 }

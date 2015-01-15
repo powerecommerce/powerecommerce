@@ -22,49 +22,50 @@
  * THE SOFTWARE.
  */
 
-namespace PowerEcommerce\System\Data {
+namespace PowerEcommerce\System\Security {
+    use PowerEcommerce\System\Data\String;
     use PowerEcommerce\System\Object;
 
     /**
-     * Class Boolean
-     * @package PowerEcommerce\System\Data
+     * Class Component
+     * @package PowerEcommerce\System\Security
      */
-    class Boolean extends Object
+    abstract class Component extends Object
     {
         /**
-         * @param boolean|\PowerEcommerce\System\Object $value Boolean values only
+         * @param \PowerEcommerce\System\Data\String $name
+         */
+        function __construct(String $name)
+        {
+            $this->setValue($name);
+        }
+
+        /**
+         * @param \PowerEcommerce\System\Data\String $value
          * @return $this
          */
         function setValue($value)
         {
-            $value = $this->factory($value);
-            !$value->isBoolean() && $value->invalid('Boolean values only');
-
-            return parent::setValue($value->getValue());
+            !($value instanceof \PowerEcommerce\System\Data\String) && $this->invalid();
+            return parent::setValue($value);
         }
 
         /**
+         * @param \PowerEcommerce\System\Security\Component $component
          * @return $this
          */
-        function clear()
-        {
-            return $this->invalid();
-        }
+        abstract function attach(Component $component);
 
         /**
-         * @return boolean
+         * @param \PowerEcommerce\System\Security\Component $component
+         * @return $this
          */
-        function isTrue()
-        {
-            return $this->getValue() === true;
-        }
+        abstract function detach(Component $component);
 
         /**
-         * @return boolean
+         * @param Component $component
+         * @return bool
          */
-        function isFalse()
-        {
-            return $this->getValue() === false;
-        }
+        abstract function isGranted(Component ...$component);
     }
 }

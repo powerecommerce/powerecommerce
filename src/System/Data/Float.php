@@ -60,6 +60,14 @@ namespace PowerEcommerce\System\Data {
         }
 
         /**
+         * @return $this
+         */
+        function clear()
+        {
+            return $this->setValue('0.');
+        }
+
+        /**
          * @return \PowerEcommerce\System\Data\Integer
          */
         function getPrecision()

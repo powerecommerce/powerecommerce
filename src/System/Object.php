@@ -26,6 +26,84 @@ namespace PowerEcommerce\System {
 
     /**
      * Class Object
+     *
+     * <code><?php
+     *
+     * require_once 'vendor/autoload.php';
+     *
+     * use PowerEcommerce\System\Data\Integer;
+     * use PowerEcommerce\System\Data\String;
+     * use PowerEcommerce\System\Object;
+     *
+     * $obj = new Object('1234');
+     *
+     * var_dump( //true
+     *      $obj->isString()
+     * );
+     *
+     * var_dump( //false
+     *      $obj->isInteger()
+     * );
+     *
+     * var_dump( //string '1234'
+     *      $obj->getValue()
+     * );
+     *
+     * var_dump( //int 1234
+     *      $obj->setValue(1234)->getValue()
+     * );
+     *
+     * var_dump( //string '1234'
+     *      $obj->toString()
+     * );
+     *
+     * var_dump( //string '000000001aff6483000000002a048a55'
+     *      $obj->getHashCode()
+     * );
+     *
+     * var_dump( //string '000000001aff6482000000002a048a55'
+     *      $obj->factory()->getHashCode()
+     * );
+     *
+     * var_dump( //int 1234
+     *      $obj->getValue()
+     * );
+     *
+     * var_dump( //string 'nice'
+     *      $obj->clear()
+     *          ->defaults('nice')
+     *          ->getValue()
+     * );
+     *
+     * var_dump( //object(PowerEcommerce\System\Data\String)[3]
+     *              //protected 'value' => string 'nice' (length=4)
+     *      $obj->cast(new String('?'))
+     * );
+     *
+     * try {
+     *      $cast = $obj->cast(new Integer());
+     * } catch (\Exception $e) {
+     *      //Exception: String is not an integer
+     * };
+     *
+     * var_dump( //object(PowerEcommerce\System\Object)[4]
+     *              //protected 'value' => int 1
+     *      $obj->factory(1)
+     * );
+     *
+     * var_dump( //object(PowerEcommerce\System\Data\Integer)[4]
+     *              //protected 'value' =>
+     *                  //object(GMP)[10]
+     *      $obj->factory(new Integer(1))
+     * );
+     *
+     * var_dump( //object(PowerEcommerce\System\Object)[4]
+     *              //protected 'value' => string 'nice' (length=4)
+     *      $obj->factory()
+     * );
+     *
+     * ?></code>
+     *
      * @package PowerEcommerce\System
      */
     class Object
@@ -247,6 +325,14 @@ namespace PowerEcommerce\System {
                 return $object->setValue($this->getValue());
             }
             return $object->setValue($this->toString());
+        }
+
+        /**
+         * @return $this
+         */
+        function clear()
+        {
+            return $this->setValue(null);
         }
 
         /**

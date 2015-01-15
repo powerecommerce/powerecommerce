@@ -71,6 +71,14 @@ namespace PowerEcommerce\System\Data {
         }
 
         /**
+         * @return $this
+         */
+        function clear()
+        {
+            return $this->setValue(0);
+        }
+
+        /**
          * @param \PowerEcommerce\System\Data\Integer $value
          * @return $this
          */

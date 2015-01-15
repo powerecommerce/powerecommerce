@@ -22,49 +22,40 @@
  * THE SOFTWARE.
  */
 
-namespace PowerEcommerce\System\Data {
-    use PowerEcommerce\System\Object;
+namespace PowerEcommerce\System\Security\Component {
+    use PowerEcommerce\System\Security\Component;
 
     /**
-     * Class Boolean
-     * @package PowerEcommerce\System\Data
+     * Class Privilege
+     * @package PowerEcommerce\System\Security\Component
      */
-    class Boolean extends Object
+    class Privilege extends Component
     {
         /**
-         * @param boolean|\PowerEcommerce\System\Object $value Boolean values only
+         * @param \PowerEcommerce\System\Security\Component $component
          * @return $this
          */
-        function setValue($value)
+        function attach(Component $component)
         {
-            $value = $this->factory($value);
-            !$value->isBoolean() && $value->invalid('Boolean values only');
-
-            return parent::setValue($value->getValue());
+            $this->invalid();
         }
 
         /**
+         * @param \PowerEcommerce\System\Security\Component $component
          * @return $this
          */
-        function clear()
+        function detach(Component $component)
         {
-            return $this->invalid();
+            $this->invalid();
         }
 
         /**
-         * @return boolean
+         * @param Component $component
+         * @return bool
          */
-        function isTrue()
+        function isGranted(Component ...$component)
         {
-            return $this->getValue() === true;
-        }
-
-        /**
-         * @return boolean
-         */
-        function isFalse()
-        {
-            return $this->getValue() === false;
+            return true;
         }
     }
 }

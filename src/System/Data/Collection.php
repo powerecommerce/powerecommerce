@@ -108,7 +108,7 @@ namespace PowerEcommerce\System\Data {
          */
         function set(String $key, Object $value)
         {
-            $this->value[(string)$key] = $value;
+            $this->value[$key->toString()] = $value;
             return $this;
         }
 
@@ -118,8 +118,22 @@ namespace PowerEcommerce\System\Data {
          */
         function get(String $key)
         {
-            return isset($this->value[(string)$key])
-                ? $this->value[(string)$key] : new Blank();
+            return $this->exists($key)->isTrue()
+                ? $this->value[$key->toString()]
+                : new Blank();
+        }
+
+        /**
+         * @param \PowerEcommerce\System\Data\String $key
+         * @return \PowerEcommerce\System\Data\Boolean
+         */
+        function exists(String $key)
+        {
+            return new Boolean(
+                isset($this->value[$key->toString()])
+                    ? true
+                    : false
+            );
         }
 
         /**
@@ -128,7 +142,7 @@ namespace PowerEcommerce\System\Data {
          */
         function del(String $key)
         {
-            unset($this->value[(string)$key]);
+            unset($this->value[$key->toString()]);
             return $this;
         }
 
