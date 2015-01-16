@@ -24,6 +24,9 @@
 
 namespace PowerEcommerce\System\Data;
 
+use PowerEcommerce\System\Data\Float\Round\HalfDown;
+use PowerEcommerce\System\Data\Float\Round\HalfUp;
+use PowerEcommerce\System\Object;
 use PowerEcommerce\System\Util\BaseUnit;
 use PowerEcommerce\System\Util\DataGenerator;
 
@@ -71,6 +74,7 @@ class FloatTest extends BaseUnit
         };
 
         foreach (DataGenerator::_all(DataGenerator::_STRING | DataGenerator::_FLOAT) as $data) {
+            if (null === $data) continue;
             $j += $test($data);
             $this->assertEquals($j, $i);
         }
@@ -211,6 +215,82 @@ class FloatTest extends BaseUnit
             if (false === strpos($data, '.')) continue;
             $assert(new Float((string)$data));
         }
+    }
+
+    function testClear()
+    {
+        $this->assertSame('1.', $this->data->setValue('1.')->getValue());
+        $this->assertSame('2.', $this->data->setValue(new Object('2.'))->getValue());
+        $this->assertSame('0.', $this->data->clear()->getValue());
+    }
+
+    function testCast()
+    {
+        $obj = new String();
+        $this->assertSame($this->data->setValue('1.7')->cast($obj), $obj);
+        $this->assertSame($this->data->setValue(new Object('2.'))->cast($obj), $obj);
+    }
+
+    /**
+     * @expectedException \InvalidArgumentException
+     */
+    function testCastException()
+    {
+        $obj = new Integer();
+        $this->data->setValue('8.')->cast($obj);
+    }
+
+    function testAllocate()
+    {
+        $this->data->setPrecision(new Integer(2));
+        $allocate = $this->data->setValue('10.')->allocate(new Float('3.'));
+
+        $this->assertSame('3.33', $allocate->get(new String('0'))->toString());
+        $this->assertSame('3.33', $allocate->get(new String('1'))->toString());
+        $this->assertSame('3.34', $allocate->get(new String('2'))->toString());
+    }
+
+    function testRound()
+    {
+        $this->data
+            ->setPrecision(new Integer(2))
+            ->setRound(new HalfDown())
+            ->setValue('10.125');
+        $this->assertNotSame('10.12', $this->data->toString());
+        $this->assertSame('10.12', $this->data->round()->toString());
+
+        $this->data
+            ->setPrecision(new Integer(2))
+            ->setRound(new HalfUp())
+            ->setValue('10.125');
+        $this->assertNotSame('10.13', $this->data->toString());
+        $this->assertSame('10.13', $this->data->round()->toString());
+
+        $this->data
+            ->setValue('10.125')
+            ->setPrecision(new Integer(2))
+            ->setRound(new HalfDown());
+        $this->assertSame('10.12', $this->data->toString());
+        $this->assertSame('10.12', $this->data->round()->toString());
+
+        $this->data
+            ->setValue('10.125')
+            ->setPrecision(new Integer(2))
+            ->setRound(new HalfUp());
+        $this->assertSame('10.13', $this->data->toString());
+        $this->assertSame('10.13', $this->data->round()->toString());
+
+        $this->data
+            ->setPrecision(new Integer(1))
+            ->setRound(new HalfDown())
+            ->setValue('10.23');
+        $this->assertSame('10.2', $this->data->add(new Float('.02'))->toString());
+
+        $this->data
+            ->setPrecision(new Integer(1))
+            ->setRound(new HalfUp())
+            ->setValue('10.23');
+        $this->assertSame('10.3', $this->data->add(new Float('.02'))->toString());
     }
 
     /**

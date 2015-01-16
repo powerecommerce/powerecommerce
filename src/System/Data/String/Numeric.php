@@ -34,8 +34,9 @@ namespace PowerEcommerce\System\Data\String {
         /**
          * @param string|\PowerEcommerce\System\Object $value
          */
-        function __construct($value = '0')
+        function __construct($value = null)
         {
+            null === $value && $value = $this->_default();
             parent::__construct($value);
         }
 
@@ -49,6 +50,14 @@ namespace PowerEcommerce\System\Data\String {
             !$value->isNumeric() && $value->invalid('Numeric values only');
 
             return parent::setValue($value->getValue());
+        }
+
+        /**
+         * @return integer
+         */
+        protected function _default()
+        {
+            return '0';
         }
     }
 }

@@ -36,8 +36,9 @@ namespace PowerEcommerce\System\Data {
         /**
          * @param string|\PowerEcommerce\System\Object $value
          */
-        function __construct($value = '')
+        function __construct($value = null)
         {
+            null === $value && $value = $this->_default();
             parent::__construct($value);
         }
 
@@ -54,21 +55,11 @@ namespace PowerEcommerce\System\Data {
         }
 
         /**
-         * @return $this
+         * @return string
          */
-        function clear()
+        protected function _default()
         {
-            return $this->setValue('');
-        }
-
-        /**
-         * @param string|\PowerEcommerce\System\Object $value
-         * @return $this
-         */
-        function defaults($value)
-        {
-            '' === $this->getValue() && $this->setValue($value);
-            return $this;
+            return '';
         }
 
         /**

@@ -24,6 +24,9 @@
 
 namespace PowerEcommerce\System\Data;
 
+use PowerEcommerce\System\Data\Integer\Round\MinusInf;
+use PowerEcommerce\System\Data\Integer\Round\PlusInf;
+use PowerEcommerce\System\Data\Integer\Round\Zero;
 use PowerEcommerce\System\Object;
 use PowerEcommerce\System\Util\BaseUnit;
 use PowerEcommerce\System\Util\DataGenerator;
@@ -71,6 +74,7 @@ class IntegerTest extends BaseUnit
         };
 
         foreach (DataGenerator::_all(DataGenerator::_STRING | DataGenerator::_INTEGER) as $data) {
+            if (null === $data) continue;
             $j += $test($data);
             $this->assertEquals($j, $i);
         }
@@ -182,6 +186,29 @@ class IntegerTest extends BaseUnit
         };
 
         foreach (DataGenerator::_integer() as $data) $assert(new Integer($data));
+    }
+
+    function testDefaults()
+    {
+        $this->assertSame('1', $this->data->defaults(1)->toString());
+    }
+
+    function testDivideRound()
+    {
+        $this->data->setValue(1);
+        $this->assertSame('1', $this->data->divide(new Integer(3), new PlusInf())->toString());
+
+        $this->data->setValue(-1);
+        $this->assertSame('0', $this->data->divide(new Integer(4), new PlusInf())->toString());
+
+        $this->data->setValue(-1);
+        $this->assertSame('-1', $this->data->divide(new Integer(4), new MinusInf())->toString());
+
+        $this->data->setValue(1);
+        $this->assertSame('0', $this->data->divide(new Integer(2), new Zero())->toString());
+
+        $this->data->setValue(3);
+        $this->assertSame('1', $this->data->divide(new Integer(2), new Zero())->toString());
     }
 
     /**

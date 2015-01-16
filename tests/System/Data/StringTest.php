@@ -73,6 +73,7 @@ class StringTest extends BaseUnit
         };
 
         foreach (DataGenerator::_all(DataGenerator::_STRING) as $data) {
+            if (null === $data) continue;
             $j += $test($data);
             $this->assertEquals($j, $i);
         }
@@ -169,6 +170,10 @@ class StringTest extends BaseUnit
                 (string)substr($data, $start, $end),
                 $this->data->setValue($data)->substring(new Integer($start), new Integer($end))->getValue()
             );
+            $this->assertSame(
+                (string)substr($data, $start),
+                $this->data->setValue($data)->substring(new Integer($start))->getValue()
+            );
         };
 
         foreach (DataGenerator::_string() as $data) $assert(new String($data));
@@ -207,6 +212,36 @@ class StringTest extends BaseUnit
         };
 
         foreach (DataGenerator::_string() as $data) $assert(new String($data));
+    }
+
+    function testClear()
+    {
+        $this->assertSame('Test', $this->data->setValue('Test')->getValue());
+        $this->assertSame('Test', $this->data->setValue(new Object('Test'))->getValue());
+        $this->assertSame('', $this->data->clear()->getValue());
+    }
+
+    function testCast()
+    {
+        $obj = new String();
+        $this->assertSame($this->data->setValue('Test')->cast($obj), $obj);
+        $this->assertSame($this->data->setValue(new Object('Test'))->cast($obj), $obj);
+    }
+
+    /**
+     * @expectedException \InvalidArgumentException
+     */
+    function testCastException()
+    {
+        $obj = new Integer();
+        $this->data->setValue('Test')->cast($obj);
+    }
+
+    function testExplode()
+    {
+        $this->data->setValue('1 2 3 4 5 6 7');
+        $this->assertEquals(7, $this->data->explode(new String(' '))->length());
+        $this->assertEquals(3, $this->data->explode(new String(' '), new Integer(3))->length());
     }
 
     /**

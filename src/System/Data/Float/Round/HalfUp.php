@@ -32,20 +32,11 @@ namespace PowerEcommerce\System\Data\Float\Round {
     class HalfUp extends Round
     {
         /**
-         * @param void
+         * @return integer
          */
-        function __construct()
+        protected function _default()
         {
-            parent::__construct();
-        }
-
-        /**
-         * @param integer $value PHP_ROUND_HALF_UP
-         * @return $this
-         */
-        function setValue($value)
-        {
-            return parent::setValue(PHP_ROUND_HALF_UP);
+            return PHP_ROUND_HALF_UP;
         }
     }
 }

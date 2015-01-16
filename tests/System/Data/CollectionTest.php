@@ -91,7 +91,7 @@ class CollectionTest extends BaseUnit
         }
     }
 
-    function testAddValue()
+    function testAdd()
     {
         $value = new Object();
 
@@ -106,18 +106,42 @@ class CollectionTest extends BaseUnit
         );
     }
 
+    function testAddValue()
+    {
+        $value = new Object();
+
+        $this->assertSame(
+            ['Test 1' => $value],
+            $this->data->addValue(['Test 1' => $value])->getValue()
+        );
+
+        $this->assertSame(
+            ['Test 1' => $value, 'Test 2' => $value],
+            $this->data->addValue(['Test 2' => $value])->getValue()
+        );
+    }
+
+    /**
+     * @expectedException \InvalidArgumentException
+     */
+    function testAddException()
+    {
+        $this->testAdd();
+        $this->data->add(new String('Test 1'), new Object());
+    }
+
     /**
      * @expectedException \InvalidArgumentException
      */
     function testAddValueException()
     {
         $this->testAddValue();
-        $this->data->add(new String('Test 1'), new Object());
+        $this->data->addValue(['Test 1' => new Object()]);
     }
 
     function testClear()
     {
-        $this->testAddValue();
+        $this->testAdd();
 
         $this->assertSame(2, sizeof($this->data->getValue()));
         $this->data->clear();
@@ -126,7 +150,7 @@ class CollectionTest extends BaseUnit
 
     function testDel()
     {
-        $this->testAddValue();
+        $this->testAdd();
 
         $this->assertSame(2, sizeof($this->data->getValue()));
 
@@ -178,6 +202,28 @@ class CollectionTest extends BaseUnit
 
             $assert($dataTest);
         }
+    }
+
+    function testCast()
+    {
+        $obj = new String();
+        $this->assertSame($this->data->setValue([new Object('Test')])->cast($obj), $obj);
+        $this->assertSame($this->data->setValue(['Test' => new String('Test')])->cast($obj), $obj);
+    }
+
+    /**
+     * @expectedException \InvalidArgumentException
+     */
+    function testCastException()
+    {
+        $obj = new Integer();
+        $this->data->cast($obj);
+    }
+
+    function testLength()
+    {
+        $obj = new Object();
+        $this->assertEquals(3, $this->data->setValue([$obj, $obj, $obj])->length());
     }
 
     /**

@@ -34,8 +34,9 @@ namespace PowerEcommerce\System\Data\String {
         /**
          * @param string|\PowerEcommerce\System\Object $value
          */
-        function __construct($value = '//')
+        function __construct($value = null)
         {
+            null === $value && $value = $this->_default();
             parent::__construct($value);
         }
 
@@ -46,6 +47,14 @@ namespace PowerEcommerce\System\Data\String {
         function setValue($value)
         {
             return parent::setValue($this->factory($value)->getValue());
+        }
+
+        /**
+         * @return boolean
+         */
+        protected function _default()
+        {
+            return '//';
         }
     }
 }

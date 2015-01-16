@@ -41,8 +41,9 @@ namespace PowerEcommerce\System\Data {
         /**
          * @param integer|string|\PowerEcommerce\System\Object $value
          */
-        function __construct($value = 0)
+        function __construct($value = null)
         {
+            null === $value && $value = $this->_default();
             parent::__construct($value);
         }
 
@@ -71,11 +72,21 @@ namespace PowerEcommerce\System\Data {
         }
 
         /**
+         * @param integer|string|\PowerEcommerce\System\Object $value
          * @return $this
          */
-        function clear()
+        function defaults($value)
         {
-            return $this->setValue(0);
+            $this->_default() === $this->toString() && $this->setValue($value);
+            return $this;
+        }
+
+        /**
+         * @return string
+         */
+        protected function _default()
+        {
+            return '0';
         }
 
         /**
@@ -98,7 +109,7 @@ namespace PowerEcommerce\System\Data {
             if (null === $round) {
                 $this->setValue($this->getValue() / $value->getValue());
             } else {
-                $this->setValue(gmp_div_q($this->getValue(), $value->getValue(), $round->getValue()));
+                $this->setValue(gmp_div_q($this->getValue(), $value->getValue(), $round->toString()));
             }
             return $this;
         }

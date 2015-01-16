@@ -24,7 +24,8 @@
 
 namespace PowerEcommerce\System;
 
-use PowerEcommerce\System\Object;
+use PowerEcommerce\System\Data\Integer;
+use PowerEcommerce\System\Data\String;
 use PowerEcommerce\System\Util\BaseUnit;
 use PowerEcommerce\System\Util\DataGenerator;
 
@@ -264,6 +265,34 @@ class ObjectTest extends BaseUnit
             !is_numeric($data) && $this->assertFalse($this->data->setValue($data)->isNumeric());
             !is_numeric($data) && $this->assertFalse($this->data->setValue($data)->isNumber());
         }
+    }
+
+    function testClear()
+    {
+        $this->assertSame('Test', $this->data->setValue('Test')->getValue());
+        $this->assertNotSame('Test', $this->data->setValue(new Object('Test'))->getValue());
+        $this->assertSame(null, $this->data->clear()->getValue());
+    }
+
+    function testCast()
+    {
+        $obj = new String();
+        $this->assertSame($this->data->setValue('Test')->cast($obj), $obj);
+        $this->assertSame($this->data->setValue(new Object('Test'))->cast($obj), $obj);
+    }
+
+    /**
+     * @expectedException \InvalidArgumentException
+     */
+    function testCastException()
+    {
+        $obj = new Integer();
+        $this->data->setValue('Test')->cast($obj);
+    }
+
+    function testLength()
+    {
+        $this->assertEquals(3, $this->data->setValue('123')->length());
     }
 
     /**

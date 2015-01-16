@@ -206,6 +206,14 @@ namespace PowerEcommerce\System {
         }
 
         /**
+         * @return integer
+         */
+        function length()
+        {
+            return strlen($this->toString());
+        }
+
+        /**
          * @param string $msg
          * @return \InvalidArgumentException
          */
@@ -220,8 +228,16 @@ namespace PowerEcommerce\System {
          */
         function defaults($value)
         {
-            null === $this->getValue() && $this->setValue($value);
+            $this->_default() === $this->getValue() && $this->setValue($value);
             return $this;
+        }
+
+        /**
+         * @return null
+         */
+        protected function _default()
+        {
+            return null;
         }
 
         /**
@@ -254,7 +270,7 @@ namespace PowerEcommerce\System {
          */
         function clear()
         {
-            return $this->setValue(null);
+            return $this->setValue($this->_default());
         }
 
         /**

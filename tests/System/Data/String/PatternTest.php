@@ -22,49 +22,42 @@
  * THE SOFTWARE.
  */
 
-namespace PowerEcommerce\System\Data {
-    use PowerEcommerce\System\Object;
+namespace PowerEcommerce\System\Data\String;
+
+use PowerEcommerce\System\Util\BaseUnit;
+
+/**
+ * @group System
+ * @group Object
+ * @group Data
+ * @group String
+ */
+class PatternTest extends BaseUnit
+{
+    /**
+     * @var \PowerEcommerce\System\Data\String\Pattern
+     */
+    protected $data;
+
+    function testPattern()
+    {
+        $this->assertSame('//', $this->data->getValue());
+    }
 
     /**
-     * Class Boolean
-     * @package PowerEcommerce\System\Data
+     * Sets up the fixture, for example, opens a network connection.
+     * This method is called before a test is executed.
      */
-    class Boolean extends Object
+    protected function setUp()
     {
-        /**
-         * @param boolean|\PowerEcommerce\System\Object $value Boolean values only
-         * @return $this
-         */
-        function setValue($value)
-        {
-            $value = $this->factory($value);
-            !$value->isBoolean() && $value->invalid('Boolean values only');
+        $this->data = new Pattern();
+    }
 
-            return parent::setValue($value->getValue());
-        }
-
-        /**
-         * @return \InvalidArgumentException
-         */
-        protected function _default()
-        {
-            return $this->invalid('Value must be defined');
-        }
-
-        /**
-         * @return boolean
-         */
-        function isTrue()
-        {
-            return $this->getValue() === true;
-        }
-
-        /**
-         * @return boolean
-         */
-        function isFalse()
-        {
-            return $this->getValue() === false;
-        }
+    /**
+     * Tears down the fixture, for example, closes a network connection.
+     * This method is called after a test is executed.
+     */
+    protected function tearDown()
+    {
     }
 }

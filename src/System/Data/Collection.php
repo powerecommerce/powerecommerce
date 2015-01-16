@@ -147,12 +147,30 @@ namespace PowerEcommerce\System\Data {
         }
 
         /**
+         * @param \PowerEcommerce\System\Object $value
+         * @return $this
+         */
+        function push(Object $value)
+        {
+            $this->value[] = $value;
+            return $this;
+        }
+
+        /**
          * @return $this
          */
         function clear()
         {
-            $this->value = [];
+            $this->value = $this->_default();
             return $this;
+        }
+
+        /**
+         * @return array
+         */
+        protected function _default()
+        {
+            return [];
         }
 
         /**
@@ -161,6 +179,14 @@ namespace PowerEcommerce\System\Data {
         function __toString()
         {
             return '';
+        }
+
+        /**
+         * @return integer
+         */
+        function length()
+        {
+            return sizeof($this->getValue());
         }
 
         /**
@@ -232,7 +258,7 @@ namespace PowerEcommerce\System\Data {
                 return $this->valueHelper($value->getValue(), $func);
             }
 
-            $value->invalid('Array values only');
+            return $value->invalid('Array values only');
         }
 
         /**

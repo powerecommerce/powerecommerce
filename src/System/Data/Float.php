@@ -26,7 +26,6 @@ namespace PowerEcommerce\System\Data {
     use PowerEcommerce\System\Data\Float\Round;
     use PowerEcommerce\System\Data\Float\Round\HalfUp;
     use PowerEcommerce\System\Data\String\Pattern;
-    use PowerEcommerce\System\Object;
 
     /**
      * Class Float
@@ -49,8 +48,9 @@ namespace PowerEcommerce\System\Data {
          * @param \PowerEcommerce\System\Data\Integer $precision
          * @param \PowerEcommerce\System\Data\Float\Round $round
          */
-        function __construct($value = '0.', Integer $precision = null, Round $round = null)
+        function __construct($value = null, Integer $precision = null, Round $round = null)
         {
+            null === $value && $value = $this->_default();
             null === $precision && $precision = new Integer(4);
             null === $round && $round = new HalfUp();
 
@@ -60,11 +60,11 @@ namespace PowerEcommerce\System\Data {
         }
 
         /**
-         * @return $this
+         * @return string
          */
-        function clear()
+        protected function _default()
         {
-            return $this->setValue('0.');
+            return '0.';
         }
 
         /**
@@ -169,30 +169,20 @@ namespace PowerEcommerce\System\Data {
         }
 
         /**
-         * @param int $targets
-         * @return \PowerEcommerce\System\Data\Float[]
+         * @param \PowerEcommerce\System\Data\Float $targets
+         * @return \PowerEcommerce\System\Data\Collection
          */
-        function allocate($targets)
+        function allocate(Float $targets)
         {
-            $_targets = clone $this;
-            $_targets->setValue($targets);
+            $part = $this->factory()->divide($targets);
+            $last = $this->factory();
+            $collection = new Collection();
 
-            $one = clone $this;
-            $one->setValue(1);
-
-            $part = clone $this;
-            $part->divide($_targets);
-
-            $end = clone $this;
-            $results = [];
-
-            for ($i = 1; $i < $targets; $i++) {
-                $results[] = $part;
-                $end->subtract($part);
+            for ($i = 1; $i < $targets->toString(); $i++) {
+                $collection->push($part);
+                $last->subtract($part);
             }
-
-            $results[] = $end;
-            return $results;
+            return $collection->push($last);
         }
 
         /**
@@ -278,7 +268,7 @@ namespace PowerEcommerce\System\Data {
                         $value->getValue()
                     )
                 );
-            } elseif ($this->getRound() instanceof \PowerEcommerce\System\Data\Float\Round\HalfUp) {
+            } elseif ($this->getRound() instanceof \PowerEcommerce\System\Data\Float\Round\HalfDown) {
                 bcscale(
                     $this->getPrecision()
                         ->toString()
@@ -289,9 +279,8 @@ namespace PowerEcommerce\System\Data {
                         $value->getValue()
                     )
                 );
-            } else {
-                $result = new String();
             }
+
             'bcmod' === $func && $result->concat(new String('.'));
             return $this->setValue($result)->round();
         }

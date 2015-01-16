@@ -1,0 +1,50 @@
+
+
+Code Coverage Report:      
+  2015-01-16 12:39:30      
+                           
+ Summary:                  
+  Classes: 80.00% (16/20)  
+  Methods: 82.80% (130/157)
+  Lines:   80.27% (529/659)
+
+\PowerEcommerce\System::Object
+  Methods: 100.00% (31/31)   Lines: 100.00% ( 42/ 42)
+\PowerEcommerce\System\Data::Blank
+  Methods: 100.00% ( 2/ 2)   Lines: 100.00% (  5/  5)
+\PowerEcommerce\System\Data::Boolean
+  Methods: 100.00% ( 4/ 4)   Lines: 100.00% (  6/  6)
+\PowerEcommerce\System\Data::Collection
+  Methods: 100.00% (22/22)   Lines: 100.00% ( 49/ 49)
+\PowerEcommerce\System\Data::Float
+  Methods: 100.00% (17/17)   Lines: 100.00% ( 96/ 96)
+\PowerEcommerce\System\Data::Integer
+  Methods: 100.00% (11/11)   Lines: 100.00% ( 33/ 33)
+\PowerEcommerce\System\Data::String
+  Methods: 100.00% (11/11)   Lines: 100.00% ( 34/ 34)
+\PowerEcommerce\System\Data\Float::Round
+  Methods: 100.00% ( 2/ 2)   Lines: 100.00% (  3/  3)
+\PowerEcommerce\System\Data\Float\Round::HalfDown
+  Methods: 100.00% ( 1/ 1)   Lines: 100.00% (  1/  1)
+\PowerEcommerce\System\Data\Float\Round::HalfUp
+  Methods: 100.00% ( 1/ 1)   Lines: 100.00% (  1/  1)
+\PowerEcommerce\System\Data\Integer::Round
+  Methods: 100.00% ( 2/ 2)   Lines: 100.00% (  3/  3)
+\PowerEcommerce\System\Data\Integer\Round::MinusInf
+  Methods: 100.00% ( 1/ 1)   Lines: 100.00% (  1/  1)
+\PowerEcommerce\System\Data\Integer\Round::PlusInf
+  Methods: 100.00% ( 1/ 1)   Lines: 100.00% (  1/  1)
+\PowerEcommerce\System\Data\Integer\Round::Zero
+  Methods: 100.00% ( 1/ 1)   Lines: 100.00% (  1/  1)
+\PowerEcommerce\System\Data\String::Pattern
+  Methods: 100.00% ( 3/ 3)   Lines: 100.00% (  5/  5)
+\PowerEcommerce\System\Data\String::Strict
+  Methods: 100.00% ( 3/ 3)   Lines: 100.00% (  5/  5)
+\PowerEcommerce\System\Util::DataGenerator
+  Methods:  90.00% ( 9/10)   Lines:  98.71% (153/155)
+\SebastianBergmann\GlobalState::Blacklist
+  Methods:  12.50% ( 1/ 8)   Lines:   2.94% (  1/ 34)
+\SebastianBergmann\GlobalState::Restorer
+  Methods:   0.00% ( 0/ 4)   Lines:  65.31% ( 32/ 49)
+\SebastianBergmann\GlobalState::Snapshot
+  Methods:  31.82% ( 7/22)   Lines:  40.00% ( 52/130)

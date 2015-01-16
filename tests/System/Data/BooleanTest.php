@@ -98,6 +98,33 @@ class BooleanTest extends BaseUnit
     }
 
     /**
+     * @expectedException \InvalidArgumentException
+     */
+    function testClear()
+    {
+        $this->data->clear();
+    }
+
+    function testCast()
+    {
+        $obj = new String();
+        $this->assertSame($this->data->cast($obj), $obj);
+        $this->assertSame($this->data->setValue(new Object(true))->cast($obj), $obj);
+
+        $obj = new Integer();
+        $this->assertSame($this->data->cast($obj), $obj);
+    }
+
+    /**
+     * @expectedException \InvalidArgumentException
+     */
+    function testCastException()
+    {
+        $obj = new Integer();
+        $this->data->setValue(new Object(false))->cast($obj);
+    }
+
+    /**
      * Sets up the fixture, for example, opens a network connection.
      * This method is called before a test is executed.
      */
