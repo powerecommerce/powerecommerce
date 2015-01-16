@@ -29,49 +29,6 @@ namespace PowerEcommerce\System\Security\Component {
 
     /**
      * Class Acl
-     *
-     * <code><?php
-     *
-     * require_once 'vendor/autoload.php';
-     *
-     * use PowerEcommerce\System\Data\String;
-     * use PowerEcommerce\System\Security\Component\Acl;
-     * use PowerEcommerce\System\Security\Component\Privilege;
-     * use PowerEcommerce\System\Security\Component\Resource;
-     * use PowerEcommerce\System\Security\Component\Role;
-     *
-     * $p1 = new Privilege(new String('p1'));
-     * $p2 = new Privilege(new String('p2'));
-     *
-     * $r1 = new Role(new String('r1'));
-     * $r2 = new Role(new String('r2'));
-     * $r1->attach($p1);
-     *
-     * $rs1 = new Resource(new String('rs1'));
-     * $rs2 = new Resource(new String('rs2'));
-     * $rs1->attach($r1);
-     *
-     * $a1 = new Acl(new String('a1'));
-     * $a1->attach($rs1);
-     *
-     * var_dump($a1->isGranted( //true
-     *      $p1, $rs1, $r1
-     * ));
-     *
-     * var_dump($a1->isGranted( //false
-     *      $p1, $rs2, $r1
-     * ));
-     *
-     * var_dump($a1->isGranted( //false
-     *      $p1, $rs1, $r2
-     * ));
-     *
-     * var_dump($a1->isGranted( //false
-     *      $p2, $rs1, $r1
-     * ));
-     *
-     * ?></code>
-     *
      * @package PowerEcommerce\System\Security\Component
      */
     class Acl extends Component
