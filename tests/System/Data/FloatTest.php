@@ -293,6 +293,11 @@ class FloatTest extends BaseUnit
         $this->assertSame('10.3', $this->data->add(new Float('.02'))->toString());
     }
 
+    function testLength()
+    {
+        $this->assertEquals(2, $this->data->length()->toString());
+    }
+
     /**
      * Sets up the fixture, for example, opens a network connection.
      * This method is called before a test is executed.

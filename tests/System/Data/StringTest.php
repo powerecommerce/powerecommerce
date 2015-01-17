@@ -240,8 +240,8 @@ class StringTest extends BaseUnit
     function testExplode()
     {
         $this->data->setValue('1 2 3 4 5 6 7');
-        $this->assertEquals(7, $this->data->explode(new String(' '))->length());
-        $this->assertEquals(3, $this->data->explode(new String(' '), new Integer(3))->length());
+        $this->assertEquals(7, $this->data->explode(new String(' '))->length()->toString());
+        $this->assertEquals(3, $this->data->explode(new String(' '), new Integer(3))->length()->toString());
     }
 
     /**

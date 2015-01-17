@@ -65,7 +65,6 @@ namespace PowerEcommerce\System\Data {
             foreach ($data as $key => $value) {
                 $encode[(string)$key] = $this->factory($value);
             }
-
             return $encode;
         }
 
@@ -89,6 +88,15 @@ namespace PowerEcommerce\System\Data {
         }
 
         /**
+         * @param array|\PowerEcommerce\System\Object $value
+         * @return $this
+         */
+        function pushValue($value)
+        {
+            return $this->value($value, 'push');
+        }
+
+        /**
          * @param \PowerEcommerce\System\Data\String $key
          * @param \PowerEcommerce\System\Object $value
          * @return $this
@@ -109,7 +117,7 @@ namespace PowerEcommerce\System\Data {
         function set(String $key, Object $value)
         {
             $this->value[$key->toString()] = $value;
-            return $this;
+            return $this->resetKeys();
         }
 
         /**
@@ -143,7 +151,7 @@ namespace PowerEcommerce\System\Data {
         function del(String $key)
         {
             unset($this->value[$key->toString()]);
-            return $this;
+            return $this->resetKeys();
         }
 
         /**
@@ -153,7 +161,7 @@ namespace PowerEcommerce\System\Data {
         function push(Object $value)
         {
             $this->value[] = $value;
-            return $this;
+            return $this->resetKeys();
         }
 
         /**
@@ -162,7 +170,7 @@ namespace PowerEcommerce\System\Data {
         function clear()
         {
             $this->value = $this->_default();
-            return $this;
+            return $this->resetKeys();
         }
 
         /**
@@ -182,11 +190,11 @@ namespace PowerEcommerce\System\Data {
         }
 
         /**
-         * @return integer
+         * @return \PowerEcommerce\System\Data\Integer
          */
         function length()
         {
-            return sizeof($this->getValue());
+            return new Integer(sizeof($this->getValue()));
         }
 
         /**
@@ -257,7 +265,6 @@ namespace PowerEcommerce\System\Data {
             if ($value->isArray() || $value instanceof \PowerEcommerce\System\Data\Collection) {
                 return $this->valueHelper($value->getValue(), $func);
             }
-
             return $value->invalid('Array values only');
         }
 
@@ -268,8 +275,22 @@ namespace PowerEcommerce\System\Data {
          */
         private function valueHelper(array $value, $func)
         {
-            foreach ($value as $key => $object) {
-                $this->$func(new String((string)$key), $object);
+            switch ($func) {
+                case 'add':
+                case 'set':
+                    foreach ($value as $key => $object) {
+                        $this->$func(new String((string)$key), $object);
+                    }
+                    break;
+
+                case 'push':
+                    foreach ($value as $key => $object) {
+                        $this->$func($object);
+                    }
+                    break;
+
+                default:
+                    $this->invalid();
             }
             return $this->resetKeys();
         }

@@ -159,5 +159,13 @@ namespace PowerEcommerce\System\Data {
         {
             return $this->subtract(new Integer(1));
         }
+
+        /**
+         * @return \PowerEcommerce\System\Data\Integer
+         */
+        function length()
+        {
+            return new Integer(parent::length());
+        }
     }
 }

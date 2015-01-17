@@ -22,41 +22,50 @@
  * THE SOFTWARE.
  */
 
-namespace PowerEcommerce\System\Data {
+namespace PowerEcommerce\System\Routing {
+    use PowerEcommerce\System\Data\String;
     use PowerEcommerce\System\Object;
 
     /**
-     * Class Blank
-     * @package PowerEcommerce\System\Data
+     * Class Component
+     * @package PowerEcommerce\System\Routing
      */
-    class Blank extends Object
+    abstract class Component extends Object
     {
         /**
-         * @param null $value
+         * @param \PowerEcommerce\System\Data\String $name
          */
-        function __construct($value = null)
+        function __construct(String $name)
         {
-            parent::__construct($value);
+            $this->setValue($name);
         }
 
         /**
-         * @param null $value
+         * @param \PowerEcommerce\System\Data\String $value
          * @return $this
          */
         function setValue($value)
         {
-            $value = $this->factory($value);
-            !$value->isNull() && $value->invalid('Null values only');
-
-            return parent::setValue($value->getValue());
+            !($value instanceof \PowerEcommerce\System\Data\String) && $this->invalid();
+            return parent::setValue($value);
         }
 
         /**
-         * @return \PowerEcommerce\System\Data\Integer
+         * @param \PowerEcommerce\System\Routing\Component $component
+         * @return $this
          */
-        function length()
-        {
-            return new Integer(parent::length());
-        }
+        abstract function attach(Component $component);
+
+        /**
+         * @param \PowerEcommerce\System\Routing\Component $component
+         * @return $this
+         */
+        abstract function detach(Component $component);
+
+        /**
+         * @param \PowerEcommerce\System\Routing\Component $component
+         * @return \PowerEcommerce\System\Data\Boolean
+         */
+        abstract function handle(Component $component);
     }
 }

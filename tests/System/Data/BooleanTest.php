@@ -124,6 +124,11 @@ class BooleanTest extends BaseUnit
         $this->data->setValue(new Object(false))->cast($obj);
     }
 
+    function testLength()
+    {
+        $this->assertEquals(1, $this->data->length()->toString());
+    }
+
     /**
      * Sets up the fixture, for example, opens a network connection.
      * This method is called before a test is executed.

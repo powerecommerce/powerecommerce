@@ -33,7 +33,7 @@ namespace PowerEcommerce\System\Util {
         /**
          * @var integer
          */
-        static $max = 10;
+        static $max = 1000;
 
         /**
          * @var integer

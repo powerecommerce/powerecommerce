@@ -69,6 +69,11 @@ class BlankTest extends BaseUnit
         $this->data->setValue(7);
     }
 
+    function testLength()
+    {
+        $this->assertEquals(0, $this->data->length()->toString());
+    }
+
     /**
      * Sets up the fixture, for example, opens a network connection.
      * This method is called before a test is executed.

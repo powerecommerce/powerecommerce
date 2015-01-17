@@ -284,5 +284,13 @@ namespace PowerEcommerce\System\Data {
             'bcmod' === $func && $result->concat(new String('.'));
             return $this->setValue($result)->round();
         }
+
+        /**
+         * @return \PowerEcommerce\System\Data\Integer
+         */
+        function length()
+        {
+            return new Integer(parent::length());
+        }
     }
 }

@@ -128,7 +128,7 @@ namespace PowerEcommerce\System\Data {
         function truncate(Integer $keepLength = null, Integer $keepStart = null)
         {
             if (null === $keepStart && null === $keepLength) {
-                return $this->setValue('');
+                return $this->clear();
             }
             null === $keepStart && $keepStart = new Integer(0);
             return $this->setValue($this->substring($keepStart, $keepLength));
@@ -139,7 +139,7 @@ namespace PowerEcommerce\System\Data {
          */
         function length()
         {
-            return new Integer(strlen($this));
+            return new Integer(parent::length());
         }
 
         /**

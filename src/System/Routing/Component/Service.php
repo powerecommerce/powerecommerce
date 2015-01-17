@@ -22,57 +22,59 @@
  * THE SOFTWARE.
  */
 
-namespace PowerEcommerce\System\Data {
-    use PowerEcommerce\System\Object;
+namespace PowerEcommerce\System\Routing\Component {
+    use PowerEcommerce\System\Data\Collection;
+    use PowerEcommerce\System\Data\String;
+    use PowerEcommerce\System\Routing\Component;
 
     /**
-     * Class Boolean
-     * @package PowerEcommerce\System\Data
+     * Class Service
+     * @package PowerEcommerce\System\Routing\Component
      */
-    class Boolean extends Object
+    class Service extends Component
     {
         /**
-         * @param boolean|\PowerEcommerce\System\Object $value Boolean values only
+         * @var \PowerEcommerce\System\Data\Collection
+         */
+        private $args;
+
+        /**
+         * @param \PowerEcommerce\System\Data\String $name
+         * @param \PowerEcommerce\System\Data\Collection $args
+         */
+        function __construct(String $name, Collection $args = null)
+        {
+            null === $args && $args = new Collection();
+            $this->args = $args;
+            parent::__construct($name);
+        }
+
+        /**
+         * @param \PowerEcommerce\System\Routing\Component $component
          * @return $this
          */
-        function setValue($value)
+        function attach(Component $component)
         {
-            $value = $this->factory($value);
-            !$value->isBoolean() && $value->invalid('Boolean values only');
-
-            return parent::setValue($value->getValue());
+            $this->invalid();
         }
 
         /**
-         * @return \InvalidArgumentException
+         * @param \PowerEcommerce\System\Routing\Component $component
+         * @return $this
          */
-        protected function _default()
+        function detach(Component $component)
         {
-            return $this->invalid('Value must be defined');
+            $this->invalid();
         }
 
         /**
-         * @return boolean
+         * @param \PowerEcommerce\System\Routing\Component $component
+         * @return \PowerEcommerce\System\Routing\Component
          */
-        function isTrue()
+        function handle(Component $component)
         {
-            return $this->getValue() === true;
-        }
-
-        /**
-         * @return boolean
-         */
-        function isFalse()
-        {
-            return $this->getValue() === false;
-        }
-
-        /**
-         * @return \PowerEcommerce\System\Data\Integer
-         */
-        function length()
-        {
-            return new Integer(parent::length());
+            new $component(...$this->args->getValue());
+            return $this;
         }
     }
 }

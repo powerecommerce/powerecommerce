@@ -211,6 +211,11 @@ class IntegerTest extends BaseUnit
         $this->assertSame('1', $this->data->divide(new Integer(2), new Zero())->toString());
     }
 
+    function testLength()
+    {
+        $this->assertEquals(1, $this->data->length()->toString());
+    }
+
     /**
      * Sets up the fixture, for example, opens a network connection.
      * This method is called before a test is executed.

@@ -223,7 +223,7 @@ class CollectionTest extends BaseUnit
     function testLength()
     {
         $obj = new Object();
-        $this->assertEquals(3, $this->data->setValue([$obj, $obj, $obj])->length());
+        $this->assertEquals(3, $this->data->setValue([$obj, $obj, $obj])->length()->toString());
     }
 
     /**

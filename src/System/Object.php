@@ -23,6 +23,7 @@
  */
 
 namespace PowerEcommerce\System {
+    use PowerEcommerce\System\Data\Integer;
 
     /**
      * Class Object

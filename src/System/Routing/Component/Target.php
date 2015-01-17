@@ -22,41 +22,49 @@
  * THE SOFTWARE.
  */
 
-namespace PowerEcommerce\System\Data {
-    use PowerEcommerce\System\Object;
+namespace PowerEcommerce\System\Routing\Component {
+    use PowerEcommerce\System\Data\String;
+    use PowerEcommerce\System\Routing\Component;
 
     /**
-     * Class Blank
-     * @package PowerEcommerce\System\Data
+     * Class Target
+     * @package PowerEcommerce\System\Routing\Component
      */
-    class Blank extends Object
+    class Target extends Component
     {
         /**
-         * @param null $value
+         * @param \PowerEcommerce\System\Data\String $value
          */
-        function __construct($value = null)
+        function __construct(String $value)
         {
             parent::__construct($value);
         }
 
         /**
-         * @param null $value
+         * @param \PowerEcommerce\System\Routing\Component $component
          * @return $this
          */
-        function setValue($value)
+        function attach(Component $component)
         {
-            $value = $this->factory($value);
-            !$value->isNull() && $value->invalid('Null values only');
-
-            return parent::setValue($value->getValue());
+            $this->invalid();
         }
 
         /**
-         * @return \PowerEcommerce\System\Data\Integer
+         * @param \PowerEcommerce\System\Routing\Component $component
+         * @return $this
          */
-        function length()
+        function detach(Component $component)
         {
-            return new Integer(parent::length());
+            $this->invalid();
+        }
+
+        /**
+         * @param \PowerEcommerce\System\Routing\Component $component
+         * @return $this
+         */
+        function handle(Component $component)
+        {
+            return $this;
         }
     }
 }
