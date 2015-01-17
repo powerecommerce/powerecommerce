@@ -63,8 +63,8 @@ namespace PowerEcommerce\System\Security {
         abstract function detach(Component $component);
 
         /**
-         * @param Component $component
-         * @return bool
+         * @param \PowerEcommerce\System\Security\Component $component
+         * @return \PowerEcommerce\System\Data\Boolean
          */
         abstract function isGranted(Component ...$component);
     }

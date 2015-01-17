@@ -23,6 +23,7 @@
  */
 
 namespace PowerEcommerce\System\Security\Component {
+    use PowerEcommerce\System\Data\Boolean;
     use PowerEcommerce\System\Data\Collection;
     use PowerEcommerce\System\Data\String;
     use PowerEcommerce\System\Security\Component;
@@ -70,8 +71,8 @@ namespace PowerEcommerce\System\Security\Component {
         }
 
         /**
-         * @param Component $component
-         * @return bool
+         * @param \PowerEcommerce\System\Security\Component $component
+         * @return \PowerEcommerce\System\Data\Boolean
          */
         function isGranted(Component ...$component)
         {
@@ -81,13 +82,14 @@ namespace PowerEcommerce\System\Security\Component {
             foreach ($component as $item) {
                 if ($item instanceof \PowerEcommerce\System\Security\Component\Privilege
                     && $this->children->exists($item->getValue())->isFalse()
-                ) return false;
-
+                ) {
+                    return new Boolean(false);
+                }
                 if ($item instanceof \PowerEcommerce\System\Security\Component\Privilege) {
-                    $granted = $granted && $item->isGranted(...$component);
+                    $granted = $granted && $item->isGranted(...$component)->getValue();
                 }
             }
-            return $granted;
+            return new Boolean($granted);
         }
     }
 }

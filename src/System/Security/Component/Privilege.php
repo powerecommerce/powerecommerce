@@ -23,6 +23,7 @@
  */
 
 namespace PowerEcommerce\System\Security\Component {
+    use PowerEcommerce\System\Data\Boolean;
     use PowerEcommerce\System\Security\Component;
 
     /**
@@ -50,12 +51,12 @@ namespace PowerEcommerce\System\Security\Component {
         }
 
         /**
-         * @param Component $component
-         * @return bool
+         * @param \PowerEcommerce\System\Security\Component $component
+         * @return \PowerEcommerce\System\Data\Boolean
          */
         function isGranted(Component ...$component)
         {
-            return true;
+            return new Boolean(true);
         }
     }
 }
