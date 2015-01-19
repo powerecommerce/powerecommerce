@@ -25,14 +25,12 @@
 namespace PowerEcommerce\Application\Service\Provider {
     use Pimple\Container;
     use PowerEcommerce\Application\Service\Provider;
-    use PowerEcommerce\System\Data\String;
-    use PowerEcommerce\System\Routing\Component\Target;
 
     /**
-     * Class Router
+     * Class Boot
      * @package PowerEcommerce\Application\Service\Provider
      */
-    class Router implements Provider
+    class Boot implements Provider
     {
         /**
          * Registers services on the given container.
@@ -44,49 +42,48 @@ namespace PowerEcommerce\Application\Service\Provider {
          */
         function register(Container $app)
         {
-            $this->routerTarget($app);
-            $this->router($app);
-            $this->routerFactory($app);
+            $this->bootDir($app);
+            $this->boot($app);
         }
 
         /**
          * @param Container $app
          */
-        private function routerTarget(Container $app)
+        private function bootDir(Container $app)
         {
-            !isset($app['router/target']) && $app['router/target'] = new Target(
-                new String($_SERVER['REQUEST_URI'])
+            !isset($app['boot/dir']) && $app['boot/dir'] = realpath(
+                __DIR__
+                . DIRECTORY_SEPARATOR
+                . '..'
+                . DIRECTORY_SEPARATOR
+                . '..'
+                . DIRECTORY_SEPARATOR
+                . '..'
+                . DIRECTORY_SEPARATOR
+                . '..'
+                . DIRECTORY_SEPARATOR
+                . 'boot'
             );
         }
 
         /**
          * @param Container $app
          */
-        private function router(Container $app)
+        private function boot(Container $app)
         {
-            !isset($app['router/args']) && $app['router/args'] = [
-                new String('Service')
-            ];
-            !isset($app['router']) && $app['router'] = function ($app) {
-                return new \PowerEcommerce\System\Routing\Component\Router(
-                    ...$app['router/args']
-                );
-            };
-        }
+            !isset($app['boot']) && $app['boot'] = $app->factory(function ($app) {
+                $iterator = new \GlobIterator($app['boot/dir'] . DIRECTORY_SEPARATOR . "*.php");
 
-        /**
-         * @param Container $app
-         */
-        private function routerFactory(Container $app)
-        {
-            !isset($app['router/factory/args']) && $app['router/factory/args'] = [
-                new String('Factory')
-            ];
-            !isset($app['router/factory']) && $app['router/factory'] = function ($app) {
-                return new \PowerEcommerce\System\Routing\Component\Router(
-                    ...$app['router/factory/args']
-                );
-            };
+                $up = function (\PowerEcommerce\Application\Component\Boot $boot) use ($app) {
+                    $boot->up($app);
+                };
+                /** @var \SplFileInfo $file */
+                foreach ($iterator as $file) {
+                    /** @var \PowerEcommerce\Application\Component\Boot $boot */
+                    $boot = require $file->getPathname();
+                    $up($boot);
+                }
+            });
         }
     }
 }

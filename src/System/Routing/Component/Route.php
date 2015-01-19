@@ -75,6 +75,8 @@ namespace PowerEcommerce\System\Routing\Component {
          */
         function handle(Component $component)
         {
+            !($component instanceof \PowerEcommerce\System\Routing\Component\Target) && $this->invalid();
+
             foreach ($this->getService() as $service) {
                 /** @var \PowerEcommerce\System\Routing\Component\Service $service */
                 $service->handle($component);

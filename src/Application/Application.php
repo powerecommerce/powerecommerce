@@ -23,7 +23,9 @@
  */
 
 namespace PowerEcommerce\Application {
+    use PowerEcommerce\Application\Service\Provider\Boot;
     use PowerEcommerce\Application\Service\Provider\Router;
+    use PowerEcommerce\Application\Service\Provider\Run;
     use PowerEcommerce\System\Di\Container;
 
     /**
@@ -32,8 +34,10 @@ namespace PowerEcommerce\Application {
      * @method \PowerEcommerce\System\Routing\Component\Router router()
      * @method \PowerEcommerce\System\Routing\Component\Router routerFactory()
      * @method \PowerEcommerce\System\Routing\Component\Route[] routeCollection()
+     * @method void boot()
+     * @method void run()
      *
-     * @package PowerEcommerce\Application\Application
+     * @package PowerEcommerce\Application
      */
     class Application extends Container
     {
@@ -43,7 +47,12 @@ namespace PowerEcommerce\Application {
         function __construct(array $values = array())
         {
             parent::__construct($values);
+
+            $this->register(new Boot());
+            $this->register(new Run());
             $this->register(new Router());
+
+            $this->boot();
         }
 
         /**
@@ -55,11 +64,6 @@ namespace PowerEcommerce\Application {
         {
             $name = strtolower(preg_replace('([A-Z]{1})', '/$0', $name));
             return $this[$name];
-        }
-
-        function run()
-        {
-            $this['route/collection'] = $this->router()->handle($this['router/target']);
         }
     }
 }

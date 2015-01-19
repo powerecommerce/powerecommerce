@@ -25,14 +25,12 @@
 namespace PowerEcommerce\Application\Service\Provider {
     use Pimple\Container;
     use PowerEcommerce\Application\Service\Provider;
-    use PowerEcommerce\System\Data\String;
-    use PowerEcommerce\System\Routing\Component\Target;
 
     /**
-     * Class Router
+     * Class Run
      * @package PowerEcommerce\Application\Service\Provider
      */
-    class Router implements Provider
+    class Run implements Provider
     {
         /**
          * Registers services on the given container.
@@ -44,49 +42,18 @@ namespace PowerEcommerce\Application\Service\Provider {
          */
         function register(Container $app)
         {
-            $this->routerTarget($app);
-            $this->router($app);
-            $this->routerFactory($app);
+            $this->run($app);
         }
 
         /**
          * @param Container $app
          */
-        private function routerTarget(Container $app)
+        private function run(Container $app)
         {
-            !isset($app['router/target']) && $app['router/target'] = new Target(
-                new String($_SERVER['REQUEST_URI'])
-            );
-        }
-
-        /**
-         * @param Container $app
-         */
-        private function router(Container $app)
-        {
-            !isset($app['router/args']) && $app['router/args'] = [
-                new String('Service')
-            ];
-            !isset($app['router']) && $app['router'] = function ($app) {
-                return new \PowerEcommerce\System\Routing\Component\Router(
-                    ...$app['router/args']
-                );
-            };
-        }
-
-        /**
-         * @param Container $app
-         */
-        private function routerFactory(Container $app)
-        {
-            !isset($app['router/factory/args']) && $app['router/factory/args'] = [
-                new String('Factory')
-            ];
-            !isset($app['router/factory']) && $app['router/factory'] = function ($app) {
-                return new \PowerEcommerce\System\Routing\Component\Router(
-                    ...$app['router/factory/args']
-                );
-            };
+            !isset($app['run']) && $app['run'] = $app->factory(function ($app) {
+                /** @var \PowerEcommerce\Application\Application $app */
+                $app['route/collection'] = $app->router()->handle($app['router/target']);
+            });
         }
     }
 }

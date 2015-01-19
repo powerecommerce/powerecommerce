@@ -73,7 +73,10 @@ namespace PowerEcommerce\System\Routing\Component {
          */
         function handle(Component $component)
         {
-            new $component(...$this->args->getValue());
+            !($component instanceof \PowerEcommerce\System\Routing\Component\Target) && $this->invalid();
+
+            $service = $this->toString();
+            new $service(...$this->args->getValue());
             return $this;
         }
     }
