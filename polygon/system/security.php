@@ -21,29 +21,35 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-namespace PowerEcommerce\System\Routing\Component {
-    use PowerEcommerce\System\Routing\Component;
+require_once __DIR__ . '/../../vendor/autoload.php';
 
-    class Target extends Component
-    {
-        /**
-         * @param \PowerEcommerce\System\Routing\Component $component
-         *
-         * @return $this
-         */
-        public function attach(Component $component)
-        {
-            $this->invalid();
-        }
+use PowerEcommerce\System\Security\Component\Acl;
+use PowerEcommerce\System\Security\Component\Privilege;
+use PowerEcommerce\System\Security\Component\Resource;
+use PowerEcommerce\System\Security\Component\Role;
 
-        /**
-         * @param \PowerEcommerce\System\Routing\Component $component
-         *
-         * @return \PowerEcommerce\System\Object
-         */
-        public function handle(Component $component)
-        {
-            return $this->factory($this);
-        }
-    }
-}
+$p1 = new Privilege('p1');
+$p2 = new Privilege('p2');
+
+$r1 = new Role('r1');
+$r2 = new Role('r2');
+$r1->attach($p1);
+
+$rs1 = new Resource('rs1');
+$rs2 = new Resource('rs2');
+$rs1->attach($r1);
+
+$a1 = new Acl('a1');
+$a1->attach($rs1);
+
+var_dump($a1->isGranted( //true
+    $p1, $rs1, $r1));
+
+var_dump($a1->isGranted( //false
+    $p1, $rs2, $r1));
+
+var_dump($a1->isGranted( //false
+    $p1, $rs1, $r2));
+
+var_dump($a1->isGranted( //false
+    $p2, $rs1, $r1));

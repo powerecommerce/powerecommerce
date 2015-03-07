@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Copyright (c) 2015 DD Art Tomasz Duda
+ * Copyright (c) 2015 Tomasz Duda
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,287 +21,329 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
 namespace PowerEcommerce\System {
-    use PowerEcommerce\System\Data\Integer;
+    use PowerEcommerce\System\Object\Cache;
+    use PowerEcommerce\System\Object\InvalidException;
 
-    /**
-     * Class Object
-     * @package PowerEcommerce\System
-     */
-    class Object
+    class Object implements \Iterator
     {
         /**
-         * @var mixed
+         * @var mixed[]
          */
-        protected $value;
+        protected $_data = [];
 
         /**
-         * @param mixed $value
+         * @type int
          */
-        function __construct($value = null)
+        protected $_ptr = 0;
+
+        /**
+         * @param array
+         */
+        public function __construct(array $value = [])
         {
-            $this->setValue($value);
+            $this->setData($value);
         }
 
         /**
+         * @param string $name
+         * @param array  $args
+         *
          * @return mixed
          */
-        function getValue()
+        public function __call($name, array $args)
         {
-            return $this->value;
-        }
+            switch (substr($name, 0, 3)) {
+                case 'get':
+                    $key = $this->underscore(substr($name, 3));
+                    return $this->get($key);
 
-        /**
-         * @param mixed $value
-         * @return $this
-         */
-        function setValue($value)
-        {
-            $this->value = $value;
-            return $this;
+                case 'set':
+                    $key = $this->underscore(substr($name, 3));
+                    return $this->set($key, ...$args);
+
+                case 'add':
+                    $key = $this->underscore(substr($name, 3));
+                    return $this->add($key, ...$args);
+
+                case 'del':
+                    $key = $this->underscore(substr($name, 3));
+                    return $this->del($key);
+
+                case 'has':
+                    $key = $this->underscore(substr($name, 3));
+                    return $this->has($key);
+
+                default:
+                    $class = get_called_class($this);
+                    $args  = print_r($args, true);
+                    $this->invalid("Invalid method $class::$name($args)");
+            }
         }
 
         /**
          * @return string
          */
-        function getHashCode()
+        public function __toString()
+        {
+            return implode(',', $this->getData());
+        }
+
+        /**
+         * @param string $key
+         * @param mixed  $value
+         *
+         * @return $this
+         */
+        public function add($key, $value)
+        {
+            $this->has($key) && $this->invalid('Item already exists.');
+            return $this->set($key, $value);
+        }
+
+        /**
+         * @param string $name
+         *
+         * @return string
+         */
+        protected function camelize($name)
+        {
+            return uc_words($name, '');
+        }
+
+        /**
+         * @return $this
+         */
+        public function clear()
+        {
+            $this->value = [];
+            return $this;
+        }
+
+        /**
+         * (PHP 5 &gt;= 5.0.0)<br/>
+         * Return the current element
+         *
+         * @link http://php.net/manual/en/iterator.current.php
+         * @return mixed Can return any type.
+         */
+        public function current()
+        {
+            return current($this->_data);
+        }
+
+        /**
+         * @param string $key
+         *
+         * @return $this
+         */
+        public function del($key)
+        {
+            unset($this->_data[$key]);
+            return $this;
+        }
+
+        /**
+         * @param mixed $value
+         *
+         * @return $this|\PowerEcommerce\System\Object
+         */
+        public function factory($value = '__clone__')
+        {
+            if ($value === '__clone__') {
+                return (clone $this);
+            }
+            elseif ($value === null) {
+                return new Object();
+            }
+            elseif (is_array($value)) {
+                return new Object($value);
+            }
+            return new Object([$value]);
+        }
+
+        /**
+         * @param string $key
+         *
+         * @return mixed|null
+         */
+        public function get($key)
+        {
+            return $this->has($key) ? $this->_data[$key] : null;
+        }
+
+        /**
+         * @return string
+         */
+        public function getCalledClass()
+        {
+            return get_called_class();
+        }
+
+        /**
+         * @return array
+         */
+        public function getData()
+        {
+            return $this->_data;
+        }
+
+        /**
+         * @return string
+         */
+        public function getHashCode()
         {
             return spl_object_hash($this);
         }
 
         /**
-         * @return boolean
+         * @param string $key
+         *
+         * @return bool
          */
-        function isArray()
+        public function has($key)
         {
-            return $this->_is('array');
-        }
-
-        /**
-         * @return boolean
-         */
-        function isBool()
-        {
-            return $this->_is('bool');
-        }
-
-        /**
-         * @return boolean
-         */
-        function isBoolean()
-        {
-            return $this->_is('bool');
-        }
-
-        /**
-         * @return boolean
-         */
-        function isCallable()
-        {
-            return $this->_is('callable');
-        }
-
-        /**
-         * @return boolean
-         */
-        function isDouble()
-        {
-            return $this->_is('double');
-        }
-
-        /**
-         * @return boolean
-         */
-        function isFloat()
-        {
-            return $this->_is('float');
-        }
-
-        /**
-         * @return boolean
-         */
-        function isInt()
-        {
-            return $this->_is('int');
-        }
-
-        /**
-         * @return boolean
-         */
-        function isInteger()
-        {
-            return $this->_is('integer');
-        }
-
-        /**
-         * @return boolean
-         */
-        function isLong()
-        {
-            return $this->_is('long');
-        }
-
-        /**
-         * @return boolean
-         */
-        function isNull()
-        {
-            return $this->_is('null');
-        }
-
-        /**
-         * @return boolean
-         */
-        function isNumeric()
-        {
-            return $this->_is('numeric');
-        }
-
-        /**
-         * @return boolean
-         */
-        function isObject()
-        {
-            return $this->_is('object');
-        }
-
-        /**
-         * @return boolean
-         */
-        function isReal()
-        {
-            return $this->_is('real');
-        }
-
-        /**
-         * @return boolean
-         */
-        function isResource()
-        {
-            return $this->_is('resource');
-        }
-
-        /**
-         * @return boolean
-         */
-        function isScalar()
-        {
-            return $this->_is('scalar');
-        }
-
-        /**
-         * @return boolean
-         */
-        function isString()
-        {
-            return $this->_is('string');
-        }
-
-        /**
-         * @return boolean
-         */
-        function isNumber()
-        {
-            return $this->_is('numeric');
-        }
-
-        /**
-         * @return integer
-         */
-        function length()
-        {
-            return strlen($this->toString());
+            return isset($this->_data[$key]);
         }
 
         /**
          * @param string $msg
-         * @return \InvalidArgumentException
+         *
+         * @throws \PowerEcommerce\System\Object\InvalidException
          */
-        function invalid($msg = '')
+        public function invalid($msg = null)
         {
-            throw new \InvalidArgumentException($msg);
+            null === $msg && $msg = $this->getCalledClass();
+            throw new InvalidException($msg);
+        }
+
+        /**
+         * (PHP 5 &gt;= 5.0.0)<br/>
+         * Return the key of the current element
+         *
+         * @link http://php.net/manual/en/iterator.key.php
+         * @return mixed scalar on success, or null on failure.
+         */
+        public function key()
+        {
+            return key($this->_data);
+        }
+
+        /**
+         * @return int
+         */
+        public function length()
+        {
+            return sizeof($this->getData());
+        }
+
+        /**
+         * (PHP 5 &gt;= 5.0.0)<br/>
+         * Move forward to next element
+         *
+         * @link http://php.net/manual/en/iterator.next.php
+         * @return void Any returned value is ignored.
+         */
+        public function next()
+        {
+            ++$this->_ptr;
+            next($this->_data);
         }
 
         /**
          * @param mixed $value
+         *
          * @return $this
          */
-        function defaults($value)
+        public function push($value)
         {
-            $this->_default() === $this->getValue() && $this->setValue($value);
+            $this->_data[] = $value;
             return $this;
         }
 
         /**
-         * @return null
-         */
-        protected function _default()
-        {
-            return null;
-        }
-
-        /**
-         * @param mixed $value
-         * @return $this|\PowerEcommerce\System\Object
-         */
-        function factory($value = '__clone__')
-        {
-            if ('__clone__' === $value) return (clone $this);
-            if (null === $value) return new Object();
-            if ($value instanceof \PowerEcommerce\System\Object) return $value;
-
-            return new Object($value);
-        }
-
-        /**
-         * @param \PowerEcommerce\System\Object $object
-         * @return \PowerEcommerce\System\Object
-         */
-        function cast(Object $object)
-        {
-            if ($this->getValue() instanceof \PowerEcommerce\System\Object) {
-                return $object->setValue($this->getValue());
-            }
-            return $object->setValue($this->toString());
-        }
-
-        /**
+         * @param array $value
+         *
          * @return $this
          */
-        function clear()
+        public function pushData(array $value)
         {
-            return $this->setValue($this->_default());
+            foreach ($value as $item) {
+                $this->push($item);
+            }
+            return $this;
+        }
+
+        /**
+         * (PHP 5 &gt;= 5.0.0)<br/>
+         * Rewind the Iterator to the first element
+         *
+         * @link http://php.net/manual/en/iterator.rewind.php
+         * @return void Any returned value is ignored.
+         */
+        public function rewind()
+        {
+            $this->_ptr = 0;
+            reset($this->_data);
+        }
+
+        /**
+         * @param string $key
+         * @param mixed  $value
+         *
+         * @return $this
+         */
+        public function set($key, $value)
+        {
+            $this->_data[$key] = $value;
+            return $this;
+        }
+
+        /**
+         * @param array $value
+         *
+         * @return $this
+         */
+        public function setData(array $value)
+        {
+            foreach ($value as $key => $val) {
+                $this->set($key, $val);
+            }
+            return $this;
         }
 
         /**
          * @return string
          */
-        function __toString()
-        {
-            return (string)$this->getValue();
-        }
-
-        /**
-         * @return string
-         */
-        function toString()
+        public function toString()
         {
             return $this->__toString();
         }
 
         /**
-         * @param string $funcName
-         * @param mixed $value
-         * @return boolean
+         * @param string $name
+         *
+         * @return string
          */
-        protected function _is($funcName, $value = null)
+        protected function underscore($name)
         {
-            null === $value && $value = $this->getValue();
-            $funcName = 'is_' . $funcName;
+            if (!isset(Cache::$underscore[$name])) {
+                Cache::$underscore[$name] = strtolower(preg_replace('/(.)([A-Z])/', "$1_$2", $name));
+            }
+            return Cache::$underscore[$name];
+        }
 
-            if (!$funcName($value)) return false;
-            return true;
+        /**
+         * (PHP 5 &gt;= 5.0.0)<br/>
+         * Checks if current position is valid
+         *
+         * @link http://php.net/manual/en/iterator.valid.php
+         * @return boolean The return value will be casted to boolean and then evaluated.
+         *       Returns true on success or false on failure.
+         */
+        public function valid()
+        {
+            return ($this->_ptr <= $this->length());
         }
     }
 }

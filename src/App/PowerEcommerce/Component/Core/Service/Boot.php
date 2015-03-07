@@ -21,29 +21,35 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-namespace PowerEcommerce\System\Routing\Component {
-    use PowerEcommerce\System\Routing\Component;
+namespace PowerEcommerce\App\PowerEcommerce\Component\Core\Service {
+    use PowerEcommerce\System\Service;
 
-    class Target extends Component
+    class Boot extends Service
     {
-        /**
-         * @param \PowerEcommerce\System\Routing\Component $component
-         *
-         * @return $this
-         */
-        public function attach(Component $component)
+        protected function _call()
         {
-            $this->invalid();
+            $iterator = new \GlobIterator($this->app->get('boot_dir') . DIRECTORY_SEPARATOR . "*.php");
+
+            $up = function (\PowerEcommerce\System\App\Boot $boot) {
+                $boot->up($this->app);
+            };
+            /** @var \SplFileInfo $file */
+            foreach ($iterator as $file) {
+                /** @var \PowerEcommerce\Application\Component\Boot $boot */
+                $boot = require $file->getPathname();
+                $up($boot);
+            }
         }
 
-        /**
-         * @param \PowerEcommerce\System\Routing\Component $component
-         *
-         * @return \PowerEcommerce\System\Object
-         */
-        public function handle(Component $component)
+        protected function _gc() { }
+
+        protected function _init()
         {
-            return $this->factory($this);
+            !$this->app->has('base_dir') && $this->invalid('base_dir not defined.');
+
+            if (!$this->app->has('boot_dir')) {
+                $this->app->set('boot_dir', $this->app->get('base_dir') . DIRECTORY_SEPARATOR . 'boot');
+            }
         }
     }
 }

@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Copyright (c) 2015 DD Art Tomasz Duda
+ * Copyright (c) 2015 Tomasz Duda
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,75 +21,54 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
 namespace PowerEcommerce\System\Security\Component {
-    use PowerEcommerce\System\Data\Boolean;
-    use PowerEcommerce\System\Data\Collection;
-    use PowerEcommerce\System\Data\String;
+    use PowerEcommerce\System\Object;
     use PowerEcommerce\System\Security\Component;
 
-    /**
-     * Class Acl
-     * @package PowerEcommerce\System\Security\Component
-     */
     class Acl extends Component
     {
         /**
-         * @var \PowerEcommerce\System\Data\Collection
-         */
-        private $children;
-
-        /**
-         * @param \PowerEcommerce\System\Data\String $name
-         */
-        function __construct(String $name)
-        {
-            $this->children = new Collection();
-            parent::__construct($name);
-        }
-
-        /**
          * @param \PowerEcommerce\System\Security\Component $component
+         *
          * @return $this
          */
-        function attach(Component $component)
+        public function attach(Component $component)
         {
             !($component instanceof \PowerEcommerce\System\Security\Component\Resource) && $this->invalid();
-            $this->children->add($component->getValue(), $component);
-            return $this;
+            return $this->add($component->getId(), $component);
         }
 
         /**
          * @param \PowerEcommerce\System\Security\Component $component
+         *
          * @return $this
          */
-        function detach(Component $component)
+        public function detach(Component $component)
         {
             !($component instanceof \PowerEcommerce\System\Security\Component\Resource) && $this->invalid();
-            $this->children->del($component->getValue());
-            return $this;
+            return $this->del($component->getId());
         }
 
         /**
          * @param \PowerEcommerce\System\Security\Component $component
-         * @return \PowerEcommerce\System\Data\Boolean
+         *
+         * @return bool
          */
-        function isGranted(Component ...$component)
+        public function isGranted(Component ...$component)
         {
             $granted = true;
 
             /** @var Component $item */
             foreach ($component as $item) {
-                if ($item instanceof \PowerEcommerce\System\Security\Component\Resource
-                    && $this->children->exists($item->getValue())->isFalse()
+                if ($item instanceof \PowerEcommerce\System\Security\Component\Resource && !$this->has($item->getId())
                 ) {
-                    return new Boolean(false);
+                    return false;
                 }
                 if ($item instanceof \PowerEcommerce\System\Security\Component\Resource) {
-                    $granted = $granted && $item->isGranted(...$component)->getValue();
+                    $granted = $granted && $item->isGranted(...$component);
                 }
             }
-            return new Boolean($granted);
+            return $granted;
         }
     }
 }

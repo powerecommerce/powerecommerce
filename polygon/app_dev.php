@@ -21,29 +21,12 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-namespace PowerEcommerce\System\Routing\Component {
-    use PowerEcommerce\System\Routing\Component;
+require_once __DIR__ . '/../vendor/autoload.php';
 
-    class Target extends Component
-    {
-        /**
-         * @param \PowerEcommerce\System\Routing\Component $component
-         *
-         * @return $this
-         */
-        public function attach(Component $component)
-        {
-            $this->invalid();
-        }
+use PowerEcommerce\App\App;
 
-        /**
-         * @param \PowerEcommerce\System\Routing\Component $component
-         *
-         * @return \PowerEcommerce\System\Object
-         */
-        public function handle(Component $component)
-        {
-            return $this->factory($this);
-        }
-    }
-}
+$app = new App();
+$app->set('base_dir', realpath(__DIR__ . DIRECTORY_SEPARATOR . '..'));
+$app->powerEcommerce->core->service->run->call();
+
+var_dump($app->getRouteCollection());

@@ -21,29 +21,8 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-namespace PowerEcommerce\System\Routing\Component {
-    use PowerEcommerce\System\Routing\Component;
-
-    class Target extends Component
+namespace PowerEcommerce\System\Object {
+    class InvalidException extends \Exception
     {
-        /**
-         * @param \PowerEcommerce\System\Routing\Component $component
-         *
-         * @return $this
-         */
-        public function attach(Component $component)
-        {
-            $this->invalid();
-        }
-
-        /**
-         * @param \PowerEcommerce\System\Routing\Component $component
-         *
-         * @return \PowerEcommerce\System\Object
-         */
-        public function handle(Component $component)
-        {
-            return $this->factory($this);
-        }
     }
 }

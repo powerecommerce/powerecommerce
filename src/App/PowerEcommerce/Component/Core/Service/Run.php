@@ -21,29 +21,19 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-namespace PowerEcommerce\System\Routing\Component {
-    use PowerEcommerce\System\Routing\Component;
+namespace PowerEcommerce\App\PowerEcommerce\Component\Core\Service {
+    use PowerEcommerce\System\Service;
 
-    class Target extends Component
+    class Run extends Service
     {
-        /**
-         * @param \PowerEcommerce\System\Routing\Component $component
-         *
-         * @return $this
-         */
-        public function attach(Component $component)
+        protected function _call()
         {
-            $this->invalid();
+            $this->app->powerEcommerce->core->service->boot->call();
+            $this->app->powerEcommerce->core->service->router->call();
         }
 
-        /**
-         * @param \PowerEcommerce\System\Routing\Component $component
-         *
-         * @return \PowerEcommerce\System\Object
-         */
-        public function handle(Component $component)
-        {
-            return $this->factory($this);
-        }
+        protected function _gc() { }
+
+        protected function _init() { }
     }
 }

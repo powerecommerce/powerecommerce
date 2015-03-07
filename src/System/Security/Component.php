@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Copyright (c) 2015 DD Art Tomasz Duda
+ * Copyright (c) 2015 Tomasz Duda
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,51 +21,42 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
 namespace PowerEcommerce\System\Security {
-    use PowerEcommerce\System\Data\String;
     use PowerEcommerce\System\Object;
 
     /**
-     * Class Component
-     * @package PowerEcommerce\System\Security
+     * @method $this setId(string)
+     * @method string getId()
      */
     abstract class Component extends Object
     {
         /**
-         * @param \PowerEcommerce\System\Data\String $name
+         * @param string $name
          */
-        function __construct(String $name)
+        public function __construct($name)
         {
-            $this->setValue($name);
-        }
-
-        /**
-         * @param \PowerEcommerce\System\Data\String $value
-         * @return $this
-         */
-        function setValue($value)
-        {
-            !($value instanceof \PowerEcommerce\System\Data\String) && $this->invalid();
-            return parent::setValue($value);
+            $this->setId($name);
         }
 
         /**
          * @param \PowerEcommerce\System\Security\Component $component
+         *
          * @return $this
          */
-        abstract function attach(Component $component);
+        abstract public function attach(Component $component);
 
         /**
          * @param \PowerEcommerce\System\Security\Component $component
+         *
          * @return $this
          */
-        abstract function detach(Component $component);
+        abstract public function detach(Component $component);
 
         /**
          * @param \PowerEcommerce\System\Security\Component $component
-         * @return \PowerEcommerce\System\Data\Boolean
+         *
+         * @return bool
          */
-        abstract function isGranted(Component ...$component);
+        abstract public function isGranted(Component ...$component);
     }
 }

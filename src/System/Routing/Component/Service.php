@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Copyright (c) 2015 DD Art Tomasz Duda
+ * Copyright (c) 2015 Tomasz Duda
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,63 +21,46 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
 namespace PowerEcommerce\System\Routing\Component {
-    use PowerEcommerce\System\Data\Collection;
-    use PowerEcommerce\System\Data\String;
+    use PowerEcommerce\System\App;
     use PowerEcommerce\System\Routing\Component;
 
     /**
-     * Class Service
-     * @package PowerEcommerce\System\Routing\Component
+     * @method \PowerEcommerce\System\Service getService()
      */
     class Service extends Component
     {
         /**
-         * @var \PowerEcommerce\System\Data\Collection
+         * @param \PowerEcommerce\System\Service $service
          */
-        private $args;
-
-        /**
-         * @param \PowerEcommerce\System\Data\String $name
-         * @param \PowerEcommerce\System\Data\Collection $args
-         */
-        function __construct(String $name, Collection $args = null)
+        public function __construct(\PowerEcommerce\System\Service $service)
         {
-            null === $args && $args = new Collection();
-            $this->args = $args;
-            parent::__construct($name);
+            $this->set('service', $service);
         }
 
         /**
          * @param \PowerEcommerce\System\Routing\Component $component
+         *
          * @return $this
          */
-        function attach(Component $component)
+        public function attach(Component $component)
         {
             $this->invalid();
         }
 
         /**
          * @param \PowerEcommerce\System\Routing\Component $component
-         * @return $this
+         *
+         * @return \PowerEcommerce\System\Object
          */
-        function detach(Component $component)
-        {
-            $this->invalid();
-        }
-
-        /**
-         * @param \PowerEcommerce\System\Routing\Component $component
-         * @return \PowerEcommerce\System\Routing\Component
-         */
-        function handle(Component $component)
+        public function handle(Component $component)
         {
             !($component instanceof \PowerEcommerce\System\Routing\Component\Target) && $this->invalid();
 
-            $service = $this->toString();
-            new $service(...$this->args->getValue());
-            return $this;
+            $service = $this->getService();
+            $service->start();
+
+            return $this->factory($this);
         }
     }
 }

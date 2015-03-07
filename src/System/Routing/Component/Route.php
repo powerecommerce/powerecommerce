@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Copyright (c) 2015 DD Art Tomasz Duda
+ * Copyright (c) 2015 Tomasz Duda
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,75 +21,50 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
 namespace PowerEcommerce\System\Routing\Component {
-    use PowerEcommerce\System\Data\Collection;
-    use PowerEcommerce\System\Data\String\Pattern;
     use PowerEcommerce\System\Routing\Component;
 
-    /**
-     * Class Route
-     * @package PowerEcommerce\System\Routing\Component
-     */
     class Route extends Component
     {
         /**
-         * @var \PowerEcommerce\System\Data\Collection
-         */
-        private $children;
-
-        /**
-         * @param \PowerEcommerce\System\Data\String\Pattern $name
-         */
-        function __construct(Pattern $name)
-        {
-            $this->children = new Collection();
-            parent::__construct($name);
-        }
-
-        /**
          * @param \PowerEcommerce\System\Routing\Component $component
+         *
          * @return $this
          */
-        function attach(Component $component)
+        public function attach(Component $component)
         {
             !($component instanceof \PowerEcommerce\System\Routing\Component\Service) && $this->invalid();
-            $this->children->add($component->getValue(), $component);
-            return $this;
+            return $this->push($component);
         }
 
         /**
-         * @param \PowerEcommerce\System\Routing\Component $component
-         * @return $this
+         * @return \PowerEcommerce\System\Routing\Component\Service[]
          */
-        function detach(Component $component)
+        public function getServices()
         {
-            !($component instanceof \PowerEcommerce\System\Routing\Component\Service) && $this->invalid();
-            $this->children->del($component->getValue());
-            return $this;
+            $collection = [];
+            foreach ($this->getData() as $data) {
+                if ($data instanceof \PowerEcommerce\System\Routing\Component\Service) {
+                    $collection[] = $data;
+                }
+            }
+            return $collection;
         }
 
         /**
          * @param \PowerEcommerce\System\Routing\Component $component
-         * @return $this
+         *
+         * @return \PowerEcommerce\System\Object
          */
-        function handle(Component $component)
+        public function handle(Component $component)
         {
             !($component instanceof \PowerEcommerce\System\Routing\Component\Target) && $this->invalid();
 
-            foreach ($this->getService() as $service) {
+            foreach ($this->getData() as $service) {
                 /** @var \PowerEcommerce\System\Routing\Component\Service $service */
-                $service->handle($component);
+                is_object($service) && $service->handle($component);
             }
-            return $this;
-        }
-
-        /**
-         * @return \PowerEcommerce\System\Data\Collection
-         */
-        function getService()
-        {
-            return $this->children;
+            return $this->factory($this);
         }
     }
 }

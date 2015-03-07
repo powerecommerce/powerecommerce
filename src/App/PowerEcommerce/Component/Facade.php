@@ -21,29 +21,24 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-namespace PowerEcommerce\System\Routing\Component {
-    use PowerEcommerce\System\Routing\Component;
+namespace PowerEcommerce\App\PowerEcommerce\Component {
+    use PowerEcommerce\App\App;
 
-    class Target extends Component
+    class Facade
     {
-        /**
-         * @param \PowerEcommerce\System\Routing\Component $component
-         *
-         * @return $this
-         */
-        public function attach(Component $component)
-        {
-            $this->invalid();
-        }
+        /** @type \PowerEcommerce\App\PowerEcommerce\Component\Core\Facade */
+        public $core;
+
+        /** @type \PowerEcommerce\App\PowerEcommerce\Component\HelloWorld\Facade */
+        public $helloWorld;
 
         /**
-         * @param \PowerEcommerce\System\Routing\Component $component
-         *
-         * @return \PowerEcommerce\System\Object
+         * @param \PowerEcommerce\App\App $app
          */
-        public function handle(Component $component)
+        public function __construct(App $app)
         {
-            return $this->factory($this);
+            $this->core       = new Core\Facade($app);
+            $this->helloWorld = new HelloWorld\Facade($app);
         }
     }
 }

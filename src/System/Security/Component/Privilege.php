@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Copyright (c) 2015 DD Art Tomasz Duda
+ * Copyright (c) 2015 Tomasz Duda
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,42 +21,39 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
 namespace PowerEcommerce\System\Security\Component {
-    use PowerEcommerce\System\Data\Boolean;
     use PowerEcommerce\System\Security\Component;
 
-    /**
-     * Class Privilege
-     * @package PowerEcommerce\System\Security\Component
-     */
     class Privilege extends Component
     {
         /**
          * @param \PowerEcommerce\System\Security\Component $component
+         *
          * @return $this
          */
-        function attach(Component $component)
+        public function attach(Component $component)
         {
             $this->invalid();
         }
 
         /**
          * @param \PowerEcommerce\System\Security\Component $component
+         *
          * @return $this
          */
-        function detach(Component $component)
+        public function detach(Component $component)
         {
             $this->invalid();
         }
 
         /**
          * @param \PowerEcommerce\System\Security\Component $component
-         * @return \PowerEcommerce\System\Data\Boolean
+         *
+         * @return bool
          */
-        function isGranted(Component ...$component)
+        public function isGranted(Component ...$component)
         {
-            return new Boolean(true);
+            return true;
         }
     }
 }

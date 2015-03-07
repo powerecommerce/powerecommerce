@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Copyright (c) 2015 DD Art Tomasz Duda
+ * Copyright (c) 2015 Tomasz Duda
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,80 +21,47 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
 namespace PowerEcommerce\System\Routing\Component {
-    use PowerEcommerce\System\Data\Collection;
-    use PowerEcommerce\System\Data\String;
+    use PowerEcommerce\System\Object;
     use PowerEcommerce\System\Routing\Component;
 
-    /**
-     * Class Router
-     * @package PowerEcommerce\System\Routing\Component
-     */
     class Router extends Component
     {
-        /**
-         * @var \PowerEcommerce\System\Data\Collection
-         */
-        private $children;
-
-        /**
-         * @param \PowerEcommerce\System\Data\String $name
-         */
-        function __construct(String $name)
-        {
-            $this->children = new Collection();
-            parent::__construct($name);
-        }
+        public function __construct() { }
 
         /**
          * @param \PowerEcommerce\System\Routing\Component $component
+         *
          * @return $this
          */
-        function attach(Component $component)
+        public function attach(Component $component)
         {
-            !($component instanceof \PowerEcommerce\System\Routing\Component\Route)
-            && !($component instanceof \PowerEcommerce\System\Routing\Component\Router)
-            && $this->invalid();
+            !($component instanceof \PowerEcommerce\System\Routing\Component\Route) &&
+            !($component instanceof \PowerEcommerce\System\Routing\Component\Router) && $this->invalid();
 
-            $this->children->add($component->getValue(), $component);
-            return $this;
+            return $this->push($component);
         }
 
         /**
-         * @param \PowerEcommerce\System\Routing\Component $component
-         * @return $this
+         * @param \PowerEcommerce\System\Routing\Component $target
+         *
+         * @return \PowerEcommerce\System\Object
          */
-        function detach(Component $component)
+        public function handle(Component $target)
         {
-            !($component instanceof \PowerEcommerce\System\Routing\Component\Route)
-            && !($component instanceof \PowerEcommerce\System\Routing\Component\Router)
-            && $this->invalid();
+            /** @type \PowerEcommerce\System\Routing\Component\Target $target */
+            !($target instanceof \PowerEcommerce\System\Routing\Component\Target) && $this->invalid();
+            $collection = new Object();
 
-            $this->children->del($component->getValue());
-            return $this;
-        }
+            /** @type \PowerEcommerce\System\Routing\Component $route */
+            foreach ($this->getData() as $route) {
+                $pattern = '//';
+                is_object($route) && $pattern = '/' . addcslashes($route->getId(), '/') . '/' . $route->getModifiers();
 
-        /**
-         * @param \PowerEcommerce\System\Routing\Component $component
-         * @return \PowerEcommerce\System\Data\Collection
-         */
-        function handle(Component $component)
-        {
-            /** @var \PowerEcommerce\System\Routing\Component\Target $component */
-            !($component instanceof \PowerEcommerce\System\Routing\Component\Target) && $this->invalid();
-            $collection = new Collection();
-
-            foreach ($this->children as $route) {
-                if ($route instanceof \PowerEcommerce\System\Routing\Component\Router) {
-                    /** @var \PowerEcommerce\System\Routing\Component\Router $route */
-                    $router = $route->handle($component);
-                    $collection->pushValue($router);
-
-                } /** @var \PowerEcommerce\System\Routing\Component\Route $route */
-                elseif ($component->getValue()->match($route->getValue())->isTrue()) {
-                    $router = $route->handle($component);
-                    $collection->push($router);
+                if ((is_object($route) && preg_match($pattern, $target->getId())) ||
+                    ($route instanceof \PowerEcommerce\System\Routing\Component\Router)
+                ) {
+                    $collection->pushData($route->handle($target)->getData());
                 }
             }
             return $collection;
