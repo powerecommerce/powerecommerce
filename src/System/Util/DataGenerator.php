@@ -24,38 +24,47 @@
 namespace PowerEcommerce\System\Util {
     class DataGenerator
     {
+
         /**
          * @var integer
          */
         const _ARRAY = 1 << 0;
+
         /**
          * @var integer
          */
         const _BOOLEAN = 1 << 1;
+
         /**
          * @var integer
          */
         const _FLOAT = 1 << 2;
+
         /**
          * @var integer
          */
         const _INTEGER = 1 << 3;
+
         /**
          * @var integer
          */
         const _NULL = 1 << 4;
+
         /**
          * @var integer
          */
         const _OBJECT = 1 << 5;
+
         /**
          * @var integer
          */
         const _RESOURCE = 1 << 6;
+
         /**
          * @var integer
          */
         const _STRING = 1 << 7;
+
         /**
          * @var integer
          */

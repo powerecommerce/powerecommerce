@@ -27,7 +27,10 @@ namespace PowerEcommerce\System\Routing\Component {
 
     class Router extends Component
     {
-        public function __construct() { }
+        public function __construct()
+        {
+            $this->set('components', new Object());
+        }
 
         /**
          * @param \PowerEcommerce\System\Routing\Component $component
@@ -39,7 +42,8 @@ namespace PowerEcommerce\System\Routing\Component {
             !($component instanceof \PowerEcommerce\System\Routing\Component\Route) &&
             !($component instanceof \PowerEcommerce\System\Routing\Component\Router) && $this->invalid();
 
-            return $this->push($component);
+            $this->getComponents()->push($component);
+            return $this;
         }
 
         /**
@@ -54,11 +58,10 @@ namespace PowerEcommerce\System\Routing\Component {
             $collection = new Object();
 
             /** @type \PowerEcommerce\System\Routing\Component $route */
-            foreach ($this->getData() as $route) {
-                $pattern = '//';
-                is_object($route) && $pattern = '/' . addcslashes($route->getId(), '/') . '/' . $route->getModifiers();
+            foreach ($this->getComponents() as $route) {
+                $pattern = '/' . addcslashes($route->getId(), '/') . '/' . $route->getModifiers();
 
-                if ((is_object($route) && preg_match($pattern, $target->getId())) ||
+                if ((preg_match($pattern, $target->getId())) ||
                     ($route instanceof \PowerEcommerce\System\Routing\Component\Router)
                 ) {
                     $collection->pushData($route->handle($target)->getData());

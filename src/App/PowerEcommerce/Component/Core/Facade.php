@@ -24,8 +24,9 @@
 namespace PowerEcommerce\App\PowerEcommerce\Component\Core {
     use PowerEcommerce\App\App;
 
-    class Facade
+    class Facade extends \PowerEcommerce\System\App\Facade
     {
+
         /** @type \PowerEcommerce\App\PowerEcommerce\Component\Core\Service\Facade */
         public $service;
 
@@ -34,6 +35,7 @@ namespace PowerEcommerce\App\PowerEcommerce\Component\Core {
          */
         public function __construct(App $app)
         {
+            $this->app     = $app;
             $this->service = new Service\Facade($app);
         }
     }

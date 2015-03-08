@@ -36,6 +36,8 @@ namespace PowerEcommerce\System\Routing {
      * @method $this addModifiers(string)
      * @method string getModifiers()
      * @method $this delModifiers()
+     *
+     * @method \PowerEcommerce\System\Object getComponents()
      */
     abstract class Component extends Object
     {
@@ -44,6 +46,7 @@ namespace PowerEcommerce\System\Routing {
          */
         public function __construct($name)
         {
+            $this->set('components', new Object());
             $this->setId($name);
         }
 

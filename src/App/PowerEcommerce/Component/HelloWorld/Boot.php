@@ -36,7 +36,7 @@ namespace PowerEcommerce\App\PowerEcommerce\Component\HelloWorld {
             $r1 = (new Route('/?hello/?'))->attach(new Service($app->powerEcommerce->helloWorld->service->hello));
             $r2 = (new Route('/?world/?'))->attach(new Service($app->powerEcommerce->helloWorld->service->world));
 
-            $app->powerEcommerce->core->service->router->start()->model->attach($r1)->attach($r2);
+            $app->powerEcommerce->core->service->router()->model->attach($r1)->attach($r2);
         }
     }
 }

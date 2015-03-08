@@ -28,6 +28,7 @@ namespace PowerEcommerce\App\PowerEcommerce\Component\Core\Service {
 
     class Router extends Service
     {
+
         /** @type \PowerEcommerce\System\Routing\Component\Router */
         public $model;
 
@@ -35,19 +36,20 @@ namespace PowerEcommerce\App\PowerEcommerce\Component\Core\Service {
         {
             $this->app->set('route_collection', $this->model->handle($this->app->get('router_target')));
             if ($this->app->get('route_collection') instanceof \Traversable) {
+
                 /** @type \PowerEcommerce\System\Routing\Component\Route $route */
                 foreach ($this->app->get('route_collection') as $route) {
-                    if (is_object($route))
-                        foreach ($route->getServices() as $service) {
-                            is_object($service->getService()) && $service->getService()->call();
-                        };
+
+                    /** @type \PowerEcommerce\System\Routing\Component\Service $service */
+                    foreach ($route->getComponents() as $service) {
+                        $service->getService()->call();
+                    };
                 }
-                if (is_object($route))
-                    foreach ($this->app->get('route_collection') as $route) {
-                        foreach ($route->getServices() as $service) {
-                            is_object($service->getService()) && $service->getService()->stop();
-                        };
-                    }
+                foreach ($this->app->get('route_collection') as $route) {
+                    foreach ($route->getComponents() as $service) {
+                        $service->getService()->stop();
+                    };
+                }
             }
         }
 

@@ -22,10 +22,12 @@
  * THE SOFTWARE.
  */
 namespace PowerEcommerce\System\Routing\Component {
+    use PowerEcommerce\System\Object;
     use PowerEcommerce\System\Routing\Component;
 
     class Route extends Component
     {
+
         /**
          * @param \PowerEcommerce\System\Routing\Component $component
          *
@@ -34,21 +36,9 @@ namespace PowerEcommerce\System\Routing\Component {
         public function attach(Component $component)
         {
             !($component instanceof \PowerEcommerce\System\Routing\Component\Service) && $this->invalid();
-            return $this->push($component);
-        }
+            $this->getComponents()->push($component);
 
-        /**
-         * @return \PowerEcommerce\System\Routing\Component\Service[]
-         */
-        public function getServices()
-        {
-            $collection = [];
-            foreach ($this->getData() as $data) {
-                if ($data instanceof \PowerEcommerce\System\Routing\Component\Service) {
-                    $collection[] = $data;
-                }
-            }
-            return $collection;
+            return $this;
         }
 
         /**
@@ -60,9 +50,9 @@ namespace PowerEcommerce\System\Routing\Component {
         {
             !($component instanceof \PowerEcommerce\System\Routing\Component\Target) && $this->invalid();
 
-            foreach ($this->getData() as $service) {
+            foreach ($this->getComponents() as $service) {
                 /** @var \PowerEcommerce\System\Routing\Component\Service $service */
-                is_object($service) && $service->handle($component);
+                $service->handle($component);
             }
             return $this->factory($this);
         }

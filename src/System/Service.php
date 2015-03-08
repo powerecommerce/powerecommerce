@@ -24,32 +24,33 @@
 namespace PowerEcommerce\System {
     abstract class Service extends Object
     {
-        /**
-         * @type callable
-         */
-        private $_execute = null;
 
-        /**
-         * @type callable
-         */
+        const START = 1;
+
+        const STOP  = 2;
+
+        /** @type callable */
+        private $_call = null;
+
+        /** @type callable */
         private $_gc = null;
 
-        /**
-         * @type callable
-         */
+        /** @type callable */
         private $_init = null;
 
-        /**
-         * @type \PowerEcommerce\App\App
-         */
-        protected $app;
+        /** @type \PowerEcommerce\App\App */
+        public $app;
+
+        /** @type int */
+        public $status;
 
         /**
          * @param \PowerEcommerce\App\App $app
          */
         final public function __construct(\PowerEcommerce\App\App $app)
         {
-            $this->app = $app;
+            $this->app    = $app;
+            $this->status = self::STOP;
         }
 
         /**
@@ -57,8 +58,8 @@ namespace PowerEcommerce\System {
          */
         final public function __invoke()
         {
-            null === $this->_execute && $this->start();
-            $virtual = $this->_execute;
+            null === $this->_call && $this->start();
+            $virtual = $this->_call;
 
             return $virtual();
         }
@@ -78,26 +79,29 @@ namespace PowerEcommerce\System {
         }
 
         /**
-         * @param callable $_execute
+         * @param callable $_call
          * @param callable $_init
          * @param callable $_gc
          *
          * @return $this
          *
          */
-        final public function override(callable $_execute, callable $_init, callable $_gc)
+        final public function override(callable $_call, callable $_init, callable $_gc)
         {
-            null !== $_execute && $this->_execute = $_execute;
+            null !== $_call && $this->_call = $_call;
             null !== $_init && $this->_init = $_init;
             null !== $_gc && $this->_gc = $_gc;
 
             return $this;
         }
 
+        /**
+         * @return $this
+         */
         final public function restart()
         {
             $this->stop();
-            $this->start();
+            return $this->start();
         }
 
         /**
@@ -105,8 +109,8 @@ namespace PowerEcommerce\System {
          */
         final public function start()
         {
-            if (null === $this->_execute) {
-                $this->_execute = function () { return $this->_call(); };
+            if (null === $this->_call) {
+                $this->_call = function () { return $this->_call(); };
             }
             if (null === $this->_init) {
                 $this->_init = function () { return $this->_init(); };
@@ -114,6 +118,7 @@ namespace PowerEcommerce\System {
             $virtual = $this->_init;
             $virtual();
 
+            $this->status = self::START;
             return $this;
         }
 
@@ -128,6 +133,7 @@ namespace PowerEcommerce\System {
             $virtual = $this->_gc;
             $virtual();
 
+            $this->status = self::STOP;
             return $this;
         }
     }

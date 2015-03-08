@@ -24,6 +24,8 @@
 namespace PowerEcommerce\System\Object {
     class Cache
     {
+
         public static $underscore = [];
+
     }
 }

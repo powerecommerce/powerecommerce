@@ -25,16 +25,13 @@ namespace PowerEcommerce\System {
     use PowerEcommerce\System\Object\Cache;
     use PowerEcommerce\System\Object\InvalidException;
 
-    class Object implements \Iterator
+    class Object implements \IteratorAggregate
     {
-        /**
-         * @var mixed[]
-         */
+
+        /** @type mixed[] */
         protected $_data = [];
 
-        /**
-         * @type int
-         */
+        /** @type int */
         protected $_ptr = 0;
 
         /**
@@ -75,10 +72,36 @@ namespace PowerEcommerce\System {
                     return $this->has($key);
 
                 default:
-                    $class = get_called_class($this);
+                    if (is_callable($this->__get($name))) {
+                        /** @type callable $callable */
+                        $callable = $this->__get($name);
+                        return $callable();
+                    }
+                    $class = get_called_class();
                     $args  = print_r($args, true);
                     $this->invalid("Invalid method $class::$name($args)");
             }
+        }
+
+        /**
+         * @param string $key
+         *
+         * @return mixed|null
+         */
+        public function __get($key)
+        {
+            return $this->get('__' . $key);
+        }
+
+        /**
+         * @param string $key
+         * @param mixed  $value
+         *
+         * @return $this
+         */
+        public function __set($key, $value)
+        {
+            return $this->set('__' . $key, $value);
         }
 
         /**
@@ -118,18 +141,6 @@ namespace PowerEcommerce\System {
         {
             $this->value = [];
             return $this;
-        }
-
-        /**
-         * (PHP 5 &gt;= 5.0.0)<br/>
-         * Return the current element
-         *
-         * @link http://php.net/manual/en/iterator.current.php
-         * @return mixed Can return any type.
-         */
-        public function current()
-        {
-            return current($this->_data);
         }
 
         /**
@@ -197,6 +208,14 @@ namespace PowerEcommerce\System {
         }
 
         /**
+         * @return \ArrayIterator
+         */
+        public function getIterator()
+        {
+            return new \ArrayIterator($this->_data);
+        }
+
+        /**
          * @param string $key
          *
          * @return bool
@@ -218,36 +237,11 @@ namespace PowerEcommerce\System {
         }
 
         /**
-         * (PHP 5 &gt;= 5.0.0)<br/>
-         * Return the key of the current element
-         *
-         * @link http://php.net/manual/en/iterator.key.php
-         * @return mixed scalar on success, or null on failure.
-         */
-        public function key()
-        {
-            return key($this->_data);
-        }
-
-        /**
          * @return int
          */
         public function length()
         {
             return sizeof($this->getData());
-        }
-
-        /**
-         * (PHP 5 &gt;= 5.0.0)<br/>
-         * Move forward to next element
-         *
-         * @link http://php.net/manual/en/iterator.next.php
-         * @return void Any returned value is ignored.
-         */
-        public function next()
-        {
-            ++$this->_ptr;
-            next($this->_data);
         }
 
         /**
@@ -272,19 +266,6 @@ namespace PowerEcommerce\System {
                 $this->push($item);
             }
             return $this;
-        }
-
-        /**
-         * (PHP 5 &gt;= 5.0.0)<br/>
-         * Rewind the Iterator to the first element
-         *
-         * @link http://php.net/manual/en/iterator.rewind.php
-         * @return void Any returned value is ignored.
-         */
-        public function rewind()
-        {
-            $this->_ptr = 0;
-            reset($this->_data);
         }
 
         /**
@@ -331,19 +312,6 @@ namespace PowerEcommerce\System {
                 Cache::$underscore[$name] = strtolower(preg_replace('/(.)([A-Z])/', "$1_$2", $name));
             }
             return Cache::$underscore[$name];
-        }
-
-        /**
-         * (PHP 5 &gt;= 5.0.0)<br/>
-         * Checks if current position is valid
-         *
-         * @link http://php.net/manual/en/iterator.valid.php
-         * @return boolean The return value will be casted to boolean and then evaluated.
-         *       Returns true on success or false on failure.
-         */
-        public function valid()
-        {
-            return ($this->_ptr <= $this->length());
         }
     }
 }

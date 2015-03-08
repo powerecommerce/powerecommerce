@@ -21,12 +21,41 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-require_once __DIR__ . '/../vendor/autoload.php';
-use PowerEcommerce\App\App;
+namespace PowerEcommerce\System\App {
+    use PowerEcommerce\System\Object;
 
-$app = new App();
-$app->set('base_dir', realpath(__DIR__ . DIRECTORY_SEPARATOR . '..'));
+    abstract class Facade extends Object
+    {
 
-$app->powerEcommerce->core->service->run()->call();
+        /** @type \PowerEcommerce\App\App */
+        public $app;
 
-var_dump($app->getRouteCollection());
+        /**
+         * @param $service
+         *
+         * @return callable
+         */
+        protected function _register($service)
+        {
+            return function () use ($service) {
+                static $_service;
+
+                if (null === $_service) {
+                    $_service = $service;
+                }
+                if (is_object($_service)) {
+                    /** @type \PowerEcommerce\System\Service $_service */
+                    if ($_service->status === $_service::STOP) {
+                        $_service->start();
+                    }
+                    return $_service;
+                }
+                else {
+                    /** @type \PowerEcommerce\System\Service $_service */
+                    $_service = new $_service($this->app);
+                    return $_service->start();
+                }
+            };
+        }
+    }
+}

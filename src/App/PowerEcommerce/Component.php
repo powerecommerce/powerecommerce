@@ -22,11 +22,12 @@
  * THE SOFTWARE.
  */
 namespace PowerEcommerce\App\PowerEcommerce {
-    use PowerEcommerce\App\PowerEcommerce\Component\Facade;
     use PowerEcommerce\App\App;
+    use PowerEcommerce\App\PowerEcommerce\Component\Facade;
 
     trait Component
     {
+
         /** @type \PowerEcommerce\App\PowerEcommerce\Component\Facade */
         public $powerEcommerce;
 

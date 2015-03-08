@@ -28,8 +28,8 @@ namespace PowerEcommerce\App\PowerEcommerce\Component\Core\Service {
     {
         protected function _call()
         {
-            $this->app->powerEcommerce->core->service->boot->call();
-            $this->app->powerEcommerce->core->service->router->call();
+            $this->app->powerEcommerce->core->service->boot()->call();
+            $this->app->powerEcommerce->core->service->router()->call();
         }
 
         protected function _gc() { }

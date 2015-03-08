@@ -30,6 +30,7 @@ namespace PowerEcommerce\System {
      */
     class ObjectTest extends BaseUnit
     {
+
         /**
          * @var \PowerEcommerce\System\Object
          */

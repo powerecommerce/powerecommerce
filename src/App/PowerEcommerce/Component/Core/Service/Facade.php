@@ -24,25 +24,22 @@
 namespace PowerEcommerce\App\PowerEcommerce\Component\Core\Service {
     use PowerEcommerce\App\App;
 
-    class Facade
+    /**
+     * @method \PowerEcommerce\App\PowerEcommerce\Component\Core\Service\Router router()
+     * @method \PowerEcommerce\App\PowerEcommerce\Component\Core\Service\Boot boot()
+     * @method \PowerEcommerce\App\PowerEcommerce\Component\Core\Service\Run run()
+     */
+    class Facade extends \PowerEcommerce\System\App\Facade
     {
-        /** @type \PowerEcommerce\App\PowerEcommerce\Component\Core\Service\Boot */
-        public $boot;
-
-        /** @type \PowerEcommerce\App\PowerEcommerce\Component\Core\Service\Router */
-        public $router;
-
-        /** @type \PowerEcommerce\App\PowerEcommerce\Component\Core\Service\Run */
-        public $run;
-
         /**
          * @param \PowerEcommerce\App\App $app
          */
         public function __construct(App $app)
         {
-            $this->router = new Router($app);
-            $this->run    = new Run($app);
-            $this->boot   = new Boot($app);
+            $this->app    = $app;
+            $this->router = $this->_register('\PowerEcommerce\App\PowerEcommerce\Component\Core\Service\Router');
+            $this->run    = $this->_register('\PowerEcommerce\App\PowerEcommerce\Component\Core\Service\Run');
+            $this->boot   = $this->_register('\PowerEcommerce\App\PowerEcommerce\Component\Core\Service\Boot');
         }
     }
 }
