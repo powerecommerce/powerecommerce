@@ -22,13 +22,22 @@
  * THE SOFTWARE.
  */
 namespace PowerEcommerce\System\App {
+    use PowerEcommerce\App\App;
     use PowerEcommerce\System\Object;
 
     abstract class Facade extends Object
     {
 
         /** @type \PowerEcommerce\App\App */
-        public $app;
+        private $_app;
+
+        /**
+         * @param \PowerEcommerce\App\App $app
+         */
+        public function __construct(App $app)
+        {
+            $this->_app = $app;
+        }
 
         /**
          * @param $service
@@ -52,10 +61,18 @@ namespace PowerEcommerce\System\App {
                 }
                 else {
                     /** @type \PowerEcommerce\System\Service $_service */
-                    $_service = new $_service($this->app);
+                    $_service = new $_service($this->getApp());
                     return $_service->start();
                 }
             };
+        }
+
+        /**
+         * @return \PowerEcommerce\App\App
+         */
+        public function getApp()
+        {
+            return $this->_app;
         }
     }
 }

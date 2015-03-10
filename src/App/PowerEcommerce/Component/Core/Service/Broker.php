@@ -22,14 +22,42 @@
  * THE SOFTWARE.
  */
 namespace PowerEcommerce\App\PowerEcommerce\Component\Core\Service {
+    use PowerEcommerce\System\Object;
     use PowerEcommerce\System\Service;
 
-    class Run extends Service
+    class Broker extends Service
     {
         protected function _call()
         {
-            $this->app->powerEcommerce->core->service->boot()->call();
-            $this->app->powerEcommerce->core->service->router()->call();
+            if ($this->getApp()->hasRouteCollection()) {
+                $serviceCollection = new Object();
+
+                $this->getApp()->setDisableServiceStart(true);
+
+                /** @type \PowerEcommerce\System\Routing\Component\Route $route */
+                foreach ($this->getApp()->getRouteCollection() as $route) {
+                    $serviceCollection->pushData($route->getComponents()->getData());
+                }
+
+                /** @type \PowerEcommerce\System\Routing\Component\Service $service */
+                foreach ($serviceCollection as $key => $service) {
+                    $handler = $service->getServiceHandler();
+                    $serviceCollection->set($key, $handler());
+                }
+
+                $this->getApp()->delDisableServiceStart();
+
+                /** @type \PowerEcommerce\System\Service $service */
+                foreach ($serviceCollection as $key => $service) {
+                    $service->start();
+                }
+                foreach ($serviceCollection as $key => $service) {
+                    $service->call();
+                }
+                foreach ($serviceCollection as $key => $service) {
+                    $service->stop();
+                }
+            }
         }
 
         protected function _gc() { }

@@ -22,24 +22,19 @@
  * THE SOFTWARE.
  */
 namespace PowerEcommerce\App\PowerEcommerce\Component\Core\Service {
-    use PowerEcommerce\App\App;
+    use PowerEcommerce\System\Service;
 
-    /**
-     * @method \PowerEcommerce\App\PowerEcommerce\Component\Core\Service\Router router()
-     * @method \PowerEcommerce\App\PowerEcommerce\Component\Core\Service\Boot boot()
-     * @method \PowerEcommerce\App\PowerEcommerce\Component\Core\Service\Run run()
-     */
-    class Facade extends \PowerEcommerce\System\App\Facade
+    class Main extends Service
     {
-        /**
-         * @param \PowerEcommerce\App\App $app
-         */
-        public function __construct(App $app)
+        protected function _call()
         {
-            $this->app    = $app;
-            $this->router = $this->_register('\PowerEcommerce\App\PowerEcommerce\Component\Core\Service\Router');
-            $this->run    = $this->_register('\PowerEcommerce\App\PowerEcommerce\Component\Core\Service\Run');
-            $this->boot   = $this->_register('\PowerEcommerce\App\PowerEcommerce\Component\Core\Service\Boot');
+            $this->getApp()->PowerEcommerce->Core->Boot()->call();
+            $this->getApp()->PowerEcommerce->Core->Router()->call();
+            $this->getApp()->PowerEcommerce->Core->Broker()->call();
         }
+
+        protected function _gc() { }
+
+        protected function _init() { }
     }
 }

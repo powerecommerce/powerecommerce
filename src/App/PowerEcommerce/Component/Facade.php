@@ -28,19 +28,20 @@ namespace PowerEcommerce\App\PowerEcommerce\Component {
     {
 
         /** @type \PowerEcommerce\App\PowerEcommerce\Component\Core\Facade */
-        public $core;
+        public $Core;
 
         /** @type \PowerEcommerce\App\PowerEcommerce\Component\HelloWorld\Facade */
-        public $helloWorld;
+        public $HelloWorld;
 
         /**
          * @param \PowerEcommerce\App\App $app
          */
         public function __construct(App $app)
         {
-            $this->app        = $app;
-            $this->core       = new Core\Facade($app);
-            $this->helloWorld = new HelloWorld\Facade($app);
+            parent::__construct($app);
+
+            $this->Core       = new Core\Facade($app);
+            $this->HelloWorld = new HelloWorld\Facade($app);
         }
     }
 }

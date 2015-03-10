@@ -30,37 +30,33 @@ namespace PowerEcommerce\App\PowerEcommerce\Component\Core\Service {
     {
 
         /** @type \PowerEcommerce\System\Routing\Component\Router */
-        public $model;
+        private $_model;
 
         protected function _call()
         {
-            $this->app->set('route_collection', $this->model->handle($this->app->get('router_target')));
-            if ($this->app->get('route_collection') instanceof \Traversable) {
+            $target     = $this->getApp()->getRouterTarget();
+            $collection = $this->getModel()->handle($target);
 
-                /** @type \PowerEcommerce\System\Routing\Component\Route $route */
-                foreach ($this->app->get('route_collection') as $route) {
-
-                    /** @type \PowerEcommerce\System\Routing\Component\Service $service */
-                    foreach ($route->getComponents() as $service) {
-                        $service->getService()->call();
-                    };
-                }
-                foreach ($this->app->get('route_collection') as $route) {
-                    foreach ($route->getComponents() as $service) {
-                        $service->getService()->stop();
-                    };
-                }
-            }
+            $this->getApp()->setRouteCollection($collection);
         }
 
         protected function _gc() { }
 
         protected function _init()
         {
-            if (!$this->app->has('router_target')) {
-                $this->app->set('router_target', new Target($_SERVER['REQUEST_URI']));
+            if (!$this->getApp()->hasRouterTarget()) {
+                $uri = $this->getApp()->PowerEcommerce->Core->Request()->getUri();
+                $this->getApp()->setRouterTarget(new Target($uri));
             }
-            $this->model = new \PowerEcommerce\System\Routing\Component\Router();
+            $this->_model = new \PowerEcommerce\System\Routing\Component\Router();
+        }
+
+        /**
+         * @return \PowerEcommerce\System\Routing\Component\Router
+         */
+        public function getModel()
+        {
+            return $this->_model;
         }
     }
 }

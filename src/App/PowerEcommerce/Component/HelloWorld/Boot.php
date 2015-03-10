@@ -33,10 +33,10 @@ namespace PowerEcommerce\App\PowerEcommerce\Component\HelloWorld {
          */
         public function up(App $app)
         {
-            $r1 = (new Route('/?hello/?'))->attach(new Service($app->powerEcommerce->helloWorld->service->hello));
-            $r2 = (new Route('/?world/?'))->attach(new Service($app->powerEcommerce->helloWorld->service->world));
+            $r1 = (new Route('/?hello/?'))->attach(new Service($app->PowerEcommerce->HelloWorld->Hello));
+            $r2 = (new Route('/?world/?'))->attach(new Service($app->PowerEcommerce->HelloWorld->World));
 
-            $app->powerEcommerce->core->service->router()->model->attach($r1)->attach($r2);
+            $app->PowerEcommerce->Core->Router()->getModel()->attach($r1)->attach($r2);
         }
     }
 }

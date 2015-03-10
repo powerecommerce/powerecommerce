@@ -29,14 +29,14 @@ namespace PowerEcommerce\App\PowerEcommerce {
     {
 
         /** @type \PowerEcommerce\App\PowerEcommerce\Component\Facade */
-        public $powerEcommerce;
+        public $PowerEcommerce;
 
         /**
          * @param \PowerEcommerce\App\App $app
          */
-        public function powerEcommerce(App $app)
+        public function PowerEcommerce(App $app)
         {
-            $this->powerEcommerce = new Facade($app);
+            $this->PowerEcommerce = new Facade($app);
         }
     }
 }

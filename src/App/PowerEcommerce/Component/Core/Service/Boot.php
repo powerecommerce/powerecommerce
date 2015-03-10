@@ -28,13 +28,15 @@ namespace PowerEcommerce\App\PowerEcommerce\Component\Core\Service {
     {
         protected function _call()
         {
-            $iterator = new \GlobIterator($this->app->get('boot_dir') . DIRECTORY_SEPARATOR . "*.php");
+            $iterator = new \GlobIterator($this->getApp()->getBootDir() . $this->getDs() . "*.php");
 
             $up = function (\PowerEcommerce\System\App\Boot $boot) {
-                $boot->up($this->app);
+                $boot->up($this->getApp());
             };
+
             /** @var \SplFileInfo $file */
             foreach ($iterator as $file) {
+
                 /** @var \PowerEcommerce\Application\Component\Boot $boot */
                 $boot = require $file->getPathname();
                 $up($boot);
@@ -45,10 +47,13 @@ namespace PowerEcommerce\App\PowerEcommerce\Component\Core\Service {
 
         protected function _init()
         {
-            !$this->app->has('base_dir') && $this->invalid('base_dir not defined.');
+            !$this->getApp()->hasBaseDir() && $this->invalid('The base/dir not defined.');
 
-            if (!$this->app->has('boot_dir')) {
-                $this->app->set('boot_dir', $this->app->get('base_dir') . DIRECTORY_SEPARATOR . 'boot');
+            $ds = $this->getApp()->PowerEcommerce->Core->FileSystem()->getSeparator();
+            $this->setDs($ds);
+
+            if (!$this->getApp()->hasBootDir()) {
+                $this->getApp()->setBootDir($this->getApp()->getBaseDir() . $this->getDs() . 'boot');
             }
         }
     }

@@ -24,19 +24,22 @@
 namespace PowerEcommerce\App\PowerEcommerce\Component\HelloWorld {
     use PowerEcommerce\App\App;
 
+    /**
+     * @method \PowerEcommerce\App\PowerEcommerce\Component\HelloWorld\Service\Hello Hello()
+     * @method \PowerEcommerce\App\PowerEcommerce\Component\HelloWorld\Service\World World()
+     */
     class Facade extends \PowerEcommerce\System\App\Facade
     {
-
-        /** @type \PowerEcommerce\App\PowerEcommerce\Component\HelloWorld\Service\Facade */
-        public $service;
 
         /**
          * @param \PowerEcommerce\App\App $app
          */
         public function __construct(App $app)
         {
-            $this->app     = $app;
-            $this->service = new Service\Facade($app);
+            parent::__construct($app);
+
+            $this->Hello = $this->_register('\PowerEcommerce\App\PowerEcommerce\Component\HelloWorld\Service\Hello');
+            $this->World = $this->_register('\PowerEcommerce\App\PowerEcommerce\Component\HelloWorld\Service\World');
         }
     }
 }

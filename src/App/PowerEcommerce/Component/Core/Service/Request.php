@@ -21,24 +21,23 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-namespace PowerEcommerce\App\PowerEcommerce\Component\HelloWorld\Service {
-    use PowerEcommerce\App\App;
+namespace PowerEcommerce\App\PowerEcommerce\Component\Core\Service {
+    use PowerEcommerce\System\Service;
 
-    /**
-     * @method \PowerEcommerce\App\PowerEcommerce\Component\HelloWorld\Service\Hello hello()
-     * @method \PowerEcommerce\App\PowerEcommerce\Component\HelloWorld\Service\World world()
-     */
-    class Facade extends \PowerEcommerce\System\App\Facade
+    class Request extends Service
     {
+        protected function _call() { }
+
+        protected function _gc() { }
+
+        protected function _init() { }
 
         /**
-         * @param \PowerEcommerce\App\App $app
+         * @return string
          */
-        public function __construct(App $app)
+        public function getUri()
         {
-            $this->app   = $app;
-            $this->hello = $this->_register('\PowerEcommerce\App\PowerEcommerce\Component\HelloWorld\Service\Hello');
-            $this->world = $this->_register('\PowerEcommerce\App\PowerEcommerce\Component\HelloWorld\Service\World');
+            return (string)$_SERVER['REQUEST_URI'];
         }
     }
 }

@@ -29,6 +29,9 @@ namespace PowerEcommerce\System {
 
         const STOP  = 2;
 
+        /** @type \PowerEcommerce\App\App */
+        private $_app;
+
         /** @type callable */
         private $_call = null;
 
@@ -38,9 +41,6 @@ namespace PowerEcommerce\System {
         /** @type callable */
         private $_init = null;
 
-        /** @type \PowerEcommerce\App\App */
-        public $app;
-
         /** @type int */
         public $status;
 
@@ -49,7 +49,7 @@ namespace PowerEcommerce\System {
          */
         final public function __construct(\PowerEcommerce\App\App $app)
         {
-            $this->app    = $app;
+            $this->_app   = $app;
             $this->status = self::STOP;
         }
 
@@ -71,11 +71,35 @@ namespace PowerEcommerce\System {
         abstract protected function _init();
 
         /**
+         * @return array
+         */
+        final public static function after()
+        {
+            return [1, md5(get_called_class())];
+        }
+
+        /**
+         * @return array
+         */
+        final public static function before()
+        {
+            return [-1, md5(get_called_class())];
+        }
+
+        /**
          * @return mixed
          */
         final public function call()
         {
             return $this->__invoke();
+        }
+
+        /**
+         * @return \PowerEcommerce\App\App
+         */
+        final public function getApp()
+        {
+            return $this->_app;
         }
 
         /**
@@ -109,16 +133,18 @@ namespace PowerEcommerce\System {
          */
         final public function start()
         {
-            if (null === $this->_call) {
-                $this->_call = function () { return $this->_call(); };
-            }
-            if (null === $this->_init) {
-                $this->_init = function () { return $this->_init(); };
-            }
-            $virtual = $this->_init;
-            $virtual();
+            if (null === $this->getApp()->getDisableServiceStart()) {
+                if (null === $this->_call) {
+                    $this->_call = function () { return $this->_call(); };
+                }
+                if (null === $this->_init) {
+                    $this->_init = function () { return $this->_init(); };
+                }
+                $virtual = $this->_init;
+                $virtual();
 
-            $this->status = self::START;
+                $this->status = self::START;
+            }
             return $this;
         }
 
@@ -127,13 +153,15 @@ namespace PowerEcommerce\System {
          */
         final public function stop()
         {
-            if (null === $this->_gc) {
-                $this->_gc = function () { return $this->_gc(); };
-            }
-            $virtual = $this->_gc;
-            $virtual();
+            if (null === $this->getApp()->getDisableServiceStop()) {
+                if (null === $this->_gc) {
+                    $this->_gc = function () { return $this->_gc(); };
+                }
+                $virtual = $this->_gc;
+                $virtual();
 
-            $this->status = self::STOP;
+                $this->status = self::STOP;
+            }
             return $this;
         }
     }

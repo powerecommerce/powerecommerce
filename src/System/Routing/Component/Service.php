@@ -25,6 +25,9 @@ namespace PowerEcommerce\System\Routing\Component {
     use PowerEcommerce\System\App;
     use PowerEcommerce\System\Routing\Component;
 
+    /**
+     * @method callable getServiceHandler()
+     */
     class Service extends Component
     {
         /**
@@ -32,7 +35,7 @@ namespace PowerEcommerce\System\Routing\Component {
          */
         public function __construct(callable $service)
         {
-            $this->set('service', $service);
+            $this->set('service/handler', $service);
         }
 
         /**
@@ -46,31 +49,12 @@ namespace PowerEcommerce\System\Routing\Component {
         }
 
         /**
-         * @return \PowerEcommerce\System\Service
-         */
-        public function getService()
-        {
-            if (!($this->get('service') instanceof \PowerEcommerce\System\Service)) {
-                $this->handle($this);
-            }
-            return $this->get('service');
-        }
-
-        /**
          * @param \PowerEcommerce\System\Routing\Component $component
          *
          * @return \PowerEcommerce\System\Object
          */
         public function handle(Component $component)
         {
-            if ($this->get('service') instanceof \PowerEcommerce\System\Service) {
-                return $this->factory($this);
-            }
-
-            /** @type callable $service */
-            $service = $this->get('service');
-            $this->set('service', $service());
-
             return $this->factory($this);
         }
     }

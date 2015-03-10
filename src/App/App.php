@@ -28,7 +28,7 @@ namespace PowerEcommerce\App {
 
         public function __construct()
         {
-            $this->powerEcommerce($this);
+            $this->PowerEcommerce($this);
         }
     }
 }

@@ -24,19 +24,32 @@
 namespace PowerEcommerce\App\PowerEcommerce\Component\Core {
     use PowerEcommerce\App\App;
 
+    /**
+     * @method \PowerEcommerce\App\PowerEcommerce\Component\Core\Service\Router Router()
+     * @method \PowerEcommerce\App\PowerEcommerce\Component\Core\Service\Boot Boot()
+     * @method \PowerEcommerce\App\PowerEcommerce\Component\Core\Service\Main Main()
+     * @method \PowerEcommerce\App\PowerEcommerce\Component\Core\Service\Request Request()
+     * @method \PowerEcommerce\App\PowerEcommerce\Component\Core\Service\Response Response()
+     * @method \PowerEcommerce\App\PowerEcommerce\Component\Core\Service\FileSystem FileSystem()
+     * @method \PowerEcommerce\App\PowerEcommerce\Component\Core\Service\Broker Broker()
+     */
     class Facade extends \PowerEcommerce\System\App\Facade
     {
-
-        /** @type \PowerEcommerce\App\PowerEcommerce\Component\Core\Service\Facade */
-        public $service;
-
         /**
          * @param \PowerEcommerce\App\App $app
          */
         public function __construct(App $app)
         {
-            $this->app     = $app;
-            $this->service = new Service\Facade($app);
+            parent::__construct($app);
+
+            $this->Router     = $this->_register('\PowerEcommerce\App\PowerEcommerce\Component\Core\Service\Router');
+            $this->Main       = $this->_register('\PowerEcommerce\App\PowerEcommerce\Component\Core\Service\Main');
+            $this->Boot       = $this->_register('\PowerEcommerce\App\PowerEcommerce\Component\Core\Service\Boot');
+            $this->Request    = $this->_register('\PowerEcommerce\App\PowerEcommerce\Component\Core\Service\Request');
+            $this->Response   = $this->_register('\PowerEcommerce\App\PowerEcommerce\Component\Core\Service\Response');
+            $this->FileSystem =
+                $this->_register('\PowerEcommerce\App\PowerEcommerce\Component\Core\Service\FileSystem');
+            $this->Broker     = $this->_register('\PowerEcommerce\App\PowerEcommerce\Component\Core\Service\Broker');
         }
     }
 }

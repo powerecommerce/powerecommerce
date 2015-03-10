@@ -21,10 +21,15 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-require_once __DIR__ . '/../vendor/autoload.php';
-use PowerEcommerce\App\App;
+namespace PowerEcommerce\App\PowerEcommerce\Component\Core\Service {
+    use PowerEcommerce\System\Service;
 
-$app = new App();
-$app->set('base/dir', realpath(__DIR__ . DIRECTORY_SEPARATOR . '..'));
+    class Response extends Service
+    {
+        protected function _call() { }
 
-$app->PowerEcommerce->Core->Main()->call();
+        protected function _gc() { }
+
+        protected function _init() { }
+    }
+}

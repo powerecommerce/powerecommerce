@@ -192,6 +192,14 @@ namespace PowerEcommerce\System {
         }
 
         /**
+         * @return string
+         */
+        public function getCalledClassHash()
+        {
+            return md5($this->getCalledClass());
+        }
+
+        /**
          * @return array
          */
         public function getData()
@@ -245,6 +253,22 @@ namespace PowerEcommerce\System {
         }
 
         /**
+         * @param string $key
+         *
+         * @return int|null
+         */
+        public function ptr($key)
+        {
+            $ptr = 0;
+            foreach ($this->getData() as $_key => $_value) {
+                if ($key == $_key)
+                    break;
+                ++$ptr;
+            }
+            return ($this->size() < $ptr) ? null : $ptr;
+        }
+
+        /**
          * @param mixed $value
          *
          * @return $this
@@ -294,6 +318,14 @@ namespace PowerEcommerce\System {
         }
 
         /**
+         * @return int
+         */
+        public function size()
+        {
+            return sizeof($this->getData());
+        }
+
+        /**
          * @return string
          */
         public function toString()
@@ -309,7 +341,7 @@ namespace PowerEcommerce\System {
         protected function underscore($name)
         {
             if (!isset(Cache::$underscore[$name])) {
-                Cache::$underscore[$name] = strtolower(preg_replace('/(.)([A-Z])/', "$1_$2", $name));
+                Cache::$underscore[$name] = strtolower(preg_replace('/(.)([A-Z])/', "$1/$2", $name));
             }
             return Cache::$underscore[$name];
         }
