@@ -21,4 +21,4 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-return new \PowerEcommerce\App\PowerEcommerce\Component\HelloWorld\Boot();
+return 'PowerEcommerce\App\PowerEcommerce\HelloWorld\Boot';

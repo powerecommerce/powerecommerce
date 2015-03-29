@@ -23,6 +23,7 @@
  */
 namespace PowerEcommerce\System\Routing\Component {
     use PowerEcommerce\System\App;
+    use PowerEcommerce\System\Object;
     use PowerEcommerce\System\Routing\Component;
 
     /**
@@ -33,9 +34,9 @@ namespace PowerEcommerce\System\Routing\Component {
         /**
          * @param callable $service
          */
-        public function __construct(callable $service)
+        public function __construct($service)
         {
-            $this->set('service/handler', $service);
+            $this->setServiceHandler($service);
         }
 
         /**
@@ -55,7 +56,7 @@ namespace PowerEcommerce\System\Routing\Component {
          */
         public function handle(Component $component)
         {
-            return $this->factory($this);
+            return new Object($this->getData());
         }
     }
 }

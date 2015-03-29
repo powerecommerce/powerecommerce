@@ -21,40 +21,18 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-namespace PowerEcommerce\App\PowerEcommerce\Component\Core\Service {
+namespace PowerEcommerce\App\PowerEcommerce\HelloWorld\Service {
     use PowerEcommerce\System\Service;
 
-    class Boot extends Service
+    class World extends Service
     {
-        protected function _call()
+        public function _init() { }
+
+        public function _start()
         {
-            $iterator = new \GlobIterator($this->getApp()->getBootDir() . $this->getDs() . "*.php");
-
-            $up = function (\PowerEcommerce\System\App\Boot $boot) {
-                $boot->up($this->getApp());
-            };
-
-            /** @var \SplFileInfo $file */
-            foreach ($iterator as $file) {
-
-                /** @var \PowerEcommerce\Application\Component\Boot $boot */
-                $boot = require $file->getPathname();
-                $up($boot);
-            }
+            echo 'World';
         }
 
-        protected function _gc() { }
-
-        protected function _init()
-        {
-            !$this->getApp()->hasBaseDir() && $this->invalid('The base/dir not defined.');
-
-            $ds = $this->getApp()->PowerEcommerce->Core->FileSystem()->getSeparator();
-            $this->setDs($ds);
-
-            if (!$this->getApp()->hasBootDir()) {
-                $this->getApp()->setBootDir($this->getApp()->getBaseDir() . $this->getDs() . 'boot');
-            }
-        }
+        public function _stop() { }
     }
 }

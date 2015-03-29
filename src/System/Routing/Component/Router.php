@@ -29,7 +29,7 @@ namespace PowerEcommerce\System\Routing\Component {
     {
         public function __construct()
         {
-            $this->set('components', new Object());
+            $this->setComponents(new Object());
         }
 
         /**

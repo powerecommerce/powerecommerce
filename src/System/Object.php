@@ -22,24 +22,20 @@
  * THE SOFTWARE.
  */
 namespace PowerEcommerce\System {
-    use PowerEcommerce\System\Object\Cache;
     use PowerEcommerce\System\Object\InvalidException;
 
-    class Object implements \IteratorAggregate
+    class Object implements \IteratorAggregate, \ArrayAccess
     {
 
         /** @type mixed[] */
         protected $_data = [];
 
-        /** @type int */
-        protected $_ptr = 0;
-
         /**
-         * @param array
+         * @param array $data
          */
-        public function __construct(array $value = [])
+        public function __construct(array $data = [])
         {
-            $this->setData($value);
+            $this->_data = $data;
         }
 
         /**
@@ -77,10 +73,10 @@ namespace PowerEcommerce\System {
                         $callable = $this->__get($name);
                         return $callable();
                     }
-                    $class = get_called_class();
-                    $args  = print_r($args, true);
-                    $this->invalid("Invalid method $class::$name($args)");
             }
+            $class = $this->getCalledClass();
+            $args  = print_r($args, true);
+            return $this->invalid("Invalid method $class::$name($args)");
         }
 
         /**
@@ -90,7 +86,7 @@ namespace PowerEcommerce\System {
          */
         public function __get($key)
         {
-            return $this->get('__' . $key);
+            return $this->get('@' . $key);
         }
 
         /**
@@ -101,15 +97,15 @@ namespace PowerEcommerce\System {
          */
         public function __set($key, $value)
         {
-            return $this->set('__' . $key, $value);
+            return $this->set('@' . $key, $value);
         }
 
         /**
-         * @return string
+         * @return string JSON
          */
         public function __toString()
         {
-            return implode(',', $this->getData());
+            return json_encode($this->getData());
         }
 
         /**
@@ -155,25 +151,6 @@ namespace PowerEcommerce\System {
         }
 
         /**
-         * @param mixed $value
-         *
-         * @return $this|\PowerEcommerce\System\Object
-         */
-        public function factory($value = '__clone__')
-        {
-            if ($value === '__clone__') {
-                return (clone $this);
-            }
-            elseif ($value === null) {
-                return new Object();
-            }
-            elseif (is_array($value)) {
-                return new Object($value);
-            }
-            return new Object([$value]);
-        }
-
-        /**
          * @param string $key
          *
          * @return mixed|null
@@ -210,6 +187,14 @@ namespace PowerEcommerce\System {
         /**
          * @return string
          */
+        public function getDataHash()
+        {
+            return md5($this->__toString());
+        }
+
+        /**
+         * @return string
+         */
         public function getHashCode()
         {
             return spl_object_hash($this);
@@ -237,6 +222,7 @@ namespace PowerEcommerce\System {
          * @param string $msg
          *
          * @throws \PowerEcommerce\System\Object\InvalidException
+         * @return \PowerEcommerce\System\Object\InvalidException
          */
         public function invalid($msg = null)
         {
@@ -253,19 +239,80 @@ namespace PowerEcommerce\System {
         }
 
         /**
-         * @param string $key
+         * (PHP 5 &gt;= 5.0.0)<br/>
+         * Whether a offset exists
          *
-         * @return int|null
+         * @link http://php.net/manual/en/arrayaccess.offsetexists.php
+         *
+         * @param mixed $offset <p>
+         *                      An offset to check for.
+         *                      </p>
+         *
+         * @return boolean true on success or false on failure.
+         * </p>
+         * <p>
+         * The return value will be casted to boolean if non-boolean was returned.
          */
-        public function ptr($key)
+        public function offsetExists($offset)
         {
-            $ptr = 0;
-            foreach ($this->getData() as $_key => $_value) {
-                if ($key == $_key)
-                    break;
-                ++$ptr;
+            return $this->has($offset);
+        }
+
+        /**
+         * (PHP 5 &gt;= 5.0.0)<br/>
+         * Offset to retrieve
+         *
+         * @link http://php.net/manual/en/arrayaccess.offsetget.php
+         *
+         * @param mixed $offset <p>
+         *                      The offset to retrieve.
+         *                      </p>
+         *
+         * @return mixed Can return all value types.
+         */
+        public function offsetGet($offset)
+        {
+            if ($this->has($offset)) {
+                return $this->get($offset);
             }
-            return ($this->size() < $ptr) ? null : $ptr;
+            return $this->invalid("'$offset' is not defined.");
+        }
+
+        /**
+         * (PHP 5 &gt;= 5.0.0)<br/>
+         * Offset to set
+         *
+         * @link http://php.net/manual/en/arrayaccess.offsetset.php
+         *
+         * @param mixed $offset <p>
+         *                      The offset to assign the value to.
+         *                      </p>
+         * @param mixed $value  <p>
+         *                      The value to set.
+         *                      </p>
+         *
+         * @return void
+         */
+        public function offsetSet($offset, $value)
+        {
+            $this->set($offset, $value);
+        }
+
+        /**
+         * (PHP 5 &gt;= 5.0.0)<br/>
+         * Offset to unset
+         *
+         * @link http://php.net/manual/en/arrayaccess.offsetunset.php
+         *
+         * @param mixed $offset <p>
+         *                      The offset to unset.
+         *                      </p>
+         *
+         * @return void
+         */
+        public function offsetUnset($offset)
+        {
+            $this->del($offset);
         }
 
         /**
@@ -318,14 +365,6 @@ namespace PowerEcommerce\System {
         }
 
         /**
-         * @return int
-         */
-        public function size()
-        {
-            return sizeof($this->getData());
-        }
-
-        /**
          * @return string
          */
         public function toString()
@@ -338,12 +377,9 @@ namespace PowerEcommerce\System {
          *
          * @return string
          */
-        protected function underscore($name)
+        public function underscore($name)
         {
-            if (!isset(Cache::$underscore[$name])) {
-                Cache::$underscore[$name] = strtolower(preg_replace('/(.)([A-Z])/', "$1/$2", $name));
-            }
-            return Cache::$underscore[$name];
+            return $name;
         }
     }
 }

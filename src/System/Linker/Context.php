@@ -21,47 +21,10 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-namespace PowerEcommerce\System\Routing {
+namespace PowerEcommerce\System\Linker {
     use PowerEcommerce\System\Object;
 
-    /**
-     * @method bool hasId()
-     * @method $this setId(string)
-     * @method $this addId(string)
-     * @method string getId()
-     * @method $this delId()
-     *
-     * @method bool hasModifiers()
-     * @method $this setModifiers(string)
-     * @method $this addModifiers(string)
-     * @method string getModifiers()
-     * @method $this delModifiers()
-     *
-     * @method \PowerEcommerce\System\Object getComponents()
-     */
-    abstract class Component extends Object
+    class Context extends Object
     {
-        /**
-         * @param string $name
-         */
-        public function __construct($name)
-        {
-            $this->setComponents(new Object());
-            $this->setId($name);
-        }
-
-        /**
-         * @param \PowerEcommerce\System\Routing\Component $component
-         *
-         * @return $this
-         */
-        abstract public function attach(Component $component);
-
-        /**
-         * @param \PowerEcommerce\System\Routing\Component $component
-         *
-         * @return \PowerEcommerce\System\Object
-         */
-        abstract public function handle(Component $component);
     }
 }

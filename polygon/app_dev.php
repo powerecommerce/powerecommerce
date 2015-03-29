@@ -22,9 +22,12 @@
  * THE SOFTWARE.
  */
 require_once __DIR__ . '/../vendor/autoload.php';
-use PowerEcommerce\App\App;
+use PowerEcommerce\System\App;
 
-$app = new App();
-$app->set('base/dir', realpath(__DIR__ . DIRECTORY_SEPARATOR . '..'));
+$context = new App\Context();
+$context->setDS(DIRECTORY_SEPARATOR);
+$context->setBaseDir(realpath(__DIR__ . $context->getDS() . '..'));
+$context->setBootLoaderDir($context->getBaseDir() . $context->getDS() . 'boot');
 
-$app->PowerEcommerce->Core->Main()->call();
+$app = new App($context);
+$app->up()->render()->down();

@@ -21,14 +21,8 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-namespace PowerEcommerce\System\App {
-    use PowerEcommerce\App\App;
-
-    abstract class Boot
+namespace PowerEcommerce\System\Linker {
+    class PriorityQueue extends \SplPriorityQueue
     {
-        /**
-         * @param \PowerEcommerce\App\App $app
-         */
-        abstract public function up(App $app);
     }
 }

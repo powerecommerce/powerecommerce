@@ -21,22 +21,8 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-namespace PowerEcommerce\App\PowerEcommerce {
-    use PowerEcommerce\App\App;
-    use PowerEcommerce\App\PowerEcommerce\Component\Facade;
-
-    trait Component
+namespace PowerEcommerce\System\Broker {
+    class PriorityQueue extends \SplPriorityQueue
     {
-
-        /** @type \PowerEcommerce\App\PowerEcommerce\Component\Facade */
-        public $PowerEcommerce;
-
-        /**
-         * @param \PowerEcommerce\App\App $app
-         */
-        public function PowerEcommerce(App $app)
-        {
-            $this->PowerEcommerce = new Facade($app);
-        }
     }
 }

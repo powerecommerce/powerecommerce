@@ -21,18 +21,21 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-namespace PowerEcommerce\App\PowerEcommerce\Component\HelloWorld\Service {
-    use PowerEcommerce\System\Service;
-
-    class World extends Service
+namespace PowerEcommerce\System\Service {
+    abstract class Event
     {
-        protected function _call()
-        {
-            echo 'World';
-        }
 
-        protected function _gc() { }
+        const INIT_AFTER   = 'ServiceInitAfter';
 
-        protected function _init() { }
+        const INIT_BEFORE  = 'ServiceInitBefore';
+
+        const START_AFTER  = 'ServiceStartAfter';
+
+        const START_BEFORE = 'ServiceStartBefore';
+
+        const STOP_AFTER   = 'ServiceStopAfter';
+
+        const STOP_BEFORE  = 'ServiceStopBefore';
+
     }
 }

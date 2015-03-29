@@ -21,23 +21,19 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-namespace PowerEcommerce\App\PowerEcommerce\Component\Core\Service {
-    use PowerEcommerce\System\Service;
-
-    class Request extends Service
+namespace PowerEcommerce\System\Service {
+    abstract class Status
     {
-        protected function _call() { }
 
-        protected function _gc() { }
+        const INIT      = 2;
 
-        protected function _init() { }
+        const OBSERVER  = 8;
 
-        /**
-         * @return string
-         */
-        public function getUri()
-        {
-            return (string)$_SERVER['REQUEST_URI'];
-        }
+        const START     = 1;
+
+        const STOP      = 4;
+
+        const UNDEFINED = 0;
+
     }
 }

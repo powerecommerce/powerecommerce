@@ -21,42 +21,39 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-namespace PowerEcommerce\App\PowerEcommerce\Component\Core\Service {
+namespace PowerEcommerce\App\PowerEcommerce\HelloWorld\Service {
+    use PowerEcommerce\System\App;
+    use PowerEcommerce\System\Linker\Observer;
     use PowerEcommerce\System\Object;
-    use PowerEcommerce\System\Routing\Component\Target;
+    use PowerEcommerce\System\Routing\Component;
     use PowerEcommerce\System\Service;
 
     class Router extends Service
     {
+        public function _init() { }
 
-        /** @type \PowerEcommerce\System\Routing\Component\Router */
-        private $_model;
+        public function _start() { }
 
-        protected function _call()
-        {
-            $target     = $this->getApp()->getRouterTarget();
-            $collection = $this->getModel()->handle($target);
-
-            $this->getApp()->setRouteCollection($collection);
-        }
-
-        protected function _gc() { }
-
-        protected function _init()
-        {
-            if (!$this->getApp()->hasRouterTarget()) {
-                $uri = $this->getApp()->PowerEcommerce->Core->Request()->getUri();
-                $this->getApp()->setRouterTarget(new Target($uri));
-            }
-            $this->_model = new \PowerEcommerce\System\Routing\Component\Router();
-        }
+        public function _stop() { }
 
         /**
-         * @return \PowerEcommerce\System\Routing\Component\Router
+         * @param \PowerEcommerce\System\App             $app
+         * @param \PowerEcommerce\System\Service\Context $context
+         * @param \PowerEcommerce\System\Linker\Observer $observer
+         *
+         * @return $this
          */
-        public function getModel()
+        public function notify(App $app, Service\Context $context, Observer $observer)
         {
-            return $this->_model;
+            $s1 = new Component\Service('\PowerEcommerce\App\PowerEcommerce\HelloWorld\Service\Hello');
+            $r1 = (new Component\Route('/?hello/?'))->attach($s1);
+
+            $s2 = new Component\Service('\PowerEcommerce\App\PowerEcommerce\HelloWorld\Service\World');
+            $r2 = (new Component\Route('/?world/?'))->attach($s2);
+
+            $context->getRouter()->attach($r1)->attach($r2);
+
+            return parent::notify($app, $context, $observer);
         }
     }
 }

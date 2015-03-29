@@ -21,18 +21,10 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-namespace PowerEcommerce\App\PowerEcommerce\Component\HelloWorld\Service {
-    use PowerEcommerce\System\Service;
+namespace PowerEcommerce\System\App {
+    use PowerEcommerce\System\Object;
 
-    class Hello extends Service
+    class Context extends Object
     {
-        protected function _call()
-        {
-            echo 'Hello';
-        }
-
-        protected function _gc() { }
-
-        protected function _init() { }
     }
 }

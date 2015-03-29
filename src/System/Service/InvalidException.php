@@ -21,27 +21,8 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-namespace PowerEcommerce\App\PowerEcommerce\Component {
-    use PowerEcommerce\App\App;
-
-    class Facade extends \PowerEcommerce\System\App\Facade
+namespace PowerEcommerce\System\Service {
+    class InvalidException extends \Exception
     {
-
-        /** @type \PowerEcommerce\App\PowerEcommerce\Component\Core\Facade */
-        public $Core;
-
-        /** @type \PowerEcommerce\App\PowerEcommerce\Component\HelloWorld\Facade */
-        public $HelloWorld;
-
-        /**
-         * @param \PowerEcommerce\App\App $app
-         */
-        public function __construct(App $app)
-        {
-            parent::__construct($app);
-
-            $this->Core       = new Core\Facade($app);
-            $this->HelloWorld = new HelloWorld\Facade($app);
-        }
     }
 }

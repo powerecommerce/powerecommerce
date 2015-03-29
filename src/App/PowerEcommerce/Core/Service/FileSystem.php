@@ -21,15 +21,23 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-namespace PowerEcommerce\App\PowerEcommerce\Component\Core\Service {
+namespace PowerEcommerce\App\PowerEcommerce\Core\Service {
     use PowerEcommerce\System\Service;
 
-    class Response extends Service
+    class FileSystem extends Service
     {
-        protected function _call() { }
+        public function _init() { }
 
-        protected function _gc() { }
+        public function _start() { }
 
-        protected function _init() { }
+        public function _stop() { }
+
+        /**
+         * @return string
+         */
+        public function getSeparator()
+        {
+            return (string)DIRECTORY_SEPARATOR;
+        }
     }
 }

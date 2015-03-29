@@ -21,47 +21,18 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-namespace PowerEcommerce\System\Routing {
-    use PowerEcommerce\System\Object;
+namespace PowerEcommerce\App\PowerEcommerce\HelloWorld\Service {
+    use PowerEcommerce\System\Service;
 
-    /**
-     * @method bool hasId()
-     * @method $this setId(string)
-     * @method $this addId(string)
-     * @method string getId()
-     * @method $this delId()
-     *
-     * @method bool hasModifiers()
-     * @method $this setModifiers(string)
-     * @method $this addModifiers(string)
-     * @method string getModifiers()
-     * @method $this delModifiers()
-     *
-     * @method \PowerEcommerce\System\Object getComponents()
-     */
-    abstract class Component extends Object
+    class Hello extends Service
     {
-        /**
-         * @param string $name
-         */
-        public function __construct($name)
+        public function _init() { }
+
+        public function _start()
         {
-            $this->setComponents(new Object());
-            $this->setId($name);
+            echo 'Hello';
         }
 
-        /**
-         * @param \PowerEcommerce\System\Routing\Component $component
-         *
-         * @return $this
-         */
-        abstract public function attach(Component $component);
-
-        /**
-         * @param \PowerEcommerce\System\Routing\Component $component
-         *
-         * @return \PowerEcommerce\System\Object
-         */
-        abstract public function handle(Component $component);
+        public function _stop() { }
     }
 }

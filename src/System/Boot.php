@@ -21,22 +21,48 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-namespace PowerEcommerce\App\PowerEcommerce\Component\HelloWorld {
-    use PowerEcommerce\App\App;
-    use PowerEcommerce\System\Routing\Component\Route;
-    use PowerEcommerce\System\Routing\Component\Service;
+namespace PowerEcommerce\System {
 
-    class Boot extends \PowerEcommerce\System\App\Boot
+    abstract class Boot
     {
-        /**
-         * @param \PowerEcommerce\App\App $app
-         */
-        public function up(App $app)
-        {
-            $r1 = (new Route('/?hello/?'))->attach(new Service($app->PowerEcommerce->HelloWorld->Hello));
-            $r2 = (new Route('/?world/?'))->attach(new Service($app->PowerEcommerce->HelloWorld->World));
 
-            $app->PowerEcommerce->Core->Router()->getModel()->attach($r1)->attach($r2);
+        /** @type \PowerEcommerce\System\App */
+        protected $_app;
+
+        final protected function __construct(App $app)
+        {
+            $this->_app = $app;
         }
+
+        final protected function __clone() { }
+
+        /**
+         * @return \PowerEcommerce\System\App
+         */
+        final public function app()
+        {
+            return $this->_app;
+        }
+
+        abstract public function down();
+
+        abstract public function init();
+
+        /**
+         * @param \PowerEcommerce\System\App $app
+         *
+         * @return $this
+         */
+        final public static function singleton(App $app)
+        {
+            static $instance;
+
+            if (null === $instance) {
+                $instance = new static($app);
+            }
+            return $instance;
+        }
+
+        abstract public function up();
     }
 }

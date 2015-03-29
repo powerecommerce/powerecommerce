@@ -21,23 +21,18 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-namespace PowerEcommerce\App\PowerEcommerce\Component\Core\Service {
-    use PowerEcommerce\System\Service;
+namespace PowerEcommerce\App\PowerEcommerce\Core {
+    use PowerEcommerce\App\PowerEcommerce\Core\Service\Router;
 
-    class FileSystem extends Service
+    class Boot extends \PowerEcommerce\System\Boot
     {
-        protected function _call() { }
+        public function down() { }
 
-        protected function _gc() { }
+        public function init() { }
 
-        protected function _init() { }
-
-        /**
-         * @return string
-         */
-        public function getSeparator()
+        public function up()
         {
-            return (string)DIRECTORY_SEPARATOR;
+            Router::singleton($this->app())->start();
         }
     }
 }

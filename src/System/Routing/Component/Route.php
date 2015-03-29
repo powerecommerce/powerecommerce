@@ -54,7 +54,7 @@ namespace PowerEcommerce\System\Routing\Component {
                 /** @var \PowerEcommerce\System\Routing\Component\Service $service */
                 $service->handle($component);
             }
-            return $this->factory($this);
+            return new Object($this->getData());
         }
     }
 }

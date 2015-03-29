@@ -22,83 +22,71 @@
  * THE SOFTWARE.
  */
 namespace PowerEcommerce\System {
-    use PowerEcommerce\System\App\Context;
-    use PowerEcommerce\System\Boot\Loader;
+    use PowerEcommerce\System\Broker\PriorityQueue;
 
-    class App
+    class Broker
     {
 
-        /** @type \PowerEcommerce\System\Broker */
-        protected $_broker;
+        /** @type \PowerEcommerce\System\App */
+        private $_app;
 
-        /** @type \PowerEcommerce\System\App\Context */
-        protected $_context;
+        /** @type \PowerEcommerce\System\Broker\PriorityQueue */
+        private $_queue;
 
-        /** @type \PowerEcommerce\System\Linker */
-        protected $_linker;
-
-        /** @type \PowerEcommerce\System\Boot\Loader */
-        protected $_loader;
-
-        public function __construct(Context $context)
+        /**
+         * @param \PowerEcommerce\System\App $app
+         */
+        final public function __construct(App $app)
         {
-            $this->_context = $context;
-            $this->_loader  = new Loader($this);
-            $this->_broker  = new Broker($this);
-            $this->_linker  = new Linker($this);
+            $this->_app   = $app;
+            $this->_queue = new PriorityQueue();
         }
 
         /**
-         * @return \PowerEcommerce\System\Broker
+         * @return \PowerEcommerce\System\App
          */
-        final public function broker()
+        final public function app()
         {
-            return $this->_broker;
-        }
-
-        /**
-         * @return \PowerEcommerce\System\App\Context
-         */
-        final public function context()
-        {
-            return $this->_context;
+            return $this->_app;
         }
 
         /**
          * @return $this
          */
-        public function down()
+        final public function down()
         {
-            $this->_broker->down();
-            $this->_loader->down();
-
+            /** @type \PowerEcommerce\System\Service $service */
+            foreach (clone $this->queue() as $service) {
+                $service->stop();
+            }
             return $this;
         }
 
         /**
-         * @return \PowerEcommerce\System\Linker
+         * @return \PowerEcommerce\System\Broker\PriorityQueue
          */
-        final public function linker()
+        final public function queue()
         {
-            return $this->_linker;
+            return $this->_queue;
+        }
+
+        /**
+         * @param \PowerEcommerce\System\Service
+         */
+        final public function register(Service $service)
+        {
+            $this->queue()->insert($service, $service->priority());
         }
 
         /**
          * @return $this
          */
-        public function render()
+        final public function up()
         {
-            return $this;
-        }
-
-        /**
-         * @return $this
-         */
-        public function up()
-        {
-            $this->_loader->up();
-            $this->_broker->up();
-
+            /** @type \PowerEcommerce\System\Service $service */
+            foreach (clone $this->queue() as $service) {
+                $service->start();
+            }
             return $this;
         }
     }

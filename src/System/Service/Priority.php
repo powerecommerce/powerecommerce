@@ -21,32 +21,15 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-namespace PowerEcommerce\System {
-    use PowerEcommerce\System\Util\BaseUnit;
-
-    /**
-     * @group System
-     * @group Object
-     */
-    class ObjectTest extends BaseUnit
+namespace PowerEcommerce\System\Service {
+    abstract class Priority
     {
 
-        /**
-         * @var \PowerEcommerce\System\Object
-         */
-        protected $data;
+        const AFTER  = 1;
 
-        protected function setUp()
-        {
-            $this->data = new Object();
-        }
+        const BEFORE = -1;
 
-        protected function tearDown() { }
+        const MAIN   = 0;
 
-        public function testMain()
-        {
-            $this->data->set('TestData', 'TEST');
-            $this->assertSame('TEST', $this->data->getTestData());
-        }
     }
 }

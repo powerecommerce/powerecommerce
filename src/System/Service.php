@@ -22,101 +22,138 @@
  * THE SOFTWARE.
  */
 namespace PowerEcommerce\System {
-    abstract class Service extends Object
+    use PowerEcommerce\System\Linker\Observer;
+    use PowerEcommerce\System\Service\Context;
+    use PowerEcommerce\System\Service\Event;
+    use PowerEcommerce\System\Service\Priority;
+    use PowerEcommerce\System\Service\Status;
+
+    abstract class Service
     {
 
-        const START = 1;
+        /** @type \PowerEcommerce\System\App */
+        protected $_app;
 
-        const STOP  = 2;
-
-        /** @type \PowerEcommerce\App\App */
-        private $_app;
-
-        /** @type callable */
-        private $_call = null;
-
-        /** @type callable */
-        private $_gc = null;
-
-        /** @type callable */
-        private $_init = null;
+        /** @type \PowerEcommerce\System\Service\Context */
+        protected $_context;
 
         /** @type int */
-        public $status;
+        public $priority = Priority::MAIN;
 
-        /**
-         * @param \PowerEcommerce\App\App $app
-         */
-        final public function __construct(\PowerEcommerce\App\App $app)
+        /** @type int */
+        public $status = Status::UNDEFINED;
+
+        final protected function __construct(App $app)
         {
-            $this->_app   = $app;
-            $this->status = self::STOP;
+            $this->_app     = $app;
+            $this->_context = new Context();
         }
 
+        final protected function __clone() { }
+
         /**
-         * @return mixed
+         * @return $this
          */
         final public function __invoke()
         {
-            null === $this->_call && $this->start();
-            $virtual = $this->_call;
-
-            return $virtual();
+            Status::START !== $this->status && $this->start();
+            return $this;
         }
 
-        abstract protected function _call();
+        abstract public function _init();
 
-        abstract protected function _gc();
+        abstract public function _start();
 
-        abstract protected function _init();
-
-        /**
-         * @return array
-         */
-        final public static function after()
-        {
-            return [1, md5(get_called_class())];
-        }
+        abstract public function _stop();
 
         /**
-         * @return array
+         * @return \PowerEcommerce\System\App
          */
-        final public static function before()
-        {
-            return [-1, md5(get_called_class())];
-        }
-
-        /**
-         * @return mixed
-         */
-        final public function call()
-        {
-            return $this->__invoke();
-        }
-
-        /**
-         * @return \PowerEcommerce\App\App
-         */
-        final public function getApp()
+        final public function app()
         {
             return $this->_app;
         }
 
         /**
-         * @param callable $_call
-         * @param callable $_init
-         * @param callable $_gc
+         * @return \PowerEcommerce\System\Service\Context
+         */
+        final public function context()
+        {
+            return $this->_context;
+        }
+
+        /**
+         * @param \PowerEcommerce\System\App $app
          *
          * @return $this
-         *
          */
-        final public function override(callable $_call, callable $_init, callable $_gc)
+        final public static function factory(App $app)
         {
-            null !== $_call && $this->_call = $_call;
-            null !== $_init && $this->_init = $_init;
-            null !== $_gc && $this->_gc = $_gc;
+            $service = new static($app);
 
+            $service->fire(Event::INIT_BEFORE);
+            $service->fire(get_called_class() . '\Init\Before');
+
+            $service->status = Status::INIT;
+            $service->_init();
+
+            $service->fire(Event::INIT_AFTER);
+            $service->fire(get_called_class() . '\Init\After');
+
+            return $service;
+        }
+
+        /**
+         * @param string $event
+         *
+         * @return $this
+         */
+        final public function fire($event)
+        {
+            $context = $this->app()->linker()->context();
+
+            if ($context->has($event)) {
+                /** @type \PowerEcommerce\System\Linker\Observer $observer */
+                foreach (clone $context->get($event) as $observer) {
+                    $observer->notify($this->app(), $this->context());
+                }
+            }
             return $this;
+        }
+
+        /**
+         * @param \PowerEcommerce\System\App             $app
+         * @param \PowerEcommerce\System\Service\Context $context
+         * @param \PowerEcommerce\System\Linker\Observer $observer
+         *
+         * @return $this
+         */
+        public function notify(App $app, Context $context, Observer $observer)
+        {
+            return $this;
+        }
+
+        /**
+         * @param \PowerEcommerce\System\App $app
+         *
+         * @return $this
+         */
+        final public static function observer(App $app)
+        {
+            $service = new static($app);
+
+            $service->status = Status::OBSERVER;
+            $service->_init();
+
+            return $service;
+        }
+
+        /**
+         * @return int
+         */
+        final public function priority()
+        {
+            return $this->priority;
         }
 
         /**
@@ -129,23 +166,44 @@ namespace PowerEcommerce\System {
         }
 
         /**
+         * @param \PowerEcommerce\System\App $app
+         *
+         * @return $this
+         */
+        final public static function singleton(App $app)
+        {
+            static $instance;
+
+            if (null === $instance) {
+                $instance = static::factory($app);
+            }
+            return $instance;
+        }
+
+        /**
          * @return $this
          */
         final public function start()
         {
-            if (null === $this->getApp()->getDisableServiceStart()) {
-                if (null === $this->_call) {
-                    $this->_call = function () { return $this->_call(); };
-                }
-                if (null === $this->_init) {
-                    $this->_init = function () { return $this->_init(); };
-                }
-                $virtual = $this->_init;
-                $virtual();
+            if (Status::START !== $this->status) {
+                $this->fire(Event::START_BEFORE);
+                $this->fire(get_called_class() . '\Start\Before');
 
-                $this->status = self::START;
+                $this->status = Status::START;
+                $this->_start();
+
+                $this->fire(Event::START_AFTER);
+                $this->fire(get_called_class() . '\Start\After');
             }
             return $this;
+        }
+
+        /**
+         * @return int
+         */
+        final public function status()
+        {
+            return $this->status;
         }
 
         /**
@@ -153,14 +211,15 @@ namespace PowerEcommerce\System {
          */
         final public function stop()
         {
-            if (null === $this->getApp()->getDisableServiceStop()) {
-                if (null === $this->_gc) {
-                    $this->_gc = function () { return $this->_gc(); };
-                }
-                $virtual = $this->_gc;
-                $virtual();
+            if (Status::STOP !== $this->status) {
+                $this->fire(Event::STOP_BEFORE);
+                $this->fire(get_called_class() . '\Stop\Before');
 
-                $this->status = self::STOP;
+                $this->status = Status::STOP;
+                $this->_stop();
+
+                $this->fire(Event::STOP_AFTER);
+                $this->fire(get_called_class() . '\Stop\After');
             }
             return $this;
         }

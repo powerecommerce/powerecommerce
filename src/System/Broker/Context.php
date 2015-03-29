@@ -21,14 +21,10 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-namespace PowerEcommerce\App {
-    class App extends \PowerEcommerce\System\App
-    {
-        use PowerEcommerce\Component;
+namespace PowerEcommerce\System\Broker {
+    use PowerEcommerce\System\Object;
 
-        public function __construct()
-        {
-            $this->PowerEcommerce($this);
-        }
+    class Context extends Object
+    {
     }
 }

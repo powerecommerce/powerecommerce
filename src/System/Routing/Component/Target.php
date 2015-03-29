@@ -22,6 +22,7 @@
  * THE SOFTWARE.
  */
 namespace PowerEcommerce\System\Routing\Component {
+    use PowerEcommerce\System\Object;
     use PowerEcommerce\System\Routing\Component;
 
     class Target extends Component
@@ -43,7 +44,7 @@ namespace PowerEcommerce\System\Routing\Component {
          */
         public function handle(Component $component)
         {
-            return $this->factory($this);
+            return new Object($this->getData());
         }
     }
 }

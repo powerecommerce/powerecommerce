@@ -21,20 +21,4 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-namespace PowerEcommerce\App\PowerEcommerce\Component\Core\Service {
-    use PowerEcommerce\System\Service;
-
-    class Main extends Service
-    {
-        protected function _call()
-        {
-            $this->getApp()->PowerEcommerce->Core->Boot()->call();
-            $this->getApp()->PowerEcommerce->Core->Router()->call();
-            $this->getApp()->PowerEcommerce->Core->Broker()->call();
-        }
-
-        protected function _gc() { }
-
-        protected function _init() { }
-    }
-}
+return 'PowerEcommerce\App\PowerEcommerce\Core\Boot';

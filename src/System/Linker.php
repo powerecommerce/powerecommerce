@@ -21,25 +21,46 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-namespace PowerEcommerce\App\PowerEcommerce\Component\HelloWorld {
-    use PowerEcommerce\App\App;
+namespace PowerEcommerce\System {
+    use PowerEcommerce\System\Linker\Context;
+    use PowerEcommerce\System\Linker\Observer;
+    use PowerEcommerce\System\Linker\PriorityQueue;
 
-    /**
-     * @method \PowerEcommerce\App\PowerEcommerce\Component\HelloWorld\Service\Hello Hello()
-     * @method \PowerEcommerce\App\PowerEcommerce\Component\HelloWorld\Service\World World()
-     */
-    class Facade extends \PowerEcommerce\System\App\Facade
+    class Linker
     {
 
-        /**
-         * @param \PowerEcommerce\App\App $app
-         */
-        public function __construct(App $app)
-        {
-            parent::__construct($app);
+        /** @type \PowerEcommerce\System\App */
+        private $_app;
 
-            $this->Hello = $this->_register('\PowerEcommerce\App\PowerEcommerce\Component\HelloWorld\Service\Hello');
-            $this->World = $this->_register('\PowerEcommerce\App\PowerEcommerce\Component\HelloWorld\Service\World');
+        /** @type \PowerEcommerce\System\Linker\Context */
+        private $_context;
+
+        /**
+         * @param \PowerEcommerce\System\App $app
+         */
+        final public function __construct(App $app)
+        {
+            $this->_app     = $app;
+            $this->_context = new Context();
+        }
+
+        /**
+         * @return \PowerEcommerce\System\Linker\Context
+         */
+        final public function context()
+        {
+            return $this->_context;
+        }
+
+        /**
+         * @param \PowerEcommerce\System\Linker\Observer $observer
+         */
+        final public function register(Observer $observer)
+        {
+            if (!$this->context()->has($observer->getEvent())) {
+                $this->context()->set($observer->getEvent(), new PriorityQueue());
+            }
+            $this->context()->get($observer->getEvent())->insert($observer, $observer->getPriority());
         }
     }
 }
