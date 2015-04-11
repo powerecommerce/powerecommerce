@@ -21,8 +21,47 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-$app  = PowerEcommerce\App::singleton();
-$port = $app->kernel()->scheduler()->port('powerecommerce.system');
+namespace PowerEcommerce\App\PowerEcommerce\System\Thread {
+    use PowerEcommerce\System\Thread;
 
-$process = $port->process('\PowerEcommerce\App\PowerEcommerce\System\Process\Router');
-$process->createThread('\PowerEcommerce\App\PowerEcommerce\HelloWorld\Thread\Router');
+    class Boot extends Thread
+    {
+        /**
+         * @return $this
+         */
+        public function abort()
+        {
+            return $this;
+        }
+
+        /**
+         * @return $this
+         */
+        public function end()
+        {
+            return $this;
+        }
+
+        /**
+         * @return $this
+         */
+        public function execute()
+        {
+            return $this;
+        }
+
+        /**
+         * @return $this
+         */
+        public function load()
+        {
+            $glob = new \GlobIterator($this->app()->sm()['BootLoaderDir'] . $this->app()->sm()['DS'] . "*.php");
+
+            /** @type \SplFileInfo $file */
+            foreach ($glob as $file) {
+                require $file->getPathname();
+            }
+            return $this;
+        }
+    }
+}

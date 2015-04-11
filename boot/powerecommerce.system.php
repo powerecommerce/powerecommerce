@@ -22,7 +22,8 @@
  * THE SOFTWARE.
  */
 $app  = PowerEcommerce\App::singleton();
+$sm   = $app->sm();
 $port = $app->kernel()->scheduler()->port('powerecommerce.system');
 
-$process = $port->process('\PowerEcommerce\App\PowerEcommerce\System\Process\Router');
-$process->createThread('\PowerEcommerce\App\PowerEcommerce\HelloWorld\Thread\Router');
+$port->createProcess('\PowerEcommerce\App\PowerEcommerce\System\Process\Router');
+$port->createProcess('\PowerEcommerce\App\PowerEcommerce\System\Process\View');

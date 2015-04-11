@@ -21,8 +21,56 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-$app  = PowerEcommerce\App::singleton();
-$port = $app->kernel()->scheduler()->port('powerecommerce.system');
+namespace PowerEcommerce\System {
+    use PowerEcommerce\System\Shared\Memory;
 
-$process = $port->process('\PowerEcommerce\App\PowerEcommerce\System\Process\Router');
-$process->createThread('\PowerEcommerce\App\PowerEcommerce\HelloWorld\Thread\Router');
+    class Kernel
+    {
+
+        /** @type \PowerEcommerce\System\Scheduler */
+        protected $_scheduler;
+
+        /** @type \PowerEcommerce\System\Shared\Memory */
+        protected $_sm;
+
+        public function __construct(Memory $sm, Scheduler $scheduler)
+        {
+            $this->_sm        = $sm;
+            $this->_scheduler = $scheduler;
+        }
+
+        /**
+         * @return $this
+         */
+        public function abort()
+        {
+            $this->scheduler()->abort();
+            return $this;
+        }
+
+        /**
+         * @return $this
+         */
+        public function run()
+        {
+            $this->scheduler()->run();
+            return $this;
+        }
+
+        /**
+         * @return \PowerEcommerce\System\Scheduler
+         */
+        public function scheduler()
+        {
+            return $this->_scheduler;
+        }
+
+        /**
+         * @return \PowerEcommerce\System\Shared\Memory
+         */
+        public function sm()
+        {
+            return $this->_sm;
+        }
+    }
+}

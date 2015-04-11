@@ -197,7 +197,7 @@ namespace PowerEcommerce\System {
          */
         public function getHashCode()
         {
-            return spl_object_hash($this);
+            return '\\' . spl_object_hash($this);
         }
 
         /**

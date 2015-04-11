@@ -22,12 +22,19 @@
  * THE SOFTWARE.
  */
 require_once __DIR__ . '/../vendor/autoload.php';
-use PowerEcommerce\System\App;
 
-$context = new App\Context();
-$context->setDS(DIRECTORY_SEPARATOR);
-$context->setBaseDir(realpath(__DIR__ . $context->getDS() . '..'));
-$context->setBootLoaderDir($context->getBaseDir() . $context->getDS() . 'boot');
+use PowerEcommerce\App;
+use PowerEcommerce\System\Port\Priority as PortPriority;
+use PowerEcommerce\System\Process\Priority as ProcessPriority;
 
-$app = new App($context);
-$app->up()->render()->down();
+$app = App::singleton();
+$sm  = $app->sm();
+
+$sm->set('DS', DIRECTORY_SEPARATOR);
+$sm->set('BaseDir', realpath(__DIR__ . $sm->get('DS') . '..'));
+$sm->set('BootLoaderDir', $sm->get('BaseDir') . $sm->get('DS') . 'boot');
+
+$port = $app->kernel()->scheduler()->port('powerecommerce.system.boot', PortPriority::CRITICAL);
+$port->createProcess('\PowerEcommerce\App\PowerEcommerce\System\Process\Boot', ProcessPriority::CRITICAL);
+
+$app->run();

@@ -2,6 +2,10 @@
 
 [![Build Status](https://travis-ci.org/powerecommerce/powerecommerce.svg?branch=master)](https://travis-ci.org/powerecommerce/powerecommerce)
 
+## Atom Architecture
+
+![Atom Architecture](/atom.png)
+
 ## Install
 
 ```

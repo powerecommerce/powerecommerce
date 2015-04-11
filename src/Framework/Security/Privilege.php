@@ -21,8 +21,38 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-$app  = PowerEcommerce\App::singleton();
-$port = $app->kernel()->scheduler()->port('powerecommerce.system');
+namespace PowerEcommerce\Framework\Security {
 
-$process = $port->process('\PowerEcommerce\App\PowerEcommerce\System\Process\Router');
-$process->createThread('\PowerEcommerce\App\PowerEcommerce\HelloWorld\Thread\Router');
+    class Privilege extends Component
+    {
+        /**
+         * @param \PowerEcommerce\Framework\Security\Component $component
+         *
+         * @return $this
+         */
+        public function attach(Component $component)
+        {
+            $this->invalid();
+        }
+
+        /**
+         * @param \PowerEcommerce\Framework\Security\Component $component
+         *
+         * @return $this
+         */
+        public function detach(Component $component)
+        {
+            $this->invalid();
+        }
+
+        /**
+         * @param \PowerEcommerce\Framework\Security\Component $component
+         *
+         * @return bool
+         */
+        public function isGranted(Component ...$component)
+        {
+            return true;
+        }
+    }
+}

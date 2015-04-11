@@ -21,8 +21,17 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-$app  = PowerEcommerce\App::singleton();
-$port = $app->kernel()->scheduler()->port('powerecommerce.system');
+namespace PowerEcommerce\App\PowerEcommerce\System\Process {
+    use PowerEcommerce\System\Process;
 
-$process = $port->process('\PowerEcommerce\App\PowerEcommerce\System\Process\Router');
-$process->createThread('\PowerEcommerce\App\PowerEcommerce\HelloWorld\Thread\Router');
+    class Request extends Process
+    {
+        /**
+         * @return string
+         */
+        public function uri()
+        {
+            return (string)$_SERVER['REQUEST_URI'];
+        }
+    }
+}

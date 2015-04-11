@@ -21,8 +21,23 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-$app  = PowerEcommerce\App::singleton();
-$port = $app->kernel()->scheduler()->port('powerecommerce.system');
+namespace PowerEcommerce\System\Process {
+    abstract class Priority
+    {
 
-$process = $port->process('\PowerEcommerce\App\PowerEcommerce\System\Process\Router');
-$process->createThread('\PowerEcommerce\App\PowerEcommerce\HelloWorld\Thread\Router');
+        const ABOVE_NORMAL = 40;
+
+        const BELOW_NORMAL = 20;
+
+        const CRITICAL     = 60;
+
+        const HIGHEST      = 50;
+
+        const INACTIVE     = 0;
+
+        const LOWEST       = 10;
+
+        const NORMAL       = 30;
+
+    }
+}

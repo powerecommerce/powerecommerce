@@ -21,8 +21,24 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-$app  = PowerEcommerce\App::singleton();
-$port = $app->kernel()->scheduler()->port('powerecommerce.system');
+namespace PowerEcommerce\System\Util {
+    trait Singleton
+    {
+        protected function __construct() { }
 
-$process = $port->process('\PowerEcommerce\App\PowerEcommerce\System\Process\Router');
-$process->createThread('\PowerEcommerce\App\PowerEcommerce\HelloWorld\Thread\Router');
+        protected function __clone() { }
+
+        /**
+         * @return $this
+         */
+        public static function singleton()
+        {
+            static $instance;
+
+            if (null === $instance) {
+                $instance = new static;
+            }
+            return $instance;
+        }
+    }
+}

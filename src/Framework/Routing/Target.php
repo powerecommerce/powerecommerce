@@ -21,8 +21,27 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-$app  = PowerEcommerce\App::singleton();
-$port = $app->kernel()->scheduler()->port('powerecommerce.system');
+namespace PowerEcommerce\Framework\Routing {
+    class Target extends Component
+    {
+        /**
+         * @param \PowerEcommerce\Framework\Routing\Component $component
+         *
+         * @return $this
+         */
+        public function attach(Component $component)
+        {
+            $this->invalid();
+        }
 
-$process = $port->process('\PowerEcommerce\App\PowerEcommerce\System\Process\Router');
-$process->createThread('\PowerEcommerce\App\PowerEcommerce\HelloWorld\Thread\Router');
+        /**
+         * @param \PowerEcommerce\Framework\Routing\Component $component
+         *
+         * @return \PowerEcommerce\System\Object
+         */
+        public function handle(Component $component)
+        {
+            return $this;
+        }
+    }
+}

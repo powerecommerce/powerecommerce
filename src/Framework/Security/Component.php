@@ -21,8 +21,42 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-$app  = PowerEcommerce\App::singleton();
-$port = $app->kernel()->scheduler()->port('powerecommerce.system');
+namespace PowerEcommerce\Framework\Security {
+    use PowerEcommerce\System\Object;
 
-$process = $port->process('\PowerEcommerce\App\PowerEcommerce\System\Process\Router');
-$process->createThread('\PowerEcommerce\App\PowerEcommerce\HelloWorld\Thread\Router');
+    /**
+     * @method $this setId(string)
+     * @method string getId()
+     */
+    abstract class Component extends Object
+    {
+        /**
+         * @param string $name
+         */
+        public function __construct($name)
+        {
+            $this->setId($name);
+        }
+
+        /**
+         * @param \PowerEcommerce\Framework\Security\Component $component
+         *
+         * @return $this
+         */
+        abstract public function attach(Component $component);
+
+        /**
+         * @param \PowerEcommerce\Framework\Security\Component $component
+         *
+         * @return $this
+         */
+        abstract public function detach(Component $component);
+
+        /**
+         * @param \PowerEcommerce\Framework\Security\Component $component
+         *
+         * @return bool
+         */
+        abstract public function isGranted(Component ...$component);
+    }
+}

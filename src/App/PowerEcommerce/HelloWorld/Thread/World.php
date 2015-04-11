@@ -21,8 +21,42 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-$app  = PowerEcommerce\App::singleton();
-$port = $app->kernel()->scheduler()->port('powerecommerce.system');
+namespace PowerEcommerce\App\PowerEcommerce\HelloWorld\Thread {
+    use PowerEcommerce\System\Thread;
 
-$process = $port->process('\PowerEcommerce\App\PowerEcommerce\System\Process\Router');
-$process->createThread('\PowerEcommerce\App\PowerEcommerce\HelloWorld\Thread\Router');
+    class World extends Thread
+    {
+        /**
+         * @return $this
+         */
+        public function abort()
+        {
+            return $this;
+        }
+
+        /**
+         * @return $this
+         */
+        public function end()
+        {
+            return $this;
+        }
+
+        /**
+         * @return $this
+         */
+        public function execute()
+        {
+            $this->psm()->setOutput($this->psm()->getOutput() . 'World');
+            return $this;
+        }
+
+        /**
+         * @return $this
+         */
+        public function load()
+        {
+            return $this;
+        }
+    }
+}
