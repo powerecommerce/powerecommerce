@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<boot>
+    <port name="PowerEcommerce">
+        <process name="Router" src="\PowerEcommerce\App\PowerEcommerce\System\Process\Router">
+            <thread name="PowerEcommerceRouter" priority="60" src="\PowerEcommerce\App\PowerEcommerce\System\Thread\Router"/>
+        </process>
+        <process name="View" src="\PowerEcommerce\App\PowerEcommerce\System\Process\View">
+            <thread name="PowerEcommerceView" src="\PowerEcommerce\App\PowerEcommerce\System\Thread\View"/>
+        </process>
+    </port>
+</boot>

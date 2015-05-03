@@ -26,10 +26,5 @@ namespace PowerEcommerce\App\PowerEcommerce\System\Process {
 
     class Router extends Process
     {
-        public function __construct()
-        {
-            parent::__construct();
-            $this->createThread('\PowerEcommerce\App\PowerEcommerce\System\Thread\Router');
-        }
     }
 }

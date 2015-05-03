@@ -65,7 +65,8 @@ namespace PowerEcommerce\App\PowerEcommerce\HelloWorld\Thread {
                                       '\PowerEcommerce\App\PowerEcommerce\System\Process\View');
             $r2 = (new Route('/?world/?'))->attach($s2);
 
-            $this->psm()->getRouter()->attach($r1)->attach($r2);
+            $sm = $this->process()->sharedMemory();
+            $sm->getRouter()->attach($r1)->attach($r2);
             return $this;
         }
     }

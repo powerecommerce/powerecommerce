@@ -25,13 +25,20 @@ namespace PowerEcommerce\System\Flow {
     abstract class State
     {
 
-        const EXECUTED   = 2;
+        /** @type int */
+        const EXECUTED = 2;
 
-        const LOADED     = 1;
+        /** @type int */
+        const INIT = 8;
 
+        /** @type int */
+        const LOADED = 1;
+
+        /** @type int */
         const TERMINATED = 4;
 
-        const UNDEFINED  = 0;
+        /** @type int */
+        const UNDEFINED = 0;
 
     }
 }

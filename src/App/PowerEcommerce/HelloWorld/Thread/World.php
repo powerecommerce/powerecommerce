@@ -47,8 +47,8 @@ namespace PowerEcommerce\App\PowerEcommerce\HelloWorld\Thread {
          */
         public function execute()
         {
-            $this->psm()->setOutput($this->psm()->getOutput() . 'World');
-            return $this;
+            $sm = $this->process()->sharedMemory();
+            $sm->setOutput($sm->getOutput() . 'World');
         }
 
         /**

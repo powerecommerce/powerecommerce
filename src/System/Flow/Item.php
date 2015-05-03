@@ -21,56 +21,44 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-namespace PowerEcommerce\System {
-    use PowerEcommerce\System\Shared\Memory;
-
-    class Kernel
+namespace PowerEcommerce\System\Flow {
+    interface Item
     {
-
-        /** @type \PowerEcommerce\System\Scheduler */
-        protected $_scheduler;
-
-        /** @type \PowerEcommerce\System\Shared\Memory */
-        protected $_sm;
-
-        public function __construct(Memory $sm, Scheduler $scheduler)
-        {
-            $this->_sm        = $sm;
-            $this->_scheduler = $scheduler;
-        }
-
         /**
+         * @param string $key
+         * @param mixed  $value
+         *
          * @return $this
          */
-        public function abort()
-        {
-            $this->scheduler()->abort();
-            return $this;
-        }
+        public function add($key, $value);
 
         /**
+         * @param string $key
+         *
          * @return $this
          */
-        public function run()
-        {
-            $this->scheduler()->run();
-            return $this;
-        }
+        public function del($key);
 
         /**
-         * @return \PowerEcommerce\System\Scheduler
+         * @param string $key
+         *
+         * @return mixed
          */
-        public function scheduler()
-        {
-            return $this->_scheduler;
-        }
+        public function get($key);
 
         /**
-         * @return \PowerEcommerce\System\Shared\Memory
+         * @param string $key
+         *
+         * @return bool
          */
-        public function sm()
-        {
-            return $this->_sm;
-        }
+        public function has($key);
+
+        /**
+         * @param string $key
+         * @param mixed  $value
+         *
+         * @return $this
+         */
+        public function set($key, $value);
     }
 }

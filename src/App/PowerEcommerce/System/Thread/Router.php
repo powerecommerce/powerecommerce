@@ -26,13 +26,9 @@ namespace PowerEcommerce\App\PowerEcommerce\System\Thread {
     use PowerEcommerce\Framework\Routing\Router as RouterComponent;
     use PowerEcommerce\Framework\Routing\Target;
     use PowerEcommerce\System\Thread;
-    use PowerEcommerce\System\Thread\Priority;
 
     class Router extends Thread
     {
-
-        /** @type int */
-        protected $_priority = Priority::CRITICAL;
 
         /**
          * @return $this
@@ -55,7 +51,7 @@ namespace PowerEcommerce\App\PowerEcommerce\System\Thread {
          */
         public function execute()
         {
-            $target = $this->app()->sm('RouterTarget');
+            $target = $this->app()->sharedMemory('RouterTarget');
             $this->router()->handle($target);
 
             return $this;
@@ -66,11 +62,12 @@ namespace PowerEcommerce\App\PowerEcommerce\System\Thread {
          */
         public function load()
         {
-            if (!$this->app()->sm('RouterTarget')) {
+            if (!$this->app()->sharedMemory('RouterTarget')) {
                 $uri = (new Request())->uri();
-                $this->app()->sm('RouterTarget', new Target($uri));
+                $this->app()->sharedMemory('RouterTarget', new Target($uri));
             }
-            $this->psm('Router', new RouterComponent('powerecommerce.system.router'));
+            $sm = $this->process()->sharedMemory();
+            $sm->set('Router', new RouterComponent('powerecommerce.system.router'));
             return $this;
         }
 
@@ -79,7 +76,8 @@ namespace PowerEcommerce\App\PowerEcommerce\System\Thread {
          */
         public function router()
         {
-            return $this->psm()['Router'];
+            $sm = $this->process()->sharedMemory();
+            return $sm['Router'];
         }
     }
 }

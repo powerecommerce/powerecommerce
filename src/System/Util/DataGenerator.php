@@ -197,8 +197,10 @@ namespace PowerEcommerce\System\Util {
             yield floatval(PHP_INT_MAX);
 
             for ($i = 0; $i <= self::$max; ++$i) {
-                yield floatval(mt_rand(0, 1) ? mt_rand(-PHP_INT_MAX, mt_getrandmax())
-                                   : abs(mt_rand(-PHP_INT_MAX, mt_getrandmax())));
+                yield floatval(mt_rand(0, 1)
+                                   ? mt_rand(-PHP_INT_MAX, mt_getrandmax())
+                                   : abs(mt_rand(-PHP_INT_MAX,
+                                                 mt_getrandmax())));
 
                 yield floatval(mt_rand(0, 1) ? mt_rand(-PHP_INT_MAX / mt_rand(1000, 10000), mt_getrandmax())
                                    : abs(mt_rand(-PHP_INT_MAX / mt_rand(1000, 10000), mt_getrandmax())));
@@ -236,8 +238,10 @@ namespace PowerEcommerce\System\Util {
             yield PHP_INT_MAX;
 
             for ($i = 0; $i <= self::$max; ++$i) {
-                yield intval(mt_rand(0, 1) ? mt_rand(-PHP_INT_MAX, mt_getrandmax())
-                                 : abs(mt_rand(-PHP_INT_MAX, mt_getrandmax())));
+                yield intval(mt_rand(0, 1)
+                                 ? mt_rand(-PHP_INT_MAX, mt_getrandmax())
+                                 : abs(mt_rand(-PHP_INT_MAX,
+                                               mt_getrandmax())));
 
                 yield intval(mt_rand(0, 1) ? mt_rand(-PHP_INT_MAX / mt_rand(1000, 10000), mt_getrandmax())
                                  : abs(mt_rand(-PHP_INT_MAX / mt_rand(1000, 10000), mt_getrandmax())));

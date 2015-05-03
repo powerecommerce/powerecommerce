@@ -26,6 +26,8 @@ namespace PowerEcommerce\App\PowerEcommerce\System\Process {
 
     class Request extends Process
     {
+        public function __construct() { }
+
         /**
          * @return string
          */

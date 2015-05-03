@@ -23,18 +23,32 @@
  */
 require_once __DIR__ . '/../vendor/autoload.php';
 
-use PowerEcommerce\App;
-use PowerEcommerce\System\Port\Priority as PortPriority;
-use PowerEcommerce\System\Process\Priority as ProcessPriority;
+use PowerEcommerce\System\App;
+use PowerEcommerce\System\Flow\Priority;
+use PowerEcommerce\System\Port\Scheduler\ItemWrapper as PortWrapper;
+use PowerEcommerce\System\Scheduler\ItemWrapper;
 
-$app = App::singleton();
-$sm  = $app->sm();
+$app       = App::singleton();
+$scheduler = $app->scheduler();
 
-$sm->set('DS', DIRECTORY_SEPARATOR);
-$sm->set('BaseDir', realpath(__DIR__ . $sm->get('DS') . '..'));
-$sm->set('BootLoaderDir', $sm->get('BaseDir') . $sm->get('DS') . 'boot');
+$app->sharedMemory('DS', DIRECTORY_SEPARATOR);
+$app->sharedMemory('BaseDir', realpath(__DIR__ . $app->sharedMemory('DS') . '..'));
+$app->sharedMemory('BootLoaderDir', $app->sharedMemory('BaseDir') . $app->sharedMemory('DS') . 'boot');
 
-$port = $app->kernel()->scheduler()->port('powerecommerce.system.boot', PortPriority::CRITICAL);
-$port->createProcess('\PowerEcommerce\App\PowerEcommerce\System\Process\Boot', ProcessPriority::CRITICAL);
+$bootPortId     = 'PowerEcommerceBootPort';
+$bootProcessId  = 'PowerEcommerceBootProcess';
+$bootProcessSrc = '\PowerEcommerce\App\PowerEcommerce\System\Process\Boot';
+$bootThreadId   = 'PowerEcommerceBootThread';
+$bootThreadSrc  = '\PowerEcommerce\App\PowerEcommerce\System\Thread\Boot';
+
+$scheduler->set($bootPortId, new PortWrapper(Priority::CRITICAL));
+
+/** @type \PowerEcommerce\System\Scheduler\ItemWrapper $port */
+$port = $scheduler->get($bootPortId);
+$port->set($bootProcessId, new ItemWrapper($bootProcessSrc, Priority::CRITICAL));
+
+/** @type \PowerEcommerce\System\Scheduler\ItemWrapper $process */
+$process = $port->get($bootProcessId);
+$process->set($bootThreadId, new ItemWrapper($bootThreadSrc, Priority::CRITICAL));
 
 $app->run();

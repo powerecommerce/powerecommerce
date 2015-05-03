@@ -21,8 +21,8 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-namespace PowerEcommerce\System\Thread {
-    class PriorityQueue extends \SplPriorityQueue
+namespace PowerEcommerce\System\Scheduler {
+    class ItemAlreadyExistsException extends \Exception
     {
     }
 }

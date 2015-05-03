@@ -21,9 +21,10 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-$app  = PowerEcommerce\App::singleton();
-$sm   = $app->sm();
-$port = $app->kernel()->scheduler()->port('powerecommerce.system');
+namespace PowerEcommerce\System\App {
+    use PowerEcommerce\System\Object;
 
-$port->createProcess('\PowerEcommerce\App\PowerEcommerce\System\Process\Router');
-$port->createProcess('\PowerEcommerce\App\PowerEcommerce\System\Process\View');
+    class SharedMemory extends Object
+    {
+    }
+}

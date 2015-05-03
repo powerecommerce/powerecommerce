@@ -21,10 +21,23 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-namespace PowerEcommerce\System\Process\Shared {
-    use PowerEcommerce\System\Object;
+namespace PowerEcommerce\System\Port\Scheduler {
+    use PowerEcommerce\System\Flow;
+    use PowerEcommerce\System\Flow\Priority;
 
-    class Memory extends Object
+    class ItemWrapper extends \PowerEcommerce\System\Scheduler\ItemWrapper
     {
+
+        /** @type string */
+        protected $_src = '\PowerEcommerce\System\Port';
+
+        /**
+         * @param int   $priority
+         * @param array $args
+         */
+        public function __construct($priority = Priority::NORMAL, array $args = [])
+        {
+            parent::__construct($this->_src, $priority, $args);
+        }
     }
 }

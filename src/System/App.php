@@ -21,26 +21,24 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-namespace PowerEcommerce {
-    use PowerEcommerce\System\Kernel;
+namespace PowerEcommerce\System {
+    use PowerEcommerce\System\App\Kernel;
     use PowerEcommerce\System\Scheduler;
-    use PowerEcommerce\System\Shared\Memory;
     use PowerEcommerce\System\Util\Singleton;
 
-    class App
+    class App implements Flow
     {
         use Singleton;
 
-        /** @type \PowerEcommerce\System\Kernel */
+        /** @type \PowerEcommerce\System\App\Kernel */
         protected $_kernel;
 
-        /** @type \PowerEcommerce\System\Shared\Memory */
-        protected $_sm;
-
-        protected function __construct()
+        /**
+         * @param \PowerEcommerce\System\App\Kernel $kernel
+         */
+        protected function __construct(Kernel $kernel = null)
         {
-            $this->_sm     = new Memory();
-            $this->_kernel = new Kernel(new Memory(), new Scheduler());
+            $this->_kernel = (null === $kernel ? new Kernel() : $kernel);
         }
 
         /**
@@ -53,11 +51,38 @@ namespace PowerEcommerce {
         }
 
         /**
-         * @return \PowerEcommerce\System\Kernel
+         * @return $this
+         */
+        public function end()
+        {
+            $this->kernel()->end();
+            return $this;
+        }
+
+        /**
+         * @return $this
+         */
+        public function execute()
+        {
+            $this->kernel()->execute();
+            return $this;
+        }
+
+        /**
+         * @return \PowerEcommerce\System\App\Kernel
          */
         public function kernel()
         {
             return $this->_kernel;
+        }
+
+        /**
+         * @return $this
+         */
+        public function load()
+        {
+            $this->kernel()->load();
+            return $this;
         }
 
         /**
@@ -70,20 +95,22 @@ namespace PowerEcommerce {
         }
 
         /**
+         * @return \PowerEcommerce\System\Scheduler
+         */
+        public function scheduler()
+        {
+            return $this->kernel()->scheduler();
+        }
+
+        /**
          * @param string $key
          * @param mixed  $value
          *
-         * @return mixed|\PowerEcommerce\System\Shared\Memory
+         * @return mixed|\PowerEcommerce\System\App\SharedMemory
          */
-        public function sm($key = null, $value = null)
+        public function sharedMemory($key = null, $value = null)
         {
-            if (null !== $value) {
-                $this->_sm->set($key, $value);
-            }
-            elseif (null !== $key) {
-                return $this->_sm->get($key);
-            }
-            return $this->_sm;
+            return $this->kernel()->sharedMemory($key, $value);
         }
     }
 }

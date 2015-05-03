@@ -22,26 +22,33 @@
  * THE SOFTWARE.
  */
 namespace PowerEcommerce\System {
+    use PowerEcommerce\System\Flow\Item;
     use PowerEcommerce\System\Flow\State;
     use PowerEcommerce\System\Port\PortAlreadyRunningException;
-    use PowerEcommerce\System\Port\PriorityQueue;
+    use PowerEcommerce\System\Port\SharedMemory;
 
-    class Port implements Flow
+    class Port implements Flow, Item
     {
 
-        /** @type \PowerEcommerce\System\Object */
-        protected $_data;
+        /** @type \PowerEcommerce\System\Scheduler process */
+        protected $_scheduler;
 
-        /** @type \PowerEcommerce\System\Port\PriorityQueue */
-        protected $_queue;
+        /** @type \PowerEcommerce\System\Port\SharedMemory */
+        protected $_sharedMemory;
 
         /** @type int */
         protected $_state = State::UNDEFINED;
 
-        public function __construct()
+        /**
+         * @param \PowerEcommerce\System\Port\SharedMemory $sharedMemory
+         * @param \PowerEcommerce\System\Scheduler         $scheduler
+         */
+        public function __construct(SharedMemory $sharedMemory = null, Scheduler $scheduler = null)
         {
-            $this->_data  = new Object();
-            $this->_queue = new PriorityQueue();
+            $this->_sharedMemory = (null === $sharedMemory ? new SharedMemory() : $sharedMemory);
+            $this->_scheduler    = (null === $scheduler ? new Scheduler() : $scheduler);
+
+            $this->scheduler()->args([$this]);
         }
 
         /**
@@ -49,33 +56,35 @@ namespace PowerEcommerce\System {
          */
         public function abort()
         {
-            foreach ($this->queue() as $source) {
-                $this->process($source)->abort();
-            }
-            $this->_state = State::TERMINATED;
+            $this->scheduler()->abort();
             return $this;
         }
 
         /**
-         * @param string $source
-         * @param int    $priority
+         * @param string                                       $id
+         * @param \PowerEcommerce\System\Scheduler\ItemWrapper $itemWrapper
          *
          * @return $this
          * @throws \PowerEcommerce\System\Port\PortAlreadyRunningException
+         * @throws \PowerEcommerce\System\Scheduler\ItemAlreadyExistsException
          */
-        public function createProcess($source, $priority = null)
+        public function add($id, $itemWrapper)
         {
             if (State::UNDEFINED !== $this->state()) {
                 throw new PortAlreadyRunningException;
             }
-            if (!$this->_data->has($source)) {
-                /** @type \PowerEcommerce\System\Process $process */
-                $process = new $source();
-                $process->setPriority($priority);
+            $this->scheduler()->add($id, $itemWrapper);
+            return $this;
+        }
 
-                $this->_data->set($source, $process);
-                $this->queue()->insert($source, $process->getPriority());
-            }
+        /**
+         * @param string $id
+         *
+         * @return $this
+         */
+        public function del($id)
+        {
+            $this->scheduler()->del($id);
             return $this;
         }
 
@@ -84,10 +93,7 @@ namespace PowerEcommerce\System {
          */
         public function end()
         {
-            foreach ($this->queue() as $source) {
-                $this->process($source)->end();
-            }
-            $this->_state = State::TERMINATED;
+            $this->scheduler()->end();
             return $this;
         }
 
@@ -96,11 +102,28 @@ namespace PowerEcommerce\System {
          */
         public function execute()
         {
-            foreach (clone $this->queue() as $source) {
-                $this->process($source)->execute();
-            }
-            $this->_state = State::EXECUTED;
+            $this->scheduler()->execute();
             return $this;
+        }
+
+        /**
+         * @param string $id
+         *
+         * @return mixed
+         */
+        public function get($id)
+        {
+            return $this->scheduler()->get($id);
+        }
+
+        /**
+         * @param string $id
+         *
+         * @return bool
+         */
+        public function has($id)
+        {
+            return $this->scheduler()->has($id);
         }
 
         /**
@@ -108,33 +131,49 @@ namespace PowerEcommerce\System {
          */
         public function load()
         {
-            foreach (clone $this->queue() as $source) {
-                $this->process($source)->load();
-            }
-            $this->_state = State::LOADED;
+            $this->scheduler()->load();
             return $this;
         }
 
         /**
-         * @param string $source
-         * @param int    $priority
-         *
-         * @return \PowerEcommerce\System\Process
+         * @return \PowerEcommerce\System\Scheduler
          */
-        public function process($source, $priority = null)
+        public function scheduler()
         {
-            if (!$this->_data->has($source)) {
-                $this->createProcess($source, $priority);
-            }
-            return $this->_data->get($source);
+            return $this->_scheduler;
         }
 
         /**
-         * @return \PowerEcommerce\System\Port\PriorityQueue
+         * @param string                                       $id
+         * @param \PowerEcommerce\System\Scheduler\ItemWrapper $itemWrapper
+         *
+         * @return $this
+         * @throws \PowerEcommerce\System\Port\PortAlreadyRunningException
          */
-        public function queue()
+        public function set($id, $itemWrapper)
         {
-            return $this->_queue;
+            if (State::UNDEFINED !== $this->state()) {
+                throw new PortAlreadyRunningException;
+            }
+            $this->scheduler()->set($id, $itemWrapper);
+            return $this;
+        }
+
+        /**
+         * @param string $key
+         * @param mixed  $value
+         *
+         * @return mixed|\PowerEcommerce\System\App\SharedMemory
+         */
+        public function sharedMemory($key = null, $value = null)
+        {
+            if (null !== $value) {
+                $this->_sharedMemory->set($key, $value);
+            }
+            elseif (null !== $key) {
+                return $this->_sharedMemory->get($key);
+            }
+            return $this->_sharedMemory;
         }
 
         /**
@@ -142,7 +181,7 @@ namespace PowerEcommerce\System {
          */
         public function state()
         {
-            return $this->_state;
+            return $this->scheduler()->state();
         }
     }
 }

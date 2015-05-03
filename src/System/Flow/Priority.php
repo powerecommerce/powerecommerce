@@ -21,10 +21,30 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-namespace PowerEcommerce\System\Shared {
-    use PowerEcommerce\System\Object;
-
-    class Memory extends Object
+namespace PowerEcommerce\System\Flow {
+    abstract class Priority
     {
+
+        /** @type int */
+        const ABOVE_NORMAL = 40;
+
+        /** @type int */
+        const BELOW_NORMAL = 20;
+
+        /** @type int */
+        const CRITICAL = 60;
+
+        /** @type int */
+        const HIGHEST = 50;
+
+        /** @type int */
+        const INACTIVE = 0;
+
+        /** @type int */
+        const LOWEST = 10;
+
+        /** @type int */
+        const NORMAL = 30;
+
     }
 }

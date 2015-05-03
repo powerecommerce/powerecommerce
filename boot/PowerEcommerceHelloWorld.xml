@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<boot>
+    <port name="PowerEcommerce">
+        <process name="View">
+            <thread name="HelloWorldHello" priority="50" match="/?hello/?" src="\PowerEcommerce\App\PowerEcommerce\HelloWorld\Thread\Hello"/>
+            <thread name="HelloWorldWorld" priority="50" match="/?world/?" src="\PowerEcommerce\App\PowerEcommerce\HelloWorld\Thread\World"/>
+        </process>
+    </port>
+</boot>

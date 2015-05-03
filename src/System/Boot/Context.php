@@ -21,23 +21,10 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-namespace PowerEcommerce\System\Process {
-    abstract class Priority
+namespace PowerEcommerce\System\Boot {
+    use PowerEcommerce\System\Object;
+
+    class Context extends Object
     {
-
-        const ABOVE_NORMAL = 40;
-
-        const BELOW_NORMAL = 20;
-
-        const CRITICAL     = 60;
-
-        const HIGHEST      = 50;
-
-        const INACTIVE     = 0;
-
-        const LOWEST       = 10;
-
-        const NORMAL       = 30;
-
     }
 }

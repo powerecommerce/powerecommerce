@@ -57,7 +57,7 @@ namespace PowerEcommerce\Framework\Routing {
         public function handle(Component $component)
         {
             $app  = App::singleton();
-            $port = $app->kernel()->scheduler()->port($this->getPort());
+            $port = $app->port($this->getPort());
 
             if ($priority = $this->getPriority()) {
                 $port->createProcess($this->getProcess(), $priority);

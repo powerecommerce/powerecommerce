@@ -22,7 +22,7 @@
  * THE SOFTWARE.
  */
 namespace PowerEcommerce\Framework\Routing {
-    use PowerEcommerce\App;
+    use PowerEcommerce\System\App;
 
     class Thread extends Component
     {
@@ -31,7 +31,8 @@ namespace PowerEcommerce\Framework\Routing {
          * @param string $process
          * @param string $port
          */
-        public function __construct($source, $process = '\PowerEcommerce\App\PowerEcommerce\System\Process\Router',
+        public function __construct($source,
+                                    $process = '\PowerEcommerce\App\PowerEcommerce\System\Process\Router',
                                     $port = 'powerecommerce.system.router')
         {
             parent::__construct($source);
@@ -58,7 +59,7 @@ namespace PowerEcommerce\Framework\Routing {
          */
         public function handle(Component $component)
         {
-            $port    = App::singleton()->kernel()->scheduler()->port($this->getPort());
+            $port    = App::singleton()->scheduler()->get($this->getPort());
             $process = $port->process($this->getProcess());
 
             if ($priority = $this->getPriority()) {

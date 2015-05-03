@@ -40,7 +40,8 @@ namespace PowerEcommerce\App\PowerEcommerce\System\Thread {
          */
         public function end()
         {
-            echo $this->psm()->getOutput();
+            $sm = $this->process()->sharedMemory();
+            echo $sm->getOutput();
             return $this;
         }
 

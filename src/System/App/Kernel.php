@@ -21,38 +21,27 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-namespace PowerEcommerce\System {
-    use PowerEcommerce\System\Flow\State;
-    use PowerEcommerce\System\Process\ProcessAlreadyRunningException;
-    use PowerEcommerce\System\Process\SharedMemory;
+namespace PowerEcommerce\System\App {
+    use PowerEcommerce\System\Flow;
+    use PowerEcommerce\System\Scheduler;
 
-    abstract class Process implements Flow
+    class Kernel implements Flow
     {
 
-        /** @type \PowerEcommerce\System\Port */
-        protected $_port;
-
-        /** @type \PowerEcommerce\System\Scheduler threads */
+        /** @type \PowerEcommerce\System\Scheduler ports */
         protected $_scheduler;
 
-        /** @type \PowerEcommerce\System\Process\SharedMemory */
+        /** @type \PowerEcommerce\System\App\SharedMemory */
         protected $_sharedMemory;
 
-        /** @type int */
-        protected $_state = State::UNDEFINED;
-
         /**
-         * @param \PowerEcommerce\System\Port                 $port
-         * @param \PowerEcommerce\System\Process\SharedMemory $sharedMemory
-         * @param \PowerEcommerce\System\Scheduler            $scheduler
+         * @param \PowerEcommerce\System\App\SharedMemory $sharedMemory
+         * @param \PowerEcommerce\System\Scheduler        $scheduler
          */
-        public function __construct(Port $port, SharedMemory $sharedMemory = null, Scheduler $scheduler = null)
+        public function __construct(SharedMemory $sharedMemory = null, Scheduler $scheduler = null)
         {
-            $this->_port         = $port;
             $this->_sharedMemory = (null === $sharedMemory ? new SharedMemory() : $sharedMemory);
             $this->_scheduler    = (null === $scheduler ? new Scheduler() : $scheduler);
-
-            $this->scheduler()->args([$this]);
         }
 
         /**
@@ -69,14 +58,10 @@ namespace PowerEcommerce\System {
          * @param \PowerEcommerce\System\Scheduler\ItemWrapper $itemWrapper
          *
          * @return $this
-         * @throws \PowerEcommerce\System\Process\ProcessAlreadyRunningException
          * @throws \PowerEcommerce\System\Scheduler\ItemAlreadyExistsException
          */
         public function add($id, $itemWrapper)
         {
-            if (State::UNDEFINED !== $this->state()) {
-                throw new ProcessAlreadyRunningException;
-            }
             $this->scheduler()->add($id, $itemWrapper);
             return $this;
         }
@@ -121,14 +106,6 @@ namespace PowerEcommerce\System {
         }
 
         /**
-         * @return string
-         */
-        public function getCalledClass()
-        {
-            return '\\' . get_called_class();
-        }
-
-        /**
          * @param string $id
          *
          * @return bool
@@ -148,11 +125,12 @@ namespace PowerEcommerce\System {
         }
 
         /**
-         * @return \PowerEcommerce\System\Port
+         * @return $this
          */
-        public function port()
+        public function run()
         {
-            return $this->_port;
+            $this->scheduler()->run();
+            return $this;
         }
 
         /**
@@ -168,13 +146,9 @@ namespace PowerEcommerce\System {
          * @param \PowerEcommerce\System\Scheduler\ItemWrapper $itemWrapper
          *
          * @return $this
-         * @throws \PowerEcommerce\System\Process\ProcessAlreadyRunningException
          */
         public function set($id, $itemWrapper)
         {
-            if (State::UNDEFINED !== $this->state()) {
-                throw new ProcessAlreadyRunningException;
-            }
             $this->scheduler()->set($id, $itemWrapper);
             return $this;
         }
@@ -194,14 +168,6 @@ namespace PowerEcommerce\System {
                 return $this->_sharedMemory->get($key);
             }
             return $this->_sharedMemory;
-        }
-
-        /**
-         * @return int
-         */
-        public function state()
-        {
-            return $this->scheduler()->state();
         }
     }
 }

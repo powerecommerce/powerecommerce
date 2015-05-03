@@ -21,60 +21,70 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-namespace PowerEcommerce\System {
+namespace PowerEcommerce\System\Scheduler {
+    use PowerEcommerce\System\Flow;
     use PowerEcommerce\System\Flow\Item;
+    use PowerEcommerce\System\Flow\Priority;
     use PowerEcommerce\System\Flow\State;
-    use PowerEcommerce\System\Scheduler\InvalidItemWrapperArgumentException;
-    use PowerEcommerce\System\Scheduler\ItemAlreadyExistsException;
-    use PowerEcommerce\System\Scheduler\PriorityQueue;
+    use PowerEcommerce\System\Object;
 
-    class Scheduler implements Flow, Item
+    class ItemWrapper implements Flow, Item
     {
 
         /** @type array */
         protected $_args;
 
-        /** @type \PowerEcommerce\System\Scheduler\PriorityQueue */
-        protected $_queue;
+        /** @type \PowerEcommerce\System\Flow */
+        private $_flow;
+
+        /** @type int */
+        protected $_priority;
 
         /** @type \PowerEcommerce\System\Object */
         protected $_registry;
 
+        /** @type string */
+        protected $_src;
+
         /** @type int */
         protected $_state = State::UNDEFINED;
 
-        public function __construct(array $args = [])
+        /**
+         * @param string $src
+         * @param int    $priority
+         * @param array  $args
+         */
+        public function __construct($src, $priority = Priority::NORMAL, array $args = [])
         {
+            $this->_src      = $src;
+            $this->_priority = $priority;
             $this->_args     = $args;
             $this->_registry = new Object();
-            $this->_queue    = new PriorityQueue();
         }
 
         /**
-         * @return $this
+         * @return \PowerEcommerce\System\Flow
          */
-        protected function _init()
+        private function _flow()
         {
-            /** @type \PowerEcommerce\System\Scheduler\ItemWrapper $flow */
-            foreach ($this->registry() as $flow) {
-                $flow->args($this->args(), true);
-                $this->_queue->insert($flow, $flow->priority());
+            if (State::UNDEFINED === $this->_state) {
+                $this->_flow = new $this->_src(...$this->args());
+
+                foreach ($this->registry() as $id => $itemWrapper) {
+                    /** @type \PowerEcommerce\System\Flow\Item $this */
+                    $this->_flow->set($id, $itemWrapper);
+                }
+                $this->_state = State::INIT;
             }
-            $this->_state = State::INIT;
-            return $this;
+            return $this->_flow;
         }
 
         /**
-         * @return $this
+         * @return \PowerEcommerce\System\Flow
          */
         public function abort()
         {
-            /** @type \PowerEcommerce\System\Scheduler\ItemWrapper $flow */
-            foreach ($this->queue() as $flow) {
-                $flow->abort();
-            }
-            $this->_state = State::TERMINATED;
-            return $this;
+            return $this->_flow()->abort();
         }
 
         /**
@@ -119,29 +129,19 @@ namespace PowerEcommerce\System {
         }
 
         /**
-         * @return $this
+         * @return \PowerEcommerce\System\Flow
          */
         public function end()
         {
-            /** @type \PowerEcommerce\System\Scheduler\ItemWrapper $flow */
-            foreach ($this->queue() as $flow) {
-                $flow->end();
-            }
-            $this->_state = State::TERMINATED;
-            return $this;
+            return $this->_flow()->end();
         }
 
         /**
-         * @return $this
+         * @return \PowerEcommerce\System\Flow
          */
         public function execute()
         {
-            /** @type \PowerEcommerce\System\Scheduler\ItemWrapper $flow */
-            foreach (clone $this->queue() as $flow) {
-                $flow->execute();
-            }
-            $this->_state = State::EXECUTED;
-            return $this;
+            return $this->_flow()->execute();
         }
 
         /**
@@ -165,27 +165,19 @@ namespace PowerEcommerce\System {
         }
 
         /**
-         * @return $this
+         * @return \PowerEcommerce\System\Flow
          */
         public function load()
         {
-            /** @type \PowerEcommerce\System\Scheduler\ItemWrapper $flow */
-            foreach (clone $this->queue() as $flow) {
-                $flow->load();
-            }
-            $this->_state = State::LOADED;
-            return $this;
+            return $this->_flow()->load();
         }
 
         /**
-         * @return \PowerEcommerce\System\Scheduler\PriorityQueue
+         * @return int
          */
-        public function queue()
+        public function priority()
         {
-            if (State::UNDEFINED === $this->state()) {
-                $this->_init();
-            }
-            return $this->_queue;
+            return $this->_priority;
         }
 
         /**
@@ -194,18 +186,6 @@ namespace PowerEcommerce\System {
         public function registry()
         {
             return $this->_registry;
-        }
-
-        /**
-         * @return $this
-         */
-        public function run()
-        {
-            $this->load();
-            $this->execute();
-            $this->end();
-
-            return $this;
         }
 
         /**
@@ -222,15 +202,6 @@ namespace PowerEcommerce\System {
             }
             $this->registry()->set($id, $itemWrapper);
             return $this;
-
-        }
-
-        /**
-         * @return int
-         */
-        public function state()
-        {
-            return $this->_state;
         }
     }
 }

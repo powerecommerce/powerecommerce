@@ -22,9 +22,10 @@
  * THE SOFTWARE.
  */
 namespace PowerEcommerce\System {
+    use PowerEcommerce\System\Flow\Item;
     use PowerEcommerce\System\Object\InvalidException;
 
-    class Object implements \IteratorAggregate, \ArrayAccess
+    class Object implements \IteratorAggregate, \ArrayAccess, Item
     {
 
         /** @type mixed[] */
@@ -165,7 +166,7 @@ namespace PowerEcommerce\System {
          */
         public function getCalledClass()
         {
-            return get_called_class();
+            return '\\' . get_called_class();
         }
 
         /**
